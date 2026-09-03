@@ -556,6 +556,26 @@
   .domain-brief{ font-size:14px; color:var(--ink-soft); margin:0 0 16px; max-width:64ch; line-height:1.55; }
   .domain-brief b{ color:var(--pedagogic); font-weight:600; }
 
+  .progress-panel{ background:var(--surface-raised); border:1px solid var(--line); border-radius:var(--radius); padding:14px 18px; margin-bottom:20px; }
+  .progress-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
+  .progress-label{ font-size:13px; font-weight:600; color:var(--ink); }
+  .progress-count{ font-family:"IBM Plex Mono", monospace; font-size:12px; color:var(--pedagogic); font-weight:600; }
+  .progress-bar{ height:8px; border-radius:5px; background:var(--surface); border:1px solid var(--line); overflow:hidden; }
+  .progress-bar-fill{ height:100%; background:var(--pedagogic); }
+
+  .rubric-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:12px; }
+  .rubric-item{ display:flex; flex-direction:column; gap:4px; padding:12px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px; }
+  .rubric-crit{ font-size:13px; font-weight:600; color:var(--pedagogic); }
+  .rubric-desc{ font-size:12.5px; color:var(--ink-soft); line-height:1.4; }
+
+  .submission-panel #submit-btn:disabled{ opacity:.45; cursor:not-allowed; }
+  .feedback-box{ background:var(--good-soft); border:1px solid var(--good); border-radius:9px; padding:16px 18px; display:flex; flex-direction:column; gap:10px; }
+  .feedback-head{ display:flex; align-items:center; gap:14px; }
+  .feedback-grade{ font-family:"IBM Plex Mono", monospace; font-size:24px; font-weight:700; color:var(--good); }
+  .feedback-head strong{ display:block; font-size:13.5px; color:var(--ink); }
+  .feedback-sub{ font-size:12px; color:var(--ink-faint); font-family:"IBM Plex Mono", monospace; }
+  .feedback-comment{ margin:0; font-size:13px; color:var(--ink-soft); line-height:1.55; }
+
   .run-btn{
     appearance:none; border:none; border-radius:8px;
     background:var(--pedagogic); color:#fff;
@@ -1193,6 +1213,14 @@
       <div data-panel="pedagogic">
         <p class="domain-brief">Domínio ativo: <span id="domain-dynamic"><b>Humor / depressividade</b>. Queda de interesse, desânimo, energia reduzida.</span> Você escreve um relato de exemplo (não use dados reais de ninguém) e roda seu extractor para ver o que ele detecta. Precisa de pelo menos <b>120 caracteres</b> para a análise ficar confiável.</p>
 
+        <div class="progress-panel">
+          <div class="progress-head">
+            <span class="progress-label">Seu progresso na extensão</span>
+            <span class="progress-count" id="progress-count">2 de 7 domínios submetidos</span>
+          </div>
+          <div class="progress-bar"><div class="progress-bar-fill" id="progress-bar-fill" style="width:28.5%"></div></div>
+        </div>
+
         <div class="workspace-grid">
 
           <div class="panel">
@@ -1211,12 +1239,45 @@
             <p class="panel-caption">Heurística simplificada para aprendizado, cada linha simula um extractor real do arsenal da Ayla (estilo linguístico, LIWC, distorção cognitiva, minimização, atos de fala, orientação temporal). Aqui roda por contagem de léxico; em produção, o mesmo raciocínio roda sobre um modelo estatístico treinado.</p>
           </div>
 
+          <div class="panel full rubric-panel">
+            <div class="panel-head"><h2>Rubrica de avaliação</h2><span class="panel-tag">o que a professora vai olhar, antes de você submeter</span></div>
+            <div class="rubric-grid">
+              <div class="rubric-item"><span class="rubric-crit">Uso correto do protocolo</span><span class="rubric-desc">o texto reflete o domínio clínico escolhido, não um relato genérico</span></div>
+              <div class="rubric-item"><span class="rubric-crit">Distinção observação × inferência</span><span class="rubric-desc">separa o que o extractor mediu do que seria interpretação clínica</span></div>
+              <div class="rubric-item"><span class="rubric-crit">Qualidade da tradução domínio → sinal</span><span class="rubric-desc">o raciocínio de que marcador linguístico corresponde ao domínio faz sentido</span></div>
+              <div class="rubric-item"><span class="rubric-crit">Aderência ao escopo</span><span class="rubric-desc">nenhum dado real de paciente ou terceiro foi usado</span></div>
+            </div>
+          </div>
+
+          <div class="panel full submission-panel">
+            <div class="panel-head"><h2>Submissão</h2><span class="panel-tag" id="submission-tag">rascunho</span></div>
+            <div id="submission-idle">
+              <p class="panel-caption" style="margin-top:0">Depois de rodar sua análise, submeta para a professora avaliar segundo a rubrica acima.</p>
+              <button type="button" class="run-btn" id="submit-btn" disabled style="background:var(--clinical)">Submeter para avaliação</button>
+            </div>
+            <div id="submission-waiting" hidden>
+              <p class="panel-caption" style="margin-top:0"><strong>Enviado.</strong> Aguardando avaliação da professora.</p>
+            </div>
+            <div id="submission-feedback" hidden>
+              <div class="feedback-box">
+                <div class="feedback-head">
+                  <span class="feedback-grade" id="feedback-grade">8,5</span>
+                  <div>
+                    <strong>Avaliação da Dra. Ana Lívia</strong>
+                    <span class="feedback-sub">Humor / depressividade</span>
+                  </div>
+                </div>
+                <p class="feedback-comment">Boa tradução do domínio, o vocabulário de queda de energia está bem capturado. Reforce a distinção entre o que é observação linguística e o que seria hipótese clínica, isso ainda mistura um pouco no seu texto.</p>
+              </div>
+            </div>
+          </div>
+
           <div class="panel full">
             <div class="panel-head"><h2>Histórico de execuções</h2><span class="panel-tag">seus experimentos</span></div>
             <div class="history-list">
-              <div class="history-row"><span class="t">ontem 14:20</span><span class="d">trecho sobre período de provas · valência −0,4</span></div>
-              <div class="history-row"><span class="t">ontem 11:05</span><span class="d">mensagem de colega · autofoco alto, hedging elevado</span></div>
-              <div class="history-row"><span class="t">seg 19:40</span><span class="d">transcrição de entrevista simulada · negação/ruminação: 3 marcadores</span></div>
+              <div class="history-row"><span class="t">ontem 14:20</span><span class="d">trecho sobre período de provas · valência −0,4 · não submetido</span></div>
+              <div class="history-row"><span class="t">ontem 11:05</span><span class="d">Ansiedade / medo · submetido · nota 9,0</span></div>
+              <div class="history-row"><span class="t">seg 19:40</span><span class="d">Ativação / mania · submetido · nota 8,0</span></div>
             </div>
           </div>
 
@@ -1551,8 +1612,36 @@
   updateCount();
   render('');
 
+  var submitBtn = document.getElementById('submit-btn');
+  var submissionTag = document.getElementById('submission-tag');
+  var submissionIdle = document.getElementById('submission-idle');
+  var submissionWaiting = document.getElementById('submission-waiting');
+  var submissionFeedback = document.getElementById('submission-feedback');
+
   document.getElementById('run-analysis').addEventListener('click', function(){
-    if (!runBtn.disabled) render(input.value);
+    if (runBtn.disabled) return;
+    render(input.value);
+    submitBtn.disabled = false;
+  });
+
+  input.addEventListener('input', function(){
+    submitBtn.disabled = true;
+    submissionTag.textContent = 'rascunho';
+    submissionIdle.hidden = false;
+    submissionWaiting.hidden = true;
+    submissionFeedback.hidden = true;
+  });
+
+  submitBtn.addEventListener('click', function(){
+    if (submitBtn.disabled) return;
+    submissionTag.textContent = 'aguardando avaliação';
+    submissionIdle.hidden = true;
+    submissionWaiting.hidden = false;
+    setTimeout(function(){
+      submissionTag.textContent = 'avaliado';
+      submissionWaiting.hidden = true;
+      submissionFeedback.hidden = false;
+    }, 1600);
   });
 
   /* ---- module switching (student sidebar) ---- */

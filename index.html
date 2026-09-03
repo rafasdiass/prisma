@@ -170,35 +170,21 @@
   .qstatus.done{ background:rgba(63,122,82,0.24); color:#9AD8A9; }
   .qstatus.wait{ background:rgba(217,169,79,0.24); color:#EFC272; }
 
-  .domain-results-panel{ margin-bottom:20px; }
-  .domain-results-panel .panel-head{ margin-bottom:16px; }
-  .domain-results-panel .panel-head h2{ font-size:17px; }
-  .domain-results-panel .panel-tag{
-    background:var(--pedagogic-soft); color:var(--pedagogic);
-    padding:4px 10px; border-radius:999px; font-weight:600;
-  }
-  .ayla-domain-narrative{ font-size:14px; color:var(--ink); line-height:1.6; margin:0 0 18px; max-width:76ch; }
+  .ayla-domain-narrative{ font-size:14.5px; color:var(--ink); line-height:1.65; margin:0 0 20px; max-width:78ch; }
   .ayla-domain-narrative b{ color:var(--pedagogic); font-weight:600; }
-
-  .domain-checklist{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:8px; margin-top:14px; }
-  .domain-checklist label{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink-soft); background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:8px 10px; cursor:pointer; }
-  .domain-checklist input{ accent-color:var(--pedagogic); }
-  .report-warning{ background:var(--pilot-soft); border:1px solid var(--pilot); border-radius:9px; padding:13px 15px; font-size:13px; color:var(--ink); line-height:1.5; margin:16px 0; }
+  .report-warning{ background:var(--pilot-soft); border:1px solid var(--pilot); border-radius:9px; padding:13px 15px; font-size:13px; color:var(--ink); line-height:1.5; margin-top:16px; }
   .report-warning strong{ color:var(--pilot); }
-  .modules-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:9px; }
-  .module-item{
-    display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%;
-    background:var(--surface); border:1px solid var(--line); text-align:left;
-    padding:12px 14px; border-radius:9px;
-    font-size:13px; color:var(--ink-soft); cursor:default; line-height:1.35;
-  }
-  .module-item.detected{ background:var(--pedagogic-soft); border-color:var(--pedagogic); color:var(--pedagogic); font-weight:700; }
-  .module-score{
-    font-family:"IBM Plex Mono", monospace; font-size:12px; font-weight:700;
-    color:var(--ink-faint); background:var(--surface-raised); border:1px solid var(--line-strong);
-    flex:0 0 auto; min-width:30px; text-align:center; padding:3px 8px; border-radius:999px;
-  }
-  .module-item.detected .module-score{ color:var(--pedagogic-contrast); background:var(--pedagogic); border-color:var(--pedagogic); }
+
+  .domain-chart{ display:flex; flex-direction:column; gap:9px; }
+  .domain-chart-row{ display:grid; grid-template-columns:170px 1fr 40px; align-items:center; gap:10px; }
+  .dc-label{ font-size:12.5px; color:var(--ink-soft); }
+  .dc-track{ height:9px; border-radius:5px; background:var(--surface); border:1px solid var(--line); overflow:hidden; }
+  .dc-fill{ height:100%; width:0%; background:var(--line-strong); transition:width .3s ease, background .2s ease; }
+  .domain-chart-row.detected .dc-label{ color:var(--pedagogic); font-weight:600; }
+  .domain-chart-row.detected .dc-fill{ background:var(--pedagogic); }
+  .dc-score{ font-family:"IBM Plex Mono", monospace; font-size:11.5px; color:var(--ink-faint); text-align:right; }
+  .domain-chart-row.detected .dc-score{ color:var(--pedagogic); font-weight:700; }
+  @media (max-width:560px){ .domain-chart-row{ grid-template-columns:1fr; gap:3px; } .dc-score{ text-align:left; } }
 
   .sidebar-foot{ margin-top:auto; padding:12px; font-size:11.5px; color:var(--sidebar-ink-dim); border-top:1px solid rgba(255,255,255,0.08); padding-top:14px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
   .theme-toggle{ display:inline-flex; align-items:center; gap:2px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.16); border-radius:999px; padding:2px; }
@@ -1246,26 +1232,6 @@
           <strong>Antes de continuar.</strong> Este texto pontuou no domínio de segurança/autoagressão. Se você escreveu algo real sobre você mesmo, isso vai além do exercício, procure o CVV (188, ligação gratuita) ou o serviço de apoio psicológico da sua faculdade. Se foi só um exemplo de estudo, siga tranquilo.
         </div>
 
-        <div class="panel domain-results-panel">
-          <div class="panel-head"><h2>Os 13 domínios, resultado desta sessão</h2><span class="panel-tag">score ao vivo, atualiza a cada trecho</span></div>
-          <p class="ayla-domain-narrative" id="ayla-domain-narrative">Ainda não tenho o que ler. Adicione um trecho à sessão e eu conto o que encontrei, com os marcadores que me fizeram chegar lá.</p>
-          <div class="modules-grid">
-            <button type="button" class="module-item" data-domain="Humor e depressividade"> Humor / depressividade<span class="module-score">—</span></button>
-            <button type="button" class="module-item" data-domain="Irritabilidade e raiva"> Irritabilidade / raiva<span class="module-score">—</span></button>
-            <button type="button" class="module-item" data-domain="Ativação e mania"> Ativação / hipomania-mania<span class="module-score">—</span></button>
-            <button type="button" class="module-item" data-domain="Ansiedade e medo"> Ansiedade / medo<span class="module-score">—</span></button>
-            <button type="button" class="module-item" data-domain="Sintomas corporais"> Sintomas corporais<span class="module-score">—</span></button>
-            <button type="button" class="module-item" data-domain="Segurança e autoagressão"> Segurança / autoagressão<span class="module-score">—</span></button>
-            <button type="button" class="module-item" data-domain="Percepção e psicose"> Percepção / psicose<span class="module-score">—</span></button>
-            <button type="button" class="module-item" data-domain="Sono"> Sono<span class="module-score">—</span></button>
-            <button type="button" class="module-item" data-domain="Memória e atenção"> Memória / atenção<span class="module-score">—</span></button>
-            <button type="button" class="module-item" data-domain="Pensamentos repetitivos"> Pensamentos repetitivos / compulsões<span class="module-score">—</span></button>
-            <button type="button" class="module-item" data-domain="Dissociação"> Dissociação / desligamento<span class="module-score">—</span></button>
-            <button type="button" class="module-item" data-domain="Funcionamento interpessoal"> Funcionamento da personalidade / relações<span class="module-score">—</span></button>
-            <button type="button" class="module-item" data-domain="Substâncias e medicações"> Substâncias / medicações<span class="module-score">—</span></button>
-          </div>
-        </div>
-
         <div class="progress-panel">
           <div class="progress-head">
             <span class="progress-label">Seu progresso na extensão</span>
@@ -1305,39 +1271,32 @@
             <div id="student-output" class="out-metric"></div>
           </div>
 
+          <div class="panel full">
+            <div class="panel-head"><h2>Minha leitura dos 13 domínios</h2><span class="panel-tag">atualiza a cada trecho</span></div>
+            <p class="ayla-domain-narrative" id="ayla-domain-narrative">Ainda não tenho o que ler. Adicione um trecho à sessão e eu conto o que encontrei, com os marcadores que me fizeram chegar lá.</p>
+            <div class="domain-chart" id="domain-chart">
+              <div class="domain-chart-row" data-domain="Humor e depressividade"><span class="dc-label">Humor / depressividade</span><div class="dc-track"><div class="dc-fill"></div></div><span class="dc-score">—</span></div>
+              <div class="domain-chart-row" data-domain="Irritabilidade e raiva"><span class="dc-label">Irritabilidade / raiva</span><div class="dc-track"><div class="dc-fill"></div></div><span class="dc-score">—</span></div>
+              <div class="domain-chart-row" data-domain="Ativação e mania"><span class="dc-label">Ativação / hipomania-mania</span><div class="dc-track"><div class="dc-fill"></div></div><span class="dc-score">—</span></div>
+              <div class="domain-chart-row" data-domain="Ansiedade e medo"><span class="dc-label">Ansiedade / medo</span><div class="dc-track"><div class="dc-fill"></div></div><span class="dc-score">—</span></div>
+              <div class="domain-chart-row" data-domain="Sintomas corporais"><span class="dc-label">Sintomas corporais</span><div class="dc-track"><div class="dc-fill"></div></div><span class="dc-score">—</span></div>
+              <div class="domain-chart-row" data-domain="Segurança e autoagressão"><span class="dc-label">Segurança / autoagressão</span><div class="dc-track"><div class="dc-fill"></div></div><span class="dc-score">—</span></div>
+              <div class="domain-chart-row" data-domain="Percepção e psicose"><span class="dc-label">Percepção / psicose</span><div class="dc-track"><div class="dc-fill"></div></div><span class="dc-score">—</span></div>
+              <div class="domain-chart-row" data-domain="Sono"><span class="dc-label">Sono</span><div class="dc-track"><div class="dc-fill"></div></div><span class="dc-score">—</span></div>
+              <div class="domain-chart-row" data-domain="Memória e atenção"><span class="dc-label">Memória / atenção</span><div class="dc-track"><div class="dc-fill"></div></div><span class="dc-score">—</span></div>
+              <div class="domain-chart-row" data-domain="Pensamentos repetitivos"><span class="dc-label">Pensamentos repetitivos</span><div class="dc-track"><div class="dc-fill"></div></div><span class="dc-score">—</span></div>
+              <div class="domain-chart-row" data-domain="Dissociação"><span class="dc-label">Dissociação</span><div class="dc-track"><div class="dc-fill"></div></div><span class="dc-score">—</span></div>
+              <div class="domain-chart-row" data-domain="Funcionamento interpessoal"><span class="dc-label">Funcionamento interpessoal</span><div class="dc-track"><div class="dc-fill"></div></div><span class="dc-score">—</span></div>
+              <div class="domain-chart-row" data-domain="Substâncias e medicações"><span class="dc-label">Substâncias / medicações</span><div class="dc-track"><div class="dc-fill"></div></div><span class="dc-score">—</span></div>
+            </div>
+            <div class="report-warning">
+              <strong>O que este gráfico não permite concluir:</strong> um trecho isolado, sem entrevista, sem história e sem contexto de vida, nunca sustenta diagnóstico. Cada score é hipótese de leitura, não conclusão clínica.
+            </div>
+          </div>
+
           <div class="panel">
             <div class="panel-head"><h2>Sobre esta heurística</h2><span class="panel-tag">didático</span></div>
             <p class="panel-caption" style="margin-top:0">O que você está vendo é uma simulação por contagem de léxico, feita pra ensinar o raciocínio de cada extractor isoladamente. Em produção, o mesmo extractor roda sobre um modelo estatístico treinado, não sobre uma lista de palavras. Troque de ferramenta ao lado pra ver o que cada uma mede especificamente no mesmo texto.</p>
-          </div>
-
-          <div class="panel full">
-            <div class="panel-head"><h2>Seu laudo</h2><span class="panel-tag">a atividade de verdade é esta, não os scores</span></div>
-            <p class="panel-caption" style="margin-top:0">Os extratores discordam entre si o tempo todo, isso é esperado. O exercício não é rodar a ferramenta, é você escrever a leitura clínica: por que este trecho pontuou o que pontuou, o que um extractor viu que o outro não viu, e o que isso muda na leitura do caso.</p>
-
-            <div class="domain-checklist" id="domain-checklist"></div>
-
-            <label for="justification-input" class="visually-hidden">Sua justificativa clínica</label>
-            <textarea id="justification-input" style="min-height:120px; margin-top:12px" placeholder="Escreva sua leitura clínica: cite os extratores que rodou, os domínios marcados acima, e onde eles concordam ou discordam."></textarea>
-            <div class="char-count" id="justification-count">0 de 400 caracteres sugeridos</div>
-
-            <div class="report-warning">
-              <strong>O que este exercício NÃO permite concluir:</strong> um trecho isolado, sem entrevista, sem história e sem contexto de vida, nunca sustenta diagnóstico. O score de um domínio é hipótese de leitura, não conclusão clínica. Isso vale mesmo com um laudo bem escrito.
-            </div>
-
-            <div id="justification-idle">
-              <button type="button" class="run-btn secondary" id="submit-justification-btn" disabled>Enviar minha submissão</button>
-            </div>
-            <div id="justification-sent" hidden>
-              <div class="feedback-box">
-                <div class="feedback-head">
-                  <span class="feedback-grade">✓</span>
-                  <div>
-                    <strong>Enviado, aguardando revisão</strong>
-                    <span class="feedback-sub">Salvo neste navegador. Este é seu histórico de sessões, a correção é humana e acontece fora da ferramenta.</span>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
         </div>
@@ -1835,7 +1794,7 @@
 
 
   /* ---- 13 domínios: léxico real de marcadores clínicos em PT-BR, detecção automática ---- */
-  var moduleButtons = document.querySelectorAll('.module-item');
+  var domainChartRows = document.querySelectorAll('.domain-chart-row');
 
   var DOMAIN_LEX = {
     'Humor e depressividade': ['sem vontade','desanimado','desanimada','tristeza','triste','não sinto prazer','sem energia','difícil levantar','sem sentido','vazio','vazia','desmotivado','desmotivada','cansado de tudo','sem ânimo'],
@@ -1852,61 +1811,6 @@
     'Funcionamento interpessoal': ['brigo direto','medo de ser abandonado','medo de ser abandonada','desconfio','difícil confiar','afasto as pessoas','ciúme','fico esperando ser deixado'],
     'Substâncias e medicações': ['bebo mais','uso remédio','parei de tomar','aumentei a dose','fumo pra relaxar','ressaca','bebida pra dormir','remédio pra ansiedade']
   };
-
-  /* ---- checklist de domínios do laudo, reaproveita as chaves do DOMAIN_LEX ---- */
-  var checklistEl = document.getElementById('domain-checklist');
-  if (checklistEl){
-    checklistEl.innerHTML = Object.keys(DOMAIN_LEX).map(function(key){
-      return '<label><input type="checkbox" value="' + key + '"> ' + key.replace(' e ', ' / ') + '</label>';
-    }).join('');
-  }
-
-  /* ---- laudo do aluno: justificativa + submissão travada, sem nota simulada ---- */
-  var justInput = document.getElementById('justification-input');
-  var justCount = document.getElementById('justification-count');
-  var justSubmitBtn = document.getElementById('submit-justification-btn');
-  var justIdleEl = document.getElementById('justification-idle');
-  var justSentEl = document.getElementById('justification-sent');
-  var JUST_MIN = 400;
-
-  function updateJustCount(){
-    if (!justInput) return;
-    var len = justInput.value.trim().length;
-    var checked = checklistEl ? checklistEl.querySelectorAll('input:checked').length : 0;
-    var ok = len >= JUST_MIN && checked > 0;
-    justCount.textContent = len + ' de ' + JUST_MIN + ' caracteres sugeridos' + (checked ? ', ' + checked + ' domínio(s) marcado(s)' : ', marque ao menos 1 domínio acima');
-    justSubmitBtn.disabled = !ok;
-  }
-  if (justInput){
-    justInput.addEventListener('input', updateJustCount);
-    if (checklistEl) checklistEl.addEventListener('change', updateJustCount);
-    updateJustCount();
-  }
-
-  if (justSubmitBtn){
-    justSubmitBtn.addEventListener('click', function(){
-      if (justSubmitBtn.disabled) return;
-      var markedDomains = Array.prototype.slice.call(checklistEl.querySelectorAll('input:checked')).map(function(c){ return c.value; });
-      var record = {
-        sessionId: 'sess-' + Date.now(),
-        trechoOriginal: sessionFullText(),
-        extractorRodado: TOOLS[activeTool].label,
-        dominiosMarcados: markedDomains,
-        justificativa: justInput.value.trim(),
-        timestamp: new Date().toISOString(),
-        status: 'enviado'
-      };
-      try {
-        var subs = JSON.parse(localStorage.getItem('prisma-student-submissions') || '[]');
-        subs.push(record);
-        localStorage.setItem('prisma-student-submissions', JSON.stringify(subs));
-      } catch(e){}
-      justInput.disabled = true;
-      checklistEl.querySelectorAll('input').forEach(function(c){ c.disabled = true; });
-      justIdleEl.hidden = true;
-      justSentEl.hidden = false;
-    });
-  }
 
   function computeDomainMatch(text){
     var lowered = (text || '').toLowerCase();
@@ -1934,9 +1838,11 @@
 
   function updateDomainMatch(){
     var text = sessionFullText();
-    moduleButtons.forEach(function(b){
-      b.classList.remove('detected');
-      var scoreEl = b.querySelector('.module-score');
+    domainChartRows.forEach(function(row){
+      row.classList.remove('detected');
+      var fillEl = row.querySelector('.dc-fill');
+      if (fillEl) fillEl.style.width = '0%';
+      var scoreEl = row.querySelector('.dc-score');
       if (scoreEl) scoreEl.textContent = '—';
     });
     if (!text.trim()){
@@ -1948,8 +1854,12 @@
     var ranked = computeDomainMatch(text);
 
     ranked.forEach(function(r){
-      var el = document.querySelector('.module-item[data-domain="' + r.label + '"] .module-score');
-      if (el) el.textContent = Math.round(r.score);
+      var row = document.querySelector('.domain-chart-row[data-domain="' + r.label + '"]');
+      if (!row) return;
+      var fillEl = row.querySelector('.dc-fill');
+      if (fillEl) fillEl.style.width = Math.round(r.score) + '%';
+      var scoreEl = row.querySelector('.dc-score');
+      if (scoreEl) scoreEl.textContent = Math.round(r.score);
     });
 
     var hits = ranked.filter(function(r){ return r.hits > 0; });
@@ -1963,8 +1873,8 @@
     domainMatchEl.innerHTML = '<span class="domain-match-pill top">' + top.label + ' ' + Math.round(top.score) + '/100</span><span class="domain-match-hint">marcadores: "' + top.matched.join('", "') + '".</span>';
     domainDynamic.innerHTML = '<b>' + top.label + '</b>, domínio mais provável nesta sessão até agora.';
     pedagogicTitle.textContent = 'Meu extractor · ' + top.label;
-    var topEl = document.querySelector('.module-item[data-domain="' + top.label + '"]');
-    if (topEl) topEl.classList.add('detected');
+    var topRow = document.querySelector('.domain-chart-row[data-domain="' + top.label + '"]');
+    if (topRow) topRow.classList.add('detected');
 
     if (aylaDomainNarrativeEl){
       var second = hits[1];

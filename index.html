@@ -83,7 +83,7 @@
   }
   ::selection{ background:var(--clinical-soft); color:var(--ink); }
   @media (prefers-reduced-motion: reduce){ *{ animation-duration:.001ms !important; transition-duration:.001ms !important; } }
-  button{ font-family:inherit; }
+  button{ font-family:inherit; color:inherit; background:none; border:none; appearance:none; -webkit-appearance:none; text-align:inherit; }
   ::-webkit-scrollbar{ width:9px; height:9px; }
   ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
   textarea:focus-visible, button:focus-visible{ outline:2px solid var(--clinical); outline-offset:2px; }
@@ -177,7 +177,10 @@
   .module-item.done .module-check{ background:var(--good); border-color:var(--good); color:#0F1311; }
   .module-item.active .module-check{ border-color:#D6A374; }
 
-  .sidebar-foot{ margin-top:auto; padding:12px; font-size:11.5px; color:var(--sidebar-ink-dim); border-top:1px solid rgba(255,255,255,0.08); padding-top:14px; }
+  .sidebar-foot{ margin-top:auto; padding:12px; font-size:11.5px; color:var(--sidebar-ink-dim); border-top:1px solid rgba(255,255,255,0.08); padding-top:14px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .theme-toggle{ display:inline-flex; align-items:center; gap:2px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.16); border-radius:999px; padding:2px; }
+  .theme-toggle button{ padding:5px 9px; border-radius:999px; font-size:12px; color:var(--sidebar-ink-dim); cursor:pointer; }
+  .theme-toggle button.active{ background:rgba(255,255,255,0.16); color:#F3F5F1; }
   .env-badge{ display:inline-flex; align-items:center; gap:6px; font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:#D9A94F; font-weight:600; }
   .env-badge .d{ width:6px; height:6px; border-radius:50%; background:#D9A94F; }
 
@@ -560,6 +563,10 @@
 
     <div class="sidebar-foot">
       <span class="env-badge"><span class="d"></span> ambiente piloto</span>
+      <div class="theme-toggle" role="group" aria-label="Tema da interface">
+        <button type="button" data-theme-set="light" aria-label="Tema claro">☀</button>
+        <button type="button" data-theme-set="dark" aria-label="Tema escuro">☾</button>
+      </div>
     </div>
   </aside>
 
@@ -1041,6 +1048,18 @@
 
 <script>
 (function(){
+  var root = document.documentElement;
+  var themeButtons = document.querySelectorAll('.theme-toggle button');
+  function setTheme(theme){
+    root.setAttribute('data-theme', theme);
+    themeButtons.forEach(function(b){ b.classList.toggle('active', b.dataset.themeSet === theme); });
+    try { localStorage.setItem('anamnesis-theme', theme); } catch(e){}
+  }
+  themeButtons.forEach(function(b){ b.addEventListener('click', function(){ setTheme(b.dataset.themeSet); }); });
+  var savedTheme = null;
+  try { savedTheme = localStorage.getItem('anamnesis-theme'); } catch(e){}
+  if (savedTheme === 'light' || savedTheme === 'dark') setTheme(savedTheme);
+
   var body = document.body;
   var modeButtons = document.querySelectorAll('.mode-switch button');
 

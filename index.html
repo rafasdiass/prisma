@@ -102,7 +102,8 @@
     display:flex; flex-direction:column;
     padding:18px 14px 20px; overflow-y:auto;
   }
-  .brand{ display:flex; align-items:center; gap:9px; padding:6px 8px 18px; }
+  .brand{ display:flex; align-items:center; gap:9px; padding:6px 8px 4px; }
+  .brand-tagline{ font-size:11.5px; line-height:1.4; color:var(--sidebar-ink-dim); padding:0 8px 18px; margin:0; }
   .brand-mark{ width:26px; height:26px; border-radius:7px; background:linear-gradient(155deg, var(--clinical), #4a8a86); flex:0 0 auto; }
   .brand-name{ font-family:"Source Serif 4", serif; font-weight:600; font-size:16.5px; color:#F3F5F1; letter-spacing:0.01em; }
 
@@ -259,6 +260,8 @@
   .tile .v.warn{ color:var(--warn); }
 
   /* ---------- processing overlay ---------- */
+  .differentiator-note{ background:var(--clinical-soft); border:1px solid var(--clinical); color:var(--ink); border-radius:var(--radius); padding:14px 16px; font-size:13px; line-height:1.55; margin-bottom:20px; }
+  .differentiator-note strong{ color:var(--clinical); }
   .processing-note{ background:var(--pilot-soft); border:1px solid var(--pilot); color:var(--ink); border-radius:var(--radius); padding:14px 16px; font-size:13.5px; line-height:1.55; margin-bottom:20px; }
   .processing-note strong{ color:var(--pilot); }
   #clinical-panels.is-processing{ opacity:.42; filter:grayscale(.35); pointer-events:none; transition:opacity .2s ease; }
@@ -562,6 +565,7 @@
       <div class="brand-mark" aria-hidden="true"></div>
       <span class="brand-name">Prisma</span>
     </div>
+    <p class="brand-tagline">O único que lê padrão relacional (DARVO, Gottman, vínculo) cruzado com voz e vídeo</p>
 
     <nav class="mode-switch" role="tablist" aria-label="Área de trabalho">
       <button type="button" data-set="clinical" class="active" role="tab" aria-selected="true">
@@ -638,6 +642,14 @@
       <!-- ============ CLINICAL WORKSPACE ============ -->
       <div data-panel="clinical">
 
+        <nav class="clinical-tabs" role="tablist" aria-label="Seções da avaliação">
+          <button type="button" class="clinical-tab active" data-tab="resumo" role="tab" aria-selected="true">Resumo</button>
+          <button type="button" class="clinical-tab" data-tab="linguagem" role="tab" aria-selected="false">Linguagem <span class="tab-count">12</span></button>
+          <button type="button" class="clinical-tab" data-tab="voz-corpo" role="tab" aria-selected="false">Voz e corpo <span class="tab-count">3</span></button>
+          <button type="button" class="clinical-tab" data-tab="vinculo" role="tab" aria-selected="false">Vínculo <span class="tab-count">12</span></button>
+          <button type="button" class="clinical-tab" data-tab="notas" role="tab" aria-selected="false">Notas da Dra.</button>
+        </nav>
+
         <div class="safety-gate cleared" id="safety-gate" role="status" aria-live="polite">
           <span class="safety-icon" aria-hidden="true">✓</span>
           <div class="safety-text">
@@ -690,14 +702,6 @@
           </div>
         </div>
 
-        <nav class="clinical-tabs" role="tablist" aria-label="Seções da avaliação">
-          <button type="button" class="clinical-tab active" data-tab="resumo" role="tab" aria-selected="true">Resumo</button>
-          <button type="button" class="clinical-tab" data-tab="linguagem" role="tab" aria-selected="false">Linguagem <span class="tab-count">12</span></button>
-          <button type="button" class="clinical-tab" data-tab="voz-corpo" role="tab" aria-selected="false">Voz e corpo <span class="tab-count">3</span></button>
-          <button type="button" class="clinical-tab" data-tab="vinculo" role="tab" aria-selected="false">Vínculo <span class="tab-count">12</span></button>
-          <button type="button" class="clinical-tab" data-tab="notas" role="tab" aria-selected="false">Notas da Dra.</button>
-        </nav>
-
         <div data-tab-content="resumo" class="active">
         <div class="tiles">
           <div class="tile"><span class="k">Canais captados</span><span class="v good" style="font-size:14px">Texto, áudio e vídeo</span></div>
@@ -708,12 +712,17 @@
           <div class="tile"><span class="k">Extratores rodados</span><span class="v good">17 de 91</span></div>
         </div>
 
+        <div class="differentiator-note">
+          <strong>Por que o Prisma não é mais um Lyssn ou Eleos Health:</strong> instrumentos de triagem padrão (PHQ-9, GAD-7) e plataformas de nota de sessão medem humor e ansiedade em texto. Nenhum deles cruza padrão relacional real (DARVO, os 4 Cavaleiros de Gottman, love bombing, resposta polivagal) com voz e vídeo da mesma sessão. É esse cruzamento, aba <b>Vínculo</b>, que ninguém mais oferece hoje.
+        </div>
+
         <div class="processing-note" id="processing-note" hidden>
           <strong>Sessão em processamento.</strong> A síntese e os padrões abaixo ficam disponíveis assim que a análise for concluída. Os painéis exibidos agora ainda mostram a última sessão revisada.
         </div>
 
         <div class="timeline-panel">
-          <div class="panel-head"><h2>Estrutura da entrevista</h2><span class="panel-tag">6 blocos por ordem real, clique para abrir</span></div>
+          <div class="panel-head"><h2>Estrutura da entrevista</h2><span class="panel-tag">segmentado por mim a partir da transcrição, clique para abrir</span></div>
+          <p class="section-note" style="margin:-8px 0 14px;font-size:12.5px;color:var(--ink-faint)">Você não precisa marcar nada durante a entrevista. Eu reconheço cada bloco depois, comparando o que foi dito com o roteiro do protocolo.</p>
           <div class="tl-legend">
             <span class="tl-legend-item"><span class="tl-legend-swatch" aria-hidden="true"></span> bloco selecionado</span>
             <span class="tl-legend-item"><span class="tl-legend-dot" aria-hidden="true"></span> cada ponto = 1 evento marcado no bloco (nenhum ponto = nenhum evento)</span>
@@ -744,7 +753,7 @@
               <span class="tl-events-row"></span>
             </button>
           </div>
-          <div class="tl-caption"><span>00:00</span><span>largura de cada bloco é proporcional ao tempo real dele na sessão</span><span id="tl-end">17:04</span></div>
+          <div class="tl-caption"><span>00:00</span><span>segmentação automática, largura proporcional ao tempo real de cada bloco</span><span id="tl-end">17:04</span></div>
           <div class="tl-detail" id="tl-detail"></div>
         </div>
         </div>

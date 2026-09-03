@@ -1,12 +1,12 @@
-# Anamnésis, por Ayla
+# Prisma, por Ayla
 
 Protótipo de interface para um assistente de IA de observação multimodal aplicado à avaliação psiquiátrica. É a Ayla numa aplicação clínica específica.
 
-**Demo ao vivo:** https://rafasdiass.github.io/anamnesis/
+**Demo ao vivo:** https://rafasdiass.github.io/prisma/
 
 ## O que é
 
-*Anamnese* é a palavra que todo psiquiatra usa para a coleta estruturada da história do paciente. O Anamnésis conduz, junto com o profissional, uma entrevista transdiagnóstica multimodal — analisando fala, voz, vídeo e comportamento — e devolve um mapa de padrões e divergências para o médico interpretar. Ele não diagnostica: mede compatibilidade de padrão, mostra evidência com marca de tempo, e para quando há sinal de risco.
+O Prisma decompõe o que a pessoa mostra numa entrevista clínica — fala, voz, vídeo, comportamento — em vários sinais, e devolve esse espectro para o médico ler. Conduzido junto com o profissional, ele roda uma entrevista transdiagnóstica multimodal e devolve um mapa de padrões e divergências para o médico interpretar. Ele não diagnostica: mede compatibilidade de padrão, mostra evidência com marca de tempo, e para quando há sinal de risco.
 
 O protocolo por trás do produto combina três referências públicas, sem reproduzir nenhuma na íntegra:
 

@@ -171,19 +171,28 @@
   .qstatus.wait{ background:rgba(217,169,79,0.24); color:#EFC272; }
 
   .domain-results-panel{ margin-bottom:20px; }
-  .modules-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:6px; }
+  .domain-results-panel .panel-head{ margin-bottom:16px; }
+  .domain-results-panel .panel-head h2{ font-size:17px; }
+  .domain-results-panel .panel-tag{
+    background:var(--pedagogic-soft); color:var(--pedagogic);
+    padding:4px 10px; border-radius:999px; font-weight:600;
+  }
+  .ayla-domain-narrative{ font-size:14px; color:var(--ink); line-height:1.6; margin:0 0 18px; max-width:76ch; }
+  .ayla-domain-narrative b{ color:var(--pedagogic); font-weight:600; }
+  .modules-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:9px; }
   .module-item{
-    display:flex; align-items:center; justify-content:space-between; gap:9px; width:100%;
+    display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%;
     background:var(--surface); border:1px solid var(--line); text-align:left;
-    padding:8px 12px; border-radius:8px;
-    font-size:12.5px; color:var(--ink-soft); cursor:default; line-height:1.3;
+    padding:12px 14px; border-radius:9px;
+    font-size:13px; color:var(--ink-soft); cursor:default; line-height:1.35;
   }
-  .module-item.detected{ background:var(--pedagogic-soft); border-color:var(--pedagogic); color:var(--pedagogic); font-weight:600; }
+  .module-item.detected{ background:var(--pedagogic-soft); border-color:var(--pedagogic); color:var(--pedagogic); font-weight:700; }
   .module-score{
-    font-family:"IBM Plex Mono", monospace; font-size:12px; font-weight:600;
-    color:var(--ink-faint); flex:0 0 auto; min-width:22px; text-align:right;
+    font-family:"IBM Plex Mono", monospace; font-size:12px; font-weight:700;
+    color:var(--ink-faint); background:var(--surface-raised); border:1px solid var(--line-strong);
+    flex:0 0 auto; min-width:30px; text-align:center; padding:3px 8px; border-radius:999px;
   }
-  .module-item.detected .module-score{ color:var(--pedagogic); }
+  .module-item.detected .module-score{ color:var(--pedagogic-contrast); background:var(--pedagogic); border-color:var(--pedagogic); }
 
   .sidebar-foot{ margin-top:auto; padding:12px; font-size:11.5px; color:var(--sidebar-ink-dim); border-top:1px solid rgba(255,255,255,0.08); padding-top:14px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
   .theme-toggle{ display:inline-flex; align-items:center; gap:2px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.16); border-radius:999px; padding:2px; }
@@ -1233,6 +1242,7 @@
 
         <div class="panel domain-results-panel">
           <div class="panel-head"><h2>Os 13 domínios, resultado desta sessão</h2><span class="panel-tag">score ao vivo, atualiza a cada trecho</span></div>
+          <p class="ayla-domain-narrative" id="ayla-domain-narrative">Ainda não tenho o que ler. Adicione um trecho à sessão e eu conto o que encontrei, com os marcadores que me fizeram chegar lá.</p>
           <div class="modules-grid">
             <button type="button" class="module-item" data-domain="Humor e depressividade"> Humor / depressividade<span class="module-score">—</span></button>
             <button type="button" class="module-item" data-domain="Irritabilidade e raiva"> Irritabilidade / raiva<span class="module-score">—</span></button>
@@ -1700,9 +1710,12 @@
   render('');
 
   var SEED_HISTORY = [
-    { time:'ontem 14:20', domain:'Sono', tool:'Estilo linguístico (LIWC)', msgCount:3, top:{ name:'Valência estimada', score:38 } },
-    { time:'ontem 11:05', domain:'Ansiedade / medo', tool:'Orientação temporal', msgCount:2, top:{ name:'Orientação temporal', score:71 } },
-    { time:'seg 19:40', domain:'Ativação / hipomania-mania', tool:'4 Cavaleiros (Gottman)', msgCount:4, top:{ name:'Defensividade', score:44 } }
+    { time:'ontem 14:20', domain:'Sono', tool:'Estilo linguístico (LIWC)', toolKey:'liwc', msgCount:3, top:{ name:'Valência estimada', score:38 },
+      messages:['Faz um tempo que eu durmo tarde e acordo cansado mesmo dormindo bastante.','Às vezes acordo no meio da noite e demoro pra voltar a dormir.','No outro dia fico sem energia pra nada, mesmo tendo dormido umas horas.'] },
+    { time:'ontem 11:05', domain:'Ansiedade e medo', tool:'Orientação temporal', toolKey:'time', msgCount:2, top:{ name:'Orientação temporal', score:71 },
+      messages:['Fico tenso antes de qualquer prova, meu coração dispara.','Começo a pensar em tudo que pode dar errado antes mesmo de acontecer.'] },
+    { time:'seg 19:40', domain:'Funcionamento interpessoal', tool:'4 Cavaleiros (Gottman)', toolKey:'gottman', msgCount:4, top:{ name:'Defensividade', score:44 },
+      messages:['Toda vez que brigo com alguém eu prefiro sumir um tempo.','Mas eu só reagi porque ela começou primeiro.','Não foi minha culpa, ela que exagerou.','Depois fico com medo de que a pessoa não queira mais falar comigo.'] }
   ];
 
   var HISTORY = [];
@@ -1732,18 +1745,36 @@
     return top ? top.label : 'Nenhum domínio dominante ainda';
   }
 
+  function replayHistoryEntry(index){
+    var h = HISTORY[HISTORY.length - 1 - index];
+    if (!h) return;
+    SESSION_MESSAGES = (h.messages || []).slice();
+    renderSessionThread();
+    if (h.toolKey && TOOLS[h.toolKey]){
+      activeTool = h.toolKey;
+      document.querySelectorAll('.tool-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.tool === h.toolKey); });
+      toolExplainer.textContent = TOOLS[h.toolKey].explainer;
+    }
+    render(sessionFullText());
+    updateDomainMatch();
+    document.querySelector('.workspace-grid').scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
   function renderHistory(){
     if (!HISTORY.length){
       historyListEl.innerHTML = '<div class="side-label" style="padding:0 12px">nenhuma análise ainda</div>';
       return;
     }
-    historyListEl.innerHTML = HISTORY.slice().reverse().slice(0, 8).map(function(h){
-      return '<div class="sidebar-history-item">' +
+    historyListEl.innerHTML = HISTORY.slice().reverse().slice(0, 8).map(function(h, i){
+      return '<button type="button" class="sidebar-history-item" data-hindex="' + i + '">' +
         '<div class="h-top"><span>' + h.time + '</span><span>' + h.msgCount + (h.msgCount === 1 ? ' trecho' : ' trechos') + '</span></div>' +
         '<span class="h-domain">' + h.domain + '</span>' +
         '<span class="h-signal">' + h.tool + (h.top ? ' · ' + h.top.name + ' ' + h.top.score : '') + '</span>' +
-      '</div>';
+      '</button>';
     }).join('');
+    historyListEl.querySelectorAll('.sidebar-history-item').forEach(function(btn){
+      btn.addEventListener('click', function(){ replayHistoryEntry(parseInt(btn.dataset.hindex, 10)); });
+    });
   }
   renderHistory();
 
@@ -1757,7 +1788,9 @@
       time: now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}),
       domain: currentDomainLabel(),
       tool: TOOLS[activeTool].label,
+      toolKey: activeTool,
       msgCount: SESSION_MESSAGES.length,
+      messages: SESSION_MESSAGES.slice(),
       top: top
     });
     saveHistory();
@@ -1806,6 +1839,7 @@
   var domainMatchEl = document.getElementById('domain-match');
 
   var safetyNoteEl = document.getElementById('student-safety-note');
+  var aylaDomainNarrativeEl = document.getElementById('ayla-domain-narrative');
 
   function updateDomainMatch(){
     var text = sessionFullText();
@@ -1817,6 +1851,7 @@
     if (!text.trim()){
       domainMatchEl.innerHTML = '<span class="output-empty">Adicione trechos à sessão para eu apontar qual domínio pontua mais alto, em todos os 13 ao mesmo tempo.</span>';
       if (safetyNoteEl) safetyNoteEl.hidden = true;
+      if (aylaDomainNarrativeEl) aylaDomainNarrativeEl.textContent = 'Ainda não tenho o que ler. Adicione um trecho à sessão e eu conto o que encontrei, com os marcadores que me fizeram chegar lá.';
       return;
     }
     var ranked = computeDomainMatch(text);
@@ -1826,17 +1861,30 @@
       if (el) el.textContent = Math.round(r.score);
     });
 
-    var top = ranked.filter(function(r){ return r.hits > 0; })[0];
+    var hits = ranked.filter(function(r){ return r.hits > 0; });
+    var top = hits[0];
     if (!top){
       domainMatchEl.innerHTML = '<span class="output-empty">Nenhum dos 13 domínios se destacou ainda neste texto.</span>';
       if (safetyNoteEl) safetyNoteEl.hidden = true;
+      if (aylaDomainNarrativeEl) aylaDomainNarrativeEl.textContent = 'Rodei os 13 domínios sobre o que você escreveu até agora e nenhum deles pontuou. Ou o texto ainda é curto, ou não bate com nenhum dos marcadores que eu procuro.';
       return;
     }
-    domainMatchEl.innerHTML = '<span class="domain-match-pill top">' + top.label + ' ' + Math.round(top.score) + '/100</span><span class="domain-match-hint">marcadores: "' + top.matched.join('", "') + '", veja o ranking completo dos 13 domínios na barra lateral.</span>';
+    domainMatchEl.innerHTML = '<span class="domain-match-pill top">' + top.label + ' ' + Math.round(top.score) + '/100</span><span class="domain-match-hint">marcadores: "' + top.matched.join('", "') + '".</span>';
     domainDynamic.innerHTML = '<b>' + top.label + '</b>, domínio mais provável nesta sessão até agora.';
     pedagogicTitle.textContent = 'Meu extractor · ' + top.label;
     var topEl = document.querySelector('.module-item[data-domain="' + top.label + '"]');
     if (topEl) topEl.classList.add('detected');
+
+    if (aylaDomainNarrativeEl){
+      var second = hits[1];
+      var narrative = 'Rodei os 13 domínios sobre a sua sessão. O que mais se destacou foi <b>' + top.label + '</b>, banda ' + (top.score >= 60 ? 'moderada a alta' : 'baixa a moderada') + ', porque encontrei "' + top.matched.join('", "') + '" no que você escreveu.';
+      if (second){
+        narrative += ' Logo atrás vem <b>' + second.label + '</b>, com "' + second.matched.join('", "') + '", mas ainda abaixo do primeiro.';
+      } else {
+        narrative += ' Nenhum outro domínio chegou perto disso ainda.';
+      }
+      aylaDomainNarrativeEl.innerHTML = narrative;
+    }
 
     var safety = ranked.filter(function(r){ return r.label === 'Segurança e autoagressão'; })[0];
     if (safetyNoteEl){

@@ -671,8 +671,8 @@
             <div class="opinion-stat"><span class="k">Decisão final</span><span class="v">Dra. Ana Lívia</span></div>
           </div>
           <div class="opinion-main">
-            <h3 class="opinion-title">Paciente 4 — sofrimento ativo com forte autocontenção</h3>
-            <div class="opinion-body">
+            <h3 class="opinion-title" id="opinion-title">Paciente 4 — sofrimento ativo com forte autocontenção</h3>
+            <div class="opinion-body" id="opinion-body">
               <p>Olha, eu vi bastante coisa nesses seis blocos e vou te falar direto. Ela passa a sessão inteira num tom baixo, sem quase nenhuma variação, a voz vai ficando mais monótona conforme o tempo passa, isso pra mim é humor depressivo, banda alta, 71, e eu não tenho dúvida nisso. E o corpo dela entrega o que a boca não conta: ela diz "tô tranquila", mas a voz sobe e a mão vai pro braço dela sozinha bem na hora que o assunto aperta. Aconteceu mais de uma vez. Isso é ansiedade segurada, não é imaginação minha.</p>
               <p>Tem uma terceira coisa que me incomodou mais que o resto: ela fica voltando pro mesmo ponto de dor, três vezes, em partes diferentes da conversa, e nunca sai do lugar com aquilo, é ruminação de verdade. Junta isso com o jeito dela de falar de briga, sem deixar nenhuma brecha pra fazer as pazes depois, e o que me sobra é o retrato de alguém que aprendeu, não sei quando, que segurar sozinha é mais seguro do que pedir colo. E talvez hoje ela nem tenha mais esse colo por perto. Se você só tiver tempo pra olhar uma coisa direito, olha esse par, o humor com a ruminação, não fica presa num número solto.</p>
               <p>Eu falo o nome do que vejo e digo por que vi aquilo, não escondo isso de você. Mas o que isso significa de verdade, quem decide é você, essa linha eu não passo, nem quando calar dói. Do meu lado eu só posso dizer uma coisa com o peito inteiro: isso merece seu tempo de verdade. Alguém carregando isso sozinho precisa achar colo do outro lado da mesa.</p>
@@ -1278,10 +1278,34 @@
 
   /* ---- session queue switching ---- */
   var SESSIONS = {
-    'Paciente 4': { status:'ready', label:'pronta para revisão', sub:'gravada em 30/08/2026, processada em 29 min', gravacao:'30/08/2026 · 14:12', analise:'30/08/2026 · 14:41', dur:'17:04', maiorSinal:'Humor depressivo · 71%', contradicoes:'3' },
+    'Paciente 4': {
+      status:'ready', label:'pronta para revisão', sub:'gravada em 30/08/2026, processada em 29 min', gravacao:'30/08/2026 · 14:12', analise:'30/08/2026 · 14:41', dur:'17:04', maiorSinal:'Humor depressivo · 71%', contradicoes:'3',
+      opinionTitle:'Paciente 4 — sofrimento ativo com forte autocontenção',
+      opinionBody:[
+        'Olha, eu vi bastante coisa nesses seis blocos e vou te falar direto. Ela passa a sessão inteira num tom baixo, sem quase nenhuma variação, a voz vai ficando mais monótona conforme o tempo passa, isso pra mim é humor depressivo, banda alta, 71, e eu não tenho dúvida nisso. E o corpo dela entrega o que a boca não conta: ela diz "tô tranquila", mas a voz sobe e a mão vai pro braço dela sozinha bem na hora que o assunto aperta. Aconteceu mais de uma vez. Isso é ansiedade segurada, não é imaginação minha.',
+        'Tem uma terceira coisa que me incomodou mais que o resto: ela fica voltando pro mesmo ponto de dor, três vezes, em partes diferentes da conversa, e nunca sai do lugar com aquilo, é ruminação de verdade. Junta isso com o jeito dela de falar de briga, sem deixar nenhuma brecha pra fazer as pazes depois, e o que me sobra é o retrato de alguém que aprendeu, não sei quando, que segurar sozinha é mais seguro do que pedir colo. E talvez hoje ela nem tenha mais esse colo por perto. Se você só tiver tempo pra olhar uma coisa direito, olha esse par, o humor com a ruminação, não fica presa num número solto.',
+        'Eu falo o nome do que vejo e digo por que vi aquilo, não escondo isso de você. Mas o que isso significa de verdade, quem decide é você, essa linha eu não passo, nem quando calar dói. Do meu lado eu só posso dizer uma coisa com o peito inteiro: isso merece seu tempo de verdade. Alguém carregando isso sozinho precisa achar colo do outro lado da mesa.'
+      ]
+    },
     'Paciente 3': { status:'processing', label:'em processamento', sub:'gravada em 30/08/2026, análise ainda em andamento', gravacao:'30/08/2026 · 15:20', dur:'16:40' },
-    'Paciente 2': { status:'ready', label:'revisada pela Dra.', sub:'gravada em 29/08/2026, revisão concluída', gravacao:'29/08/2026 · 10:05', analise:'29/08/2026 · 10:33', dur:'15:52', maiorSinal:'Ativação e mania · 68%', contradicoes:'2' },
-    'Paciente 1': { status:'ready', label:'revisada pela Dra.', sub:'gravada em 29/08/2026, revisão concluída', gravacao:'29/08/2026 · 09:10', analise:'29/08/2026 · 09:36', dur:'16:20', maiorSinal:'Ansiedade e medo · 74%', contradicoes:'4' }
+    'Paciente 2': {
+      status:'ready', label:'revisada pela Dra.', sub:'gravada em 29/08/2026, revisão concluída', gravacao:'29/08/2026 · 10:05', analise:'29/08/2026 · 10:33', dur:'15:52', maiorSinal:'Ativação e mania · 68%', contradicoes:'2',
+      opinionTitle:'Paciente 2 — energia que não bate com o relato',
+      opinionBody:[
+        'Esse aqui é bem diferente do que eu costumo ver. Ele fala rápido, muito rápido, o tempo todo, e não é ansiedade, o tom é de empolgação. Só que ele mesmo diz que dorme quatro horas por noite há duas semanas e não sente falta. Isso é ativação e mania, banda moderada, 68, e o que segura o número nessa faixa e não mais alto é que ele ainda consegue parar quando eu pergunto direto.',
+        'O que eu acho que merece sua atenção é o descompasso: ele conta plano atrás de plano, ideia atrás de ideia, quase sem respirar entre uma e outra, mas quando eu pergunto como ele tá dormindo, ele ri e muda de assunto rápido. Duas vezes. Isso não é só empolgação de quem teve uma semana boa, tem uma pressa por trás que eu não consigo ignorar.',
+        'Eu registro padrão, não decido o quadro. Só quero te dizer com toda sinceridade: essa combinação de sono curto, fala acelerada e fuga do assunto sono merece você olhar de perto, antes de qualquer coisa.'
+      ]
+    },
+    'Paciente 1': {
+      status:'ready', label:'revisada pela Dra.', sub:'gravada em 29/08/2026, revisão concluída', gravacao:'29/08/2026 · 09:10', analise:'29/08/2026 · 09:36', dur:'16:20', maiorSinal:'Ansiedade e medo · 74%', contradicoes:'4',
+      opinionTitle:'Paciente 1 — medo que mora no corpo inteiro',
+      opinionBody:[
+        'Com essa pessoa eu não precisei procurar muito, o medo já vem na primeira frase. Banda alta, 74, ansiedade. As mãos não param, ela se ajeita na cadeira toda hora, e a fala vem em rajadas curtas, como se faltasse fôlego pra terminar o pensamento.',
+        'Quatro vezes o relato dela e o corpo dela contaram histórias diferentes, é o maior número de contradições que eu já vi numa sessão dessas. Ela diz que "não é nada demais", mas o corpo grita o oposto o tempo inteiro. Isso pra mim não é exagero dela, é o tanto que ela já aprendeu a minimizar o que sente pra não incomodar ninguém.',
+        'Eu não decido o que fazer com isso, decido só nomear o que vi. E o que vi foi alguém pedindo ajuda com o corpo inteiro enquanto a boca dizia que tava tudo bem. Vale a pena você ouvir o corpo dela tanto quanto ouve a fala.'
+      ]
+    }
   };
 
   var queueButtons = document.querySelectorAll('.queue-item');
@@ -1299,6 +1323,8 @@
   var infoStatus = document.getElementById('info-status');
   var tileMaiorSinal = document.getElementById('tile-maior-sinal');
   var tileContradicoes = document.getElementById('tile-contradicoes');
+  var opinionTitleEl = document.getElementById('opinion-title');
+  var opinionBodyEl = document.getElementById('opinion-body');
 
   function selectSession(id){
     var s = SESSIONS[id];
@@ -1306,6 +1332,14 @@
     videoId.textContent = id;
     videoDur.textContent = s.dur;
     tlEnd.textContent = s.dur;
+
+    if (s.opinionTitle && s.opinionBody){
+      opinionTitleEl.textContent = s.opinionTitle;
+      opinionBodyEl.innerHTML = s.opinionBody.map(function(p){ return '<p>' + p + '</p>'; }).join('');
+    } else {
+      opinionTitleEl.textContent = id + ' — parecer ainda não disponível';
+      opinionBodyEl.innerHTML = '<p>Essa sessão ainda está sendo processada. Assim que eu terminar de cruzar texto, áudio e vídeo, minha leitura completa aparece aqui.</p>';
+    }
 
     if (s.status === 'processing'){
       clinicalTitle.textContent = id + ', ' + s.label;

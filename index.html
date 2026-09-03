@@ -560,8 +560,11 @@
   .workspace-grid{ display:grid; grid-template-columns: 1.1fr 0.9fr; gap:22px; align-items:start; }
   @media (max-width: 900px){ .workspace-grid{ grid-template-columns:1fr; } }
 
-  .domain-brief{ font-size:14px; color:var(--ink-soft); margin:0 0 16px; max-width:64ch; line-height:1.55; }
+  .domain-brief{ font-size:14px; color:var(--ink-soft); margin:0 0 10px; max-width:70ch; line-height:1.55; }
   .domain-brief b{ color:var(--pedagogic); font-weight:600; }
+  .domain-match{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px; }
+  .domain-match-pill{ font-family:"IBM Plex Mono", monospace; font-size:12px; font-weight:600; padding:6px 13px; border-radius:999px; background:var(--surface); border:1px solid var(--line-strong); color:var(--ink-soft); }
+  .domain-match-pill.top{ background:var(--pedagogic); border-color:var(--pedagogic); color:var(--pedagogic-contrast); }
 
   .progress-panel{ background:var(--surface-raised); border:1px solid var(--line); border-radius:var(--radius); padding:14px 18px; margin-bottom:20px; }
   .progress-head{ display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; }
@@ -608,15 +611,20 @@
 
   footer.appfoot{ padding:16px 28px 40px; font-size:12.5px; color:var(--ink-faint); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
 
-  .export-btn{ appearance:none; border:1px solid var(--pedagogic); background:transparent; color:var(--pedagogic); font-size:12px; font-weight:600; padding:6px 12px; border-radius:999px; cursor:pointer; white-space:nowrap; }
-  .export-btn:hover{ background:var(--pedagogic-soft); }
+  .session-thread{ display:flex; flex-direction:column; gap:8px; margin-bottom:14px; max-height:220px; overflow-y:auto; }
+  .session-msg{ background:var(--surface); border:1px solid var(--line); border-radius:9px; padding:9px 12px; font-size:13px; color:var(--ink); line-height:1.45; }
+  .session-msg .msg-n{ display:block; font-family:"IBM Plex Mono", monospace; font-size:10.5px; color:var(--pedagogic); font-weight:600; margin-bottom:3px; }
+  .session-actions{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; }
+  .run-btn.secondary{ background:transparent; border:1px solid var(--pedagogic); color:var(--pedagogic); }
+  .run-btn.secondary:hover{ background:var(--pedagogic-soft); }
+  .run-btn:disabled{ opacity:.45; cursor:not-allowed; }
 
-  @media print{
-    .sidebar, .topbar, .clinical-tabs, .mode-switch, .run-btn, .tool-grid, .export-btn, footer.appfoot, .save-btn, .save-status{ display:none !important; }
-    body, .content{ background:#fff !important; color:#000 !important; }
-    .panel, .history-list, .history-row{ break-inside:avoid; border-color:#ccc !important; }
-    .out-name, .history-row .d, h2{ color:#000 !important; }
-  }
+  /* ---------- histórico do aluno na sidebar ---------- */
+  .sidebar-history{ display:flex; flex-direction:column; gap:2px; margin-bottom:8px; }
+  .sidebar-history-item{ display:flex; flex-direction:column; gap:1px; padding:8px 12px; border-radius:8px; }
+  .sidebar-history-item .h-top{ display:flex; justify-content:space-between; gap:8px; font-size:11.5px; color:var(--sidebar-ink-dim); font-family:"IBM Plex Mono", monospace; }
+  .sidebar-history-item .h-domain{ font-size:12.5px; color:var(--sidebar-ink); font-weight:600; }
+  .sidebar-history-item .h-signal{ font-size:11.5px; color:var(--sidebar-ink-dim); }
 </style>
 
 <div class="app">
@@ -655,16 +663,25 @@
     </div>
 
     <div data-sidebar-panel="pedagogic" style="display:none">
-      <div class="side-label">Módulos, clique para trocar</div>
+      <div class="side-label">13 domínios, igual ao protocolo da Dra.</div>
       <div class="modules">
-        <button type="button" class="module-item done" data-domain="Ativação e mania" data-brief="Energia elevada, menor necessidade de sono, impulsividade." data-prompt="Escreva, com suas palavras, um relato de exemplo de alguém em estado de ativação: energia elevada, pouca necessidade de sono, pensamento acelerado."><span class="module-check">✓</span> Ativação / mania</button>
-        <button type="button" class="module-item done" data-domain="Ansiedade e medo" data-brief="Tensão, antecipação, evitação, sintomas físicos." data-prompt="Escreva um relato de exemplo de ansiedade antecipatória: tensão antes de um evento, sintomas físicos, evitação."><span class="module-check">✓</span> Ansiedade / medo</button>
         <button type="button" class="module-item active" data-domain="Humor e depressividade" data-brief="Queda de interesse, desânimo, energia reduzida." data-prompt="Escreva um relato de exemplo de humor rebaixado: queda de interesse, desânimo, energia reduzida."><span class="module-check"></span> Humor / depressividade</button>
-        <button type="button" class="module-item" data-domain="Funcionamento interpessoal" data-brief="Conflito, medo de abandono, dificuldade de reparo." data-prompt="Escreva um relato de exemplo de conflito relacional: evitação após briga, medo de abandono, dificuldade de reparo."><span class="module-check"></span> Funcionamento interpessoal</button>
+        <button type="button" class="module-item done" data-domain="Irritabilidade e raiva" data-brief="Reatividade, explosividade, hostilidade contida." data-prompt="Escreva um relato de exemplo de irritabilidade: reatividade a pequenas coisas, vontade de explodir contida."><span class="module-check">✓</span> Irritabilidade / raiva</button>
+        <button type="button" class="module-item done" data-domain="Ativação e mania" data-brief="Energia elevada, menor necessidade de sono, impulsividade." data-prompt="Escreva, com suas palavras, um relato de exemplo de alguém em estado de ativação: energia elevada, pouca necessidade de sono, pensamento acelerado."><span class="module-check">✓</span> Ativação / hipomania-mania</button>
+        <button type="button" class="module-item done" data-domain="Ansiedade e medo" data-brief="Tensão, antecipação, evitação, sintomas físicos." data-prompt="Escreva um relato de exemplo de ansiedade antecipatória: tensão antes de um evento, sintomas físicos, evitação."><span class="module-check">✓</span> Ansiedade / medo</button>
+        <button type="button" class="module-item" data-domain="Sintomas corporais" data-brief="Desconforto físico recorrente ligado a estresse." data-prompt="Escreva um relato de exemplo de sintoma físico recorrente que piora com estresse, sem causa médica clara ainda."><span class="module-check"></span> Sintomas corporais</button>
+        <button type="button" class="module-item" data-domain="Segurança e autoagressão" data-brief="Domínio sensível: aqui o foco é reconhecer marcadores linguísticos de desesperança, não simular crise." data-prompt="Escreva, em tom acadêmico, sobre como a linguagem de desesperança costuma aparecer num relato (sem descrever um método ou ato). O foco é reconhecer o marcador, não produzir conteúdo de crise."><span class="module-check"></span> Segurança / autoagressão</button>
+        <button type="button" class="module-item" data-domain="Percepção e psicose" data-brief="Experiências perceptivas incomuns e a crítica sobre elas." data-prompt="Escreva um relato de exemplo onde a pessoa descreve uma percepção incomum e comenta com crítica se aquilo faz sentido pra ela ou não."><span class="module-check"></span> Percepção / psicose</button>
         <button type="button" class="module-item" data-domain="Sono" data-brief="Insônia, fragmentação, hipersonia, mudança de padrão." data-prompt="Escreva um relato de exemplo de mudança no padrão de sono: insônia, fragmentação ou sono excessivo."><span class="module-check"></span> Sono</button>
         <button type="button" class="module-item" data-domain="Memória e atenção" data-brief="Esquecimento, distração, dificuldade de planejar." data-prompt="Escreva um relato de exemplo de dificuldade de atenção: esquecimento, distração, dificuldade de planejar."><span class="module-check"></span> Memória / atenção</button>
-        <button type="button" class="module-item" data-domain="Dissociação" data-brief="Desconexão, sensação de irrealidade, lacunas de memória subjetiva." data-prompt="Escreva um relato de exemplo de desconexão: sensação de irrealidade, lacunas de memória subjetiva."><span class="module-check"></span> Dissociação</button>
+        <button type="button" class="module-item" data-domain="Pensamentos repetitivos" data-brief="Ruminação, checagens, rituais difíceis de interromper." data-prompt="Escreva um relato de exemplo de pensamento repetitivo: uma checagem ou preocupação que volta mesmo sabendo que é excessiva."><span class="module-check"></span> Pensamentos repetitivos / compulsões</button>
+        <button type="button" class="module-item" data-domain="Dissociação" data-brief="Desconexão, sensação de irrealidade, lacunas de memória subjetiva." data-prompt="Escreva um relato de exemplo de desconexão: sensação de irrealidade, lacunas de memória subjetiva."><span class="module-check"></span> Dissociação / desligamento</button>
+        <button type="button" class="module-item" data-domain="Funcionamento interpessoal" data-brief="Conflito, medo de abandono, dificuldade de reparo." data-prompt="Escreva um relato de exemplo de conflito relacional: evitação após briga, medo de abandono, dificuldade de reparo."><span class="module-check"></span> Funcionamento da personalidade / relações</button>
+        <button type="button" class="module-item" data-domain="Substâncias e medicações" data-brief="Uso recente e relação temporal com sono, humor ou percepção." data-prompt="Escreva um relato de exemplo relacionando uso de alguma substância ou medicação a uma mudança recente de sono, humor ou energia."><span class="module-check"></span> Substâncias / medicações</button>
       </div>
+
+      <div class="side-label" style="margin-top:16px">Suas análises</div>
+      <div class="sidebar-history" id="sidebar-history"></div>
     </div>
 
     <div class="sidebar-foot">
@@ -1224,25 +1241,30 @@
 
       <!-- ============ PEDAGOGIC / STUDENT WORKSPACE ============ -->
       <div data-panel="pedagogic">
-        <p class="domain-brief">Domínio ativo: <span id="domain-dynamic"><b>Humor / depressividade</b>. Queda de interesse, desânimo, energia reduzida.</span> Você escreve um relato de exemplo (não use dados reais de ninguém) e roda seu extractor para ver o que ele detecta. Precisa de pelo menos <b>120 caracteres</b> para a análise ficar confiável.</p>
+        <p class="domain-brief">Isto é uma sessão de exploração, não uma avaliação. Vá adicionando trechos, um de cada vez, como se fosse construindo uma conversa (mensagens de WhatsApp, parágrafos de um diário, falas separadas). Você não escolhe o domínio, ele emerge do texto: <span id="domain-dynamic">adicione um trecho para eu apontar o domínio mais provável.</span></p>
+        <div class="domain-match" id="domain-match"><span class="output-empty">Adicione trechos à sessão para eu apontar qual domínio pontua mais alto.</span></div>
 
         <div class="progress-panel">
           <div class="progress-head">
             <span class="progress-label">Seu progresso na extensão</span>
-            <span class="progress-count" id="progress-count">2 de 7 domínios explorados</span>
+            <span class="progress-count" id="progress-count">4 de 13 domínios explorados</span>
           </div>
-          <div class="progress-bar"><div class="progress-bar-fill" id="progress-bar-fill" style="width:28.5%"></div></div>
+          <div class="progress-bar"><div class="progress-bar-fill" id="progress-bar-fill" style="width:30.7%"></div></div>
         </div>
 
         <div class="workspace-grid">
 
           <div class="panel">
-            <div class="panel-head"><h2>Entrada</h2><span class="panel-tag">seu texto, min. 120 caracteres</span></div>
-            <label for="student-input" class="visually-hidden">Escreva um relato de exemplo para o domínio ativo</label>
-            <textarea id="student-input" style="min-height:160px" placeholder="Escreva aqui, com suas palavras, um relato de exemplo para o domínio ativo. Não use trechos reais de sessões ou de outras pessoas." aria-describedby="student-count"></textarea>
-            <div class="char-count" id="student-count" role="status" aria-live="polite">0 de 120 caracteres</div>
-            <div style="margin-top:14px">
-              <button type="button" class="run-btn" id="run-analysis" disabled>▸ Rodar análise</button>
+            <div class="panel-head"><h2>Sessão</h2><span class="panel-tag" id="session-count">0 trechos adicionados</span></div>
+            <div class="session-thread" id="session-thread">
+              <div class="output-empty">Nenhum trecho ainda. Escreva abaixo e adicione à sessão.</div>
+            </div>
+            <label for="student-input" class="visually-hidden">Escreva um novo trecho para adicionar à sessão</label>
+            <textarea id="student-input" style="min-height:100px" placeholder="Escreva um novo trecho, mensagem ou parágrafo. Não use dados reais de outras pessoas." aria-describedby="student-count"></textarea>
+            <div class="char-count" id="student-count" role="status" aria-live="polite">0 de 20 caracteres</div>
+            <div class="session-actions">
+              <button type="button" class="run-btn secondary" id="add-message-btn" disabled>+ Adicionar trecho à sessão</button>
+              <button type="button" class="run-btn" id="run-analysis" disabled>▸ Analisar sessão inteira</button>
             </div>
           </div>
 
@@ -1257,25 +1279,13 @@
               <button type="button" class="tool-btn" data-tool="time">Orientação temporal</button>
             </div>
             <p class="tool-explainer" id="tool-explainer">Mede valência (positivo/negativo) e densidade de autofoco no texto, o extractor mais básico do arsenal, base pra quase todos os outros.</p>
+            <p class="panel-caption" style="margin-top:0">Roda sobre todos os trechos já adicionados à sessão, não só o último. Adicione mais trechos e analise de novo para ver o padrão evoluir.</p>
             <div id="student-output" class="out-metric"></div>
           </div>
 
           <div class="panel">
             <div class="panel-head"><h2>Sobre esta heurística</h2><span class="panel-tag">didático</span></div>
             <p class="panel-caption" style="margin-top:0">O que você está vendo é uma simulação por contagem de léxico, feita pra ensinar o raciocínio de cada extractor isoladamente. Em produção, o mesmo extractor roda sobre um modelo estatístico treinado, não sobre uma lista de palavras. Troque de ferramenta ao lado pra ver o que cada uma mede especificamente no mesmo texto.</p>
-          </div>
-
-          <div class="panel full">
-            <div class="panel-head">
-              <h2>Histórico de análises</h2>
-              <div style="display:flex; align-items:center; gap:10px;">
-                <span class="panel-tag" id="history-count">nenhuma execução ainda</span>
-                <button type="button" class="export-btn" id="export-report-btn">⬇ Gerar relatório de aprendizagem</button>
-              </div>
-            </div>
-            <div class="history-list" id="history-list">
-              <div class="output-empty">Suas execuções aparecem aqui conforme você roda os extratores, com domínio, ferramenta e o sinal mais forte encontrado.</div>
-            </div>
           </div>
 
         </div>
@@ -1621,16 +1631,50 @@
     });
   });
 
-  var MIN_CHARS = 120;
+  var MIN_MSG_CHARS = 20;
   var input = document.getElementById('student-input');
   var countEl = document.getElementById('student-count');
   var runBtn = document.getElementById('run-analysis');
+  var addBtn = document.getElementById('add-message-btn');
+  var sessionThreadEl = document.getElementById('session-thread');
+  var sessionCountEl = document.getElementById('session-count');
+  var SESSION_MESSAGES = [];
+
   function updateCount(){
     var len = input.value.trim().length;
-    var ok = len >= MIN_CHARS;
-    countEl.textContent = ok ? (len + ' caracteres, pronto para analisar') : (len + ' de ' + MIN_CHARS + ' caracteres');
-    runBtn.disabled = !ok;
+    var ok = len >= MIN_MSG_CHARS;
+    countEl.textContent = ok ? (len + ' caracteres, pronto para adicionar') : (len + ' de ' + MIN_MSG_CHARS + ' caracteres');
+    addBtn.disabled = !ok;
   }
+
+  function renderSessionThread(){
+    if (!SESSION_MESSAGES.length){
+      sessionThreadEl.innerHTML = '<div class="output-empty">Nenhum trecho ainda. Escreva abaixo e adicione à sessão.</div>';
+      sessionCountEl.textContent = '0 trechos adicionados';
+      runBtn.disabled = true;
+      return;
+    }
+    sessionCountEl.textContent = SESSION_MESSAGES.length + (SESSION_MESSAGES.length === 1 ? ' trecho adicionado' : ' trechos adicionados');
+    sessionThreadEl.innerHTML = SESSION_MESSAGES.map(function(m, i){
+      return '<div class="session-msg"><span class="msg-n">trecho ' + (i+1) + '</span>' + m + '</div>';
+    }).join('');
+    sessionThreadEl.scrollTop = sessionThreadEl.scrollHeight;
+    runBtn.disabled = false;
+  }
+
+  function sessionFullText(){
+    return SESSION_MESSAGES.join(' ');
+  }
+
+  addBtn.addEventListener('click', function(){
+    if (addBtn.disabled) return;
+    SESSION_MESSAGES.push(input.value.trim());
+    input.value = '';
+    updateCount();
+    renderSessionThread();
+    updateDomainMatch();
+  });
+
   var saveBtn = document.getElementById('save-btn');
   var saveStatus = document.getElementById('save-status');
   saveBtn.addEventListener('click', function(){
@@ -1646,18 +1690,24 @@
   });
   input.addEventListener('input', updateCount);
   updateCount();
+  renderSessionThread();
   render('');
+
+  var SEED_HISTORY = [
+    { time:'ontem 14:20', domain:'Sono', tool:'Estilo linguístico (LIWC)', msgCount:3, top:{ name:'Valência estimada', score:38 } },
+    { time:'ontem 11:05', domain:'Ansiedade / medo', tool:'Orientação temporal', msgCount:2, top:{ name:'Orientação temporal', score:71 } },
+    { time:'seg 19:40', domain:'Ativação / hipomania-mania', tool:'4 Cavaleiros (Gottman)', msgCount:4, top:{ name:'Defensividade', score:44 } }
+  ];
 
   var HISTORY = [];
   try {
     var savedHistory = localStorage.getItem('prisma-student-history');
-    if (savedHistory) HISTORY = JSON.parse(savedHistory);
-  } catch(e){}
+    HISTORY = savedHistory ? JSON.parse(savedHistory) : SEED_HISTORY.slice();
+  } catch(e){ HISTORY = SEED_HISTORY.slice(); }
   function saveHistory(){
     try { localStorage.setItem('prisma-student-history', JSON.stringify(HISTORY)); } catch(e){}
   }
-  var historyListEl = document.getElementById('history-list');
-  var historyCountEl = document.getElementById('history-count');
+  var historyListEl = document.getElementById('sidebar-history');
 
   function getTopSignal(){
     var rows = document.querySelectorAll('#student-output .out-row');
@@ -1671,66 +1721,89 @@
   }
 
   function currentDomainLabel(){
-    var active = document.querySelector('.module-item.active');
-    return active ? active.dataset.domain : 'Domínio';
+    var ranked = computeDomainMatch(sessionFullText());
+    var top = ranked.filter(function(r){ return r.hits > 0; })[0];
+    return top ? top.label : 'Nenhum domínio dominante ainda';
   }
 
   function renderHistory(){
     if (!HISTORY.length){
-      historyListEl.innerHTML = '<div class="output-empty">Suas execuções aparecem aqui conforme você roda os extratores, com domínio, ferramenta e o sinal mais forte encontrado.</div>';
-      historyCountEl.textContent = 'nenhuma execução ainda';
+      historyListEl.innerHTML = '<div class="side-label" style="padding:0 12px">nenhuma análise ainda</div>';
       return;
     }
-    historyCountEl.textContent = HISTORY.length + (HISTORY.length === 1 ? ' execução' : ' execuções');
-    historyListEl.innerHTML = HISTORY.slice().reverse().map(function(h){
-      return '<div class="history-row"><span class="t">' + h.time + '</span><span class="d">' + h.domain + ' · ' + h.tool + (h.top ? ' · ' + h.top.name + ' ' + h.top.score + '/100' : '') + '</span></div>';
+    historyListEl.innerHTML = HISTORY.slice().reverse().slice(0, 8).map(function(h){
+      return '<div class="sidebar-history-item">' +
+        '<div class="h-top"><span>' + h.time + '</span><span>' + h.msgCount + (h.msgCount === 1 ? ' trecho' : ' trechos') + '</span></div>' +
+        '<span class="h-domain">' + h.domain + '</span>' +
+        '<span class="h-signal">' + h.tool + (h.top ? ' · ' + h.top.name + ' ' + h.top.score : '') + '</span>' +
+      '</div>';
     }).join('');
   }
   renderHistory();
 
   document.getElementById('run-analysis').addEventListener('click', function(){
     if (runBtn.disabled) return;
-    render(input.value);
+    render(sessionFullText());
+    updateDomainMatch();
     var top = getTopSignal();
     var now = new Date();
     HISTORY.push({
       time: now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}),
       domain: currentDomainLabel(),
       tool: TOOLS[activeTool].label,
+      msgCount: SESSION_MESSAGES.length,
       top: top
     });
     saveHistory();
     renderHistory();
   });
 
-  var exportBtn = document.getElementById('export-report-btn');
-  if (exportBtn){
-    exportBtn.addEventListener('click', function(){
-      if (!HISTORY.length){
-        alert('Rode pelo menos uma análise antes de gerar o relatório.');
-        return;
-      }
-      window.print();
+
+  /* ---- 13 domínios como legenda de referência, sem seleção manual ---- */
+  var moduleButtons = document.querySelectorAll('.module-item');
+  moduleButtons.forEach(function(b){ b.removeAttribute('type'); b.setAttribute('type', 'button'); b.style.cursor = 'default'; });
+
+  var DOMAIN_LEX = {};
+  moduleButtons.forEach(function(b){
+    var words = (b.dataset.brief || '').toLowerCase().replace(/[.,]/g, '').split(/\s+/).filter(function(w){ return w.length > 4; });
+    DOMAIN_LEX[b.dataset.domain] = { label: b.textContent.replace('✓','').trim(), words: words };
+  });
+
+  function computeDomainMatch(text){
+    var lowered = (text || '').toLowerCase();
+    var scores = [];
+    Object.keys(DOMAIN_LEX).forEach(function(key){
+      var d = DOMAIN_LEX[key];
+      var hits = 0;
+      d.words.forEach(function(w){ if (lowered.indexOf(w) !== -1) hits++; });
+      scores.push({ key:key, label:d.label, hits:hits });
     });
+    scores.sort(function(a,b){ return b.hits - a.hits; });
+    return scores;
   }
 
-  /* ---- module switching (student sidebar) ---- */
-  var moduleButtons = document.querySelectorAll('.module-item');
   var domainDynamic = document.getElementById('domain-dynamic');
   var pedagogicTitle = document.getElementById('pedagogic-title');
-  moduleButtons.forEach(function(b){
-    b.addEventListener('click', function(){
-      moduleButtons.forEach(function(x){ x.classList.remove('active'); });
-      b.classList.add('active');
-      var domain = b.dataset.domain, brief = b.dataset.brief, prompt = b.dataset.prompt;
-      domainDynamic.innerHTML = '<b>' + domain + '</b>. ' + brief;
-      pedagogicTitle.textContent = 'Meu extractor · ' + domain;
-      input.placeholder = prompt;
-      input.value = '';
-      updateCount();
-      render('');
-    });
-  });
+  var domainMatchEl = document.getElementById('domain-match');
+
+  function updateDomainMatch(){
+    var text = sessionFullText();
+    if (!text.trim()){
+      domainMatchEl.innerHTML = '<span class="output-empty">Adicione trechos à sessão para eu apontar qual domínio pontua mais alto.</span>';
+      return;
+    }
+    var ranked = computeDomainMatch(text);
+    var top3 = ranked.slice(0, 3).filter(function(r){ return r.hits > 0; });
+    if (!top3.length){
+      domainMatchEl.innerHTML = '<span class="output-empty">Nenhum domínio se destacou ainda neste texto.</span>';
+      return;
+    }
+    domainMatchEl.innerHTML = top3.map(function(r, i){
+      return '<span class="domain-match-pill' + (i === 0 ? ' top' : '') + '">' + r.label + '</span>';
+    }).join('');
+    domainDynamic.innerHTML = '<b>' + top3[0].label + '</b>, domínio mais provável nesta sessão até agora.';
+    pedagogicTitle.textContent = 'Meu extractor · ' + top3[0].label;
+  }
 
   /* ---- safety gate ---- */
   var gate = document.getElementById('safety-gate');

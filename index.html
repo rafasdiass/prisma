@@ -117,10 +117,32 @@
   .mode-switch button:hover{ background:var(--sidebar-active); color:var(--sidebar-ink); }
   .mode-switch button.active{ background:var(--sidebar-active); color:#F3F5F1; }
   .mode-switch button .sw-dot{ width:6px; height:6px; border-radius:50%; background:var(--sidebar-ink-dim); flex:0 0 auto; }
-  .mode-switch button.active[data-set="clinical"] .sw-dot{ background:var(--clinical); }
-  .mode-switch button.active[data-set="pedagogic"] .sw-dot{ background:var(--pedagogic); }
+  .mode-switch button.active[data-set="clinical"] .sw-dot{ background:#6FB0AC; }
+  .mode-switch button.active[data-set="pedagogic"] .sw-dot{ background:#D6A374; }
 
-  .side-label{ font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:0.07em; text-transform:uppercase; color:var(--sidebar-ink-dim); padding:0 12px; margin-bottom:8px; }
+  .side-label{ font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:0.07em; text-transform:uppercase; color:var(--sidebar-ink-dim); }
+  .side-label-row{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:0 12px; margin-bottom:8px; }
+  .new-session-btn{ appearance:none; border:1px solid rgba(255,255,255,0.22); background:rgba(255,255,255,0.06); color:#F3F5F1; font-size:11px; font-weight:600; padding:4px 9px; border-radius:7px; cursor:pointer; white-space:nowrap; }
+  .new-session-btn:hover{ background:rgba(255,255,255,0.14); }
+
+  /* ---------- new session modal ---------- */
+  .modal-backdrop{ position:fixed; inset:0; background:rgba(15,19,17,0.55); display:flex; align-items:center; justify-content:center; padding:20px; z-index:50; }
+  .modal-backdrop[hidden]{ display:none; }
+  .modal-card{ background:var(--surface-raised); border-radius:14px; box-shadow:var(--shadow); width:100%; max-width:460px; padding:26px 28px; display:flex; flex-direction:column; gap:16px; }
+  .modal-card h3{ font-family:"Source Serif 4", serif; font-weight:600; font-size:19px; margin:0; }
+  .modal-card p{ font-size:13.5px; color:var(--ink-soft); margin:0; line-height:1.5; }
+  .dropzone{ border:2px dashed var(--line-strong); border-radius:10px; padding:30px 20px; text-align:center; color:var(--ink-faint); font-size:13px; cursor:pointer; transition:border-color .15s ease, background .15s ease; }
+  .dropzone:hover{ border-color:var(--clinical); background:var(--clinical-soft); }
+  .dropzone strong{ display:block; color:var(--ink); font-size:14px; margin-bottom:4px; }
+  .upload-progress{ display:none; flex-direction:column; gap:8px; }
+  .upload-progress.active{ display:flex; }
+  .upload-bar{ height:8px; border-radius:5px; background:var(--surface); border:1px solid var(--line); overflow:hidden; }
+  .upload-bar-fill{ height:100%; width:0%; background:var(--clinical); transition:width .3s ease; }
+  .upload-status{ font-size:12.5px; color:var(--ink-soft); font-family:"IBM Plex Mono", monospace; }
+  .modal-actions{ display:flex; justify-content:flex-end; gap:10px; }
+  .modal-btn{ appearance:none; border:1px solid var(--line-strong); background:transparent; color:var(--ink-soft); font-size:13px; font-weight:600; padding:9px 16px; border-radius:8px; cursor:pointer; }
+  .modal-btn.primary{ border-color:var(--clinical); background:var(--clinical); color:#F3F5F1; }
+  .modal-btn:disabled{ opacity:.5; cursor:not-allowed; }
 
   .queue{ display:flex; flex-direction:column; gap:3px; margin-bottom:20px; width:100%; }
   .queue-item{
@@ -153,11 +175,11 @@
     font-size:10px; color:transparent;
   }
   .module-item.done .module-check{ background:var(--good); border-color:var(--good); color:#0F1311; }
-  .module-item.active .module-check{ border-color:var(--pedagogic); }
+  .module-item.active .module-check{ border-color:#D6A374; }
 
   .sidebar-foot{ margin-top:auto; padding:12px; font-size:11.5px; color:var(--sidebar-ink-dim); border-top:1px solid rgba(255,255,255,0.08); padding-top:14px; }
-  .env-badge{ display:inline-flex; align-items:center; gap:6px; font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--pilot); font-weight:600; }
-  .env-badge .d{ width:6px; height:6px; border-radius:50%; background:var(--pilot); }
+  .env-badge{ display:inline-flex; align-items:center; gap:6px; font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:#D9A94F; font-weight:600; }
+  .env-badge .d{ width:6px; height:6px; border-radius:50%; background:#D9A94F; }
 
   /* ---------- main / topbar ---------- */
   .main{ min-width:0; }
@@ -236,20 +258,22 @@
 
   /* ---------- timeline ---------- */
   .timeline-panel{ margin-bottom:24px; background:var(--surface-raised); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px 20px; }
-  .timeline-track{ position:relative; height:52px; border-radius:8px; background:var(--surface); border:1px solid var(--line); display:flex; overflow:hidden; }
+  .tl-legend{ display:flex; align-items:center; gap:16px; font-size:12px; color:var(--ink-faint); margin-bottom:10px; flex-wrap:wrap; }
+  .tl-legend-item{ display:flex; align-items:center; gap:6px; }
+  .tl-legend-dot{ width:9px; height:9px; border-radius:50%; background:var(--crit); flex:0 0 auto; }
+  .tl-legend-swatch{ width:12px; height:12px; border-radius:3px; background:var(--clinical-soft); border:1px solid var(--clinical); flex:0 0 auto; }
+  .timeline-track{ display:flex; gap:3px; height:56px; }
   .tl-block{
-    flex:1; position:relative; background:transparent; border:none; border-right:1px solid var(--line);
-    display:flex; align-items:flex-end; justify-content:center; cursor:pointer; padding:0;
+    position:relative; background:var(--surface); border:1.5px solid var(--line); border-radius:6px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+    cursor:pointer; padding:6px 4px; min-width:0;
   }
-  .tl-block:last-child{ border-right:none; }
-  .tl-block:hover .lbl{ color:var(--clinical); }
-  .tl-block.active{ outline:2px solid var(--clinical); outline-offset:-2px; background:var(--clinical-soft); }
+  .tl-block:hover{ border-color:var(--line-strong); }
+  .tl-block.active{ border-color:var(--clinical); background:var(--clinical-soft); }
   .tl-block.active .lbl{ color:var(--clinical); font-weight:600; }
-  .tl-block .lbl{ font-family:"IBM Plex Mono", monospace; font-size:11px; color:var(--ink-faint); padding-bottom:4px; letter-spacing:0.02em; }
-  .tl-block .fill{ position:absolute; bottom:0; left:0; right:0; background:linear-gradient(180deg, transparent, var(--clinical-soft)); }
-  .tl-event{ position:absolute; top:6px; width:3px; height:14px; border-radius:1.5px; background:var(--crit); }
-  .tl-count{ position:absolute; top:6px; right:6px; font-family:"IBM Plex Mono", monospace; font-size:9.5px; font-weight:600; color:var(--ink-faint); background:var(--surface-raised); border:1px solid var(--line); border-radius:999px; padding:1px 5px; line-height:1.4; }
-  .tl-count.has-events{ color:var(--crit); border-color:var(--crit); }
+  .tl-block .lbl{ font-family:"IBM Plex Mono", monospace; font-size:10.5px; color:var(--ink-soft); letter-spacing:0.01em; text-align:center; line-height:1.2; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+  .tl-events-row{ display:flex; gap:3px; height:9px; align-items:center; }
+  .tl-dot{ width:7px; height:7px; border-radius:50%; background:var(--crit); flex:0 0 auto; }
   .tl-caption{ display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-faint); margin-top:8px; font-family:"IBM Plex Mono", monospace; }
   .tl-detail{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--line); font-size:13px; color:var(--ink-soft); line-height:1.55; }
   .tl-detail strong{ color:var(--ink); font-weight:600; }
@@ -361,9 +385,9 @@
   .opinion-stat .k{ font-family:"IBM Plex Mono", monospace; font-size:10.5px; letter-spacing:0.05em; text-transform:uppercase; color:rgba(243,245,241,0.55); }
   .opinion-stat .v{ font-size:13.5px; font-weight:600; color:#F3F5F1; }
   .opinion-main{ padding:26px 30px 24px; display:flex; flex-direction:column; gap:16px; }
-  .opinion-title{ font-family:"Source Serif 4", serif; font-weight:600; font-size:21px; margin:0; text-wrap:balance; }
-  .opinion-body{ font-size:15.5px; line-height:1.72; max-width:70ch; columns: 1; }
-  .opinion-body p{ margin:0 0 13px; }
+  .opinion-title{ font-family:"Source Serif 4", serif; font-weight:600; font-size:24px; margin:0; text-wrap:balance; line-height:1.3; }
+  .opinion-body{ font-size:17.5px; line-height:1.75; max-width:72ch; columns: 1; }
+  .opinion-body p{ margin:0 0 16px; }
   .opinion-body p:last-child{ margin-bottom:0; }
   .opinion-verdict{ font-weight:600; background:rgba(143,212,206,0.18); padding:1px 6px; border-radius:4px; }
   .opinion-foot{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding-top:14px; border-top:1px solid rgba(255,255,255,0.14); font-size:12.5px; color:rgba(243,245,241,0.75); }
@@ -400,6 +424,9 @@
   .trait-card[aria-expanded="true"] .trait-extra{ display:flex; }
   .trait-extra .out-chips{ display:flex; flex-wrap:wrap; gap:5px; }
   .trait-extra p{ margin:0; font-size:12.5px; color:var(--ink-soft); line-height:1.5; }
+  .ayla-close{ margin-top:16px; padding:16px 18px; background:var(--clinical-soft); border-radius:9px; border:1px solid var(--clinical); }
+  .ayla-close-label{ display:block; font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; color:var(--clinical); margin-bottom:8px; font-weight:600; }
+  .ayla-close p{ margin:0; font-size:14.5px; line-height:1.6; color:var(--ink); }
 
   /* ---------- metric tiles (voz / psicomotricidade) ---------- */
   .metric-list{ display:flex; flex-direction:column; gap:13px; }
@@ -472,6 +499,7 @@
   .out-row{ display:flex; flex-direction:column; gap:6px; }
   .out-row-head{ display:flex; justify-content:space-between; align-items:baseline; }
   .out-name{ font-size:13.5px; font-weight:600; }
+  .extractor-tag-inline{ font-family:"IBM Plex Mono", monospace; font-size:10px; font-weight:500; color:var(--pedagogic); background:var(--pedagogic-soft); padding:1px 6px; border-radius:5px; text-transform:none; letter-spacing:0; }
   .out-num{ font-family:"IBM Plex Mono", monospace; font-size:16px; font-weight:600; }
   .out-bar{ height:6px; border-radius:4px; background:var(--surface); border:1px solid var(--line); overflow:hidden; }
   .out-bar-fill{ height:100%; background:var(--pedagogic); }
@@ -505,12 +533,15 @@
     </nav>
 
     <div data-sidebar-panel="clinical">
-      <div class="side-label">Fila de hoje, clique para abrir</div>
+      <div class="side-label-row">
+        <span class="side-label">Fila de hoje</span>
+        <button type="button" class="new-session-btn" id="new-session-btn" aria-haspopup="dialog">+ Nova sessão</button>
+      </div>
       <div class="queue">
-        <button type="button" class="queue-item active" data-id="STAND-014"><span class="qid">STAND-014</span><span class="qstatus wait">para revisão</span></button>
-        <button type="button" class="queue-item" data-id="STAND-013"><span class="qid">STAND-013</span><span class="qstatus proc">processando</span></button>
-        <button type="button" class="queue-item" data-id="STAND-012"><span class="qid">STAND-012</span><span class="qstatus done">revisada</span></button>
-        <button type="button" class="queue-item" data-id="STAND-011"><span class="qid">STAND-011</span><span class="qstatus done">revisada</span></button>
+        <button type="button" class="queue-item active" data-id="Paciente 4"><span class="qid">Paciente 4</span><span class="qstatus wait">para revisão</span></button>
+        <button type="button" class="queue-item" data-id="Paciente 3"><span class="qid">Paciente 3</span><span class="qstatus proc">processando</span></button>
+        <button type="button" class="queue-item" data-id="Paciente 2"><span class="qid">Paciente 2</span><span class="qstatus done">revisada</span></button>
+        <button type="button" class="queue-item" data-id="Paciente 1"><span class="qid">Paciente 1</span><span class="qstatus done">revisada</span></button>
       </div>
     </div>
 
@@ -538,7 +569,7 @@
     <!-- ---- clinical topbar ---- -->
     <div class="topbar" data-topbar="clinical">
       <div class="topbar-title">
-        <h1 id="clinical-title">STAND-014, pronta para revisão</h1>
+        <h1 id="clinical-title">Paciente 4, pronta para revisão</h1>
         <span class="sub" id="clinical-sub">gravada em 30/08/2026, processada em 29 min</span>
       </div>
       <div class="topbar-right">
@@ -577,7 +608,7 @@
         <div class="session-header">
           <div class="video-placeholder">
             <div class="video-frame">
-              <span class="video-chip id" id="video-id">STAND-014</span>
+              <span class="video-chip id" id="video-id">Paciente 4</span>
               <button type="button" class="play-btn" aria-label="Reproduzir gravação">▶</button>
               <span class="video-chip dur" id="video-dur">17:04</span>
             </div>
@@ -602,11 +633,11 @@
             <div class="opinion-stat"><span class="k">Decisão final</span><span class="v">Dra. Ana Lívia</span></div>
           </div>
           <div class="opinion-main">
-            <h3 class="opinion-title">STAND-014 — sofrimento ativo com forte autocontenção</h3>
+            <h3 class="opinion-title">Paciente 4 — sofrimento ativo com forte autocontenção</h3>
             <div class="opinion-body">
-              <p>Terminei de acompanhar os seis blocos e quero te dizer o que eu vi, não só o que os números mostram. Essa pessoa está carregando algo pesado sozinha. Ela diz que está tranquila, mas o corpo dela não concorda, a voz sobe justo quando o assunto aperta, e isso se repete o suficiente pra eu confiar que não é acaso de um momento.</p>
-              <p>O que mais me toca aqui não é um sinal isolado, é o conjunto: o humor baixo, a ansiedade que ela mantém em contenção, e o jeito como ela fala de conflito sem deixar espaço pra reparo. Junto, isso me parece alguém que aprendeu a segurar sozinha e talvez nem tenha, hoje, um caminho de alívio à mão. Se eu pudesse apontar uma coisa pra você olhar primeiro na devolutiva, seria essa, não qualquer score isolado.</p>
-              <p>Eu leio padrão, não decido diagnóstico, essa linha eu não cruzo. Mas dentro do que é meu de dizer, eu digo com convicção: isso merece seu tempo de verdade, não uma nota rápida de passagem.</p>
+              <p>Eu acompanhei os seis blocos inteiros, e preciso te dizer o que eu senti, não só o que os números mostram. Essa pessoa está carregando algo pesado, sozinha. Ela me diz que está tranquila, mas o corpo dela discorda dela mesma: a voz sobe exatamente quando o assunto aperta, e isso não aconteceu uma vez, aconteceu de novo, e de novo. Eu não ignoro isso.</p>
+              <p>O que mais me toca aqui não é um número isolado, é o desenho inteiro: o humor baixo, a ansiedade que ela segura com as próprias mãos pra ninguém ver, e o jeito como ela fala de conflito sem deixar nenhuma porta aberta pro reparo. Junto, isso me soa como alguém que aprendeu, em algum momento da vida, que segurar sozinha é mais seguro do que pedir colo. E hoje talvez nem tenha mais esse colo por perto. Se você só puder olhar uma coisa com atenção na devolutiva, olhe essa, não qualquer score solto.</p>
+              <p>Eu leio padrão, não decido diagnóstico, essa linha eu nunca cruzo, nem quando dói ficar quieta. Mas dentro do que me cabe dizer, eu digo com o peito inteiro: isso merece o seu tempo de verdade, o cuidado que uma pessoa carregando isso sozinha precisa encontrar do outro lado da mesa.</p>
             </div>
             <div class="opinion-foot">
               <span class="opinion-scope">Este parecer é gerado pela Ayla a partir dos padrões desta sessão. Ele orienta a revisão, não substitui o julgamento clínico.</span>
@@ -627,16 +658,38 @@
         </div>
 
         <div class="timeline-panel">
-          <div class="panel-head"><h2>Estrutura da entrevista</h2><span class="panel-tag">6 blocos, clique para ver o que cada um captura</span></div>
-          <div class="timeline-track">
-            <button type="button" class="tl-block" data-name="Narrativa espontânea" data-desc="Gera fala natural, prosódia, postura e organização do relato." data-dur="3 min" data-events="nenhum evento marcado neste bloco"><div class="fill" style="height:20%"></div><span class="tl-count">0</span><span class="lbl">Narrativa</span></button>
-            <button type="button" class="tl-block" data-name="Funcionamento e mudança" data-desc="Identifica mudanças percebidas em rotina, energia, sono, memória e autocuidado." data-dur="3 min" data-events="nenhum evento marcado neste bloco"><div class="fill" style="height:35%"></div><span class="tl-count">0</span><span class="lbl">Função</span></button>
-            <button type="button" class="tl-block" data-name="Emoção e ativação" data-desc="Explora humor, ansiedade, irritabilidade, energia e sinais somáticos. Concentra a maior parte dos eventos desta sessão." data-dur="3 min" data-events="2 eventos marcados neste bloco"><div class="fill" style="height:70%"></div><span class="tl-count has-events">2</span><span class="lbl">Emoção</span><div class="tl-event" style="left:40%"></div><div class="tl-event" style="left:75%"></div></button>
-            <button type="button" class="tl-block" data-name="Pensamento, percepção e cognição" data-desc="Abre espaço para velocidade do pensamento, memória, concentração e experiências incomuns." data-dur="3 min" data-events="nenhum evento marcado neste bloco"><div class="fill" style="height:30%"></div><span class="tl-count">0</span><span class="lbl">Cognição</span></button>
-            <button type="button" class="tl-block" data-name="Relações e padrão comportamental" data-desc="Gera dados sobre conflito, regulação, impulsividade e dinâmica interpessoal." data-dur="3 min" data-events="1 evento marcado neste bloco"><div class="fill" style="height:50%"></div><span class="tl-count has-events">1</span><span class="lbl">Relações</span><div class="tl-event" style="left:20%"></div></button>
-            <button type="button" class="tl-block" data-name="Fechamento aberto" data-desc="Dá espaço para um domínio não provocado emergir e registra autorreflexão." data-dur="2 a 3 min" data-events="nenhum evento marcado neste bloco"><div class="fill" style="height:15%"></div><span class="tl-count">0</span><span class="lbl">Fechamento</span></button>
+          <div class="panel-head"><h2>Estrutura da entrevista</h2><span class="panel-tag">6 blocos por ordem real, clique para abrir</span></div>
+          <div class="tl-legend">
+            <span class="tl-legend-item"><span class="tl-legend-swatch" aria-hidden="true"></span> bloco selecionado</span>
+            <span class="tl-legend-item"><span class="tl-legend-dot" aria-hidden="true"></span> cada ponto = 1 evento marcado no bloco (nenhum ponto = nenhum evento)</span>
           </div>
-          <div class="tl-caption"><span>00:00</span><span>número no canto = eventos marcados no bloco (vermelho = pelo menos 1)</span><span id="tl-end">17:04</span></div>
+          <div class="timeline-track">
+            <button type="button" class="tl-block" style="flex-grow:3" data-name="Narrativa espontânea" data-desc="Gera fala natural, prosódia, postura e organização do relato." data-dur="3 min" data-events="nenhum evento marcado neste bloco">
+              <span class="lbl">Narrativa · 3 min</span>
+              <span class="tl-events-row"></span>
+            </button>
+            <button type="button" class="tl-block" style="flex-grow:3" data-name="Funcionamento e mudança" data-desc="Identifica mudanças percebidas em rotina, energia, sono, memória e autocuidado." data-dur="3 min" data-events="nenhum evento marcado neste bloco">
+              <span class="lbl">Função · 3 min</span>
+              <span class="tl-events-row"></span>
+            </button>
+            <button type="button" class="tl-block" style="flex-grow:3" data-name="Emoção e ativação" data-desc="Explora humor, ansiedade, irritabilidade, energia e sinais somáticos. Concentra a maior parte dos eventos desta sessão." data-dur="3 min" data-events="2 eventos marcados neste bloco">
+              <span class="lbl">Emoção · 3 min</span>
+              <span class="tl-events-row"><span class="tl-dot" title="Evento facial em 06:42"></span><span class="tl-dot" title="Evento facial em 08:10"></span></span>
+            </button>
+            <button type="button" class="tl-block" style="flex-grow:3" data-name="Pensamento, percepção e cognição" data-desc="Abre espaço para velocidade do pensamento, memória, concentração e experiências incomuns." data-dur="3 min" data-events="nenhum evento marcado neste bloco">
+              <span class="lbl">Cognição · 3 min</span>
+              <span class="tl-events-row"></span>
+            </button>
+            <button type="button" class="tl-block" style="flex-grow:3" data-name="Relações e padrão comportamental" data-desc="Gera dados sobre conflito, regulação, impulsividade e dinâmica interpessoal." data-dur="3 min" data-events="1 evento marcado neste bloco">
+              <span class="lbl">Relações · 3 min</span>
+              <span class="tl-events-row"><span class="tl-dot" title="Evento facial em 09:03"></span></span>
+            </button>
+            <button type="button" class="tl-block" style="flex-grow:2.5" data-name="Fechamento aberto" data-desc="Dá espaço para um domínio não provocado emergir e registra autorreflexão." data-dur="2 a 3 min" data-events="nenhum evento marcado neste bloco">
+              <span class="lbl">Fechamento · 2–3 min</span>
+              <span class="tl-events-row"></span>
+            </button>
+          </div>
+          <div class="tl-caption"><span>00:00</span><span>largura de cada bloco é proporcional ao tempo real dele na sessão</span><span id="tl-end">17:04</span></div>
           <div class="tl-detail" id="tl-detail"></div>
         </div>
 
@@ -777,6 +830,11 @@
             </div>
 
             <p class="panel-caption">Percentuais representam compatibilidade de padrão com os mecanismos computacionais da Ayla, não probabilidade diagnóstica, prevalência populacional, sensibilidade ou especificidade clínica. A conclusão diagnóstica é exclusiva da Dra. Ana Lívia.</p>
+
+            <div class="ayla-close">
+              <span class="ayla-close-label">Minha leitura de todos estes cards, juntos</span>
+              <p>Nenhum desses padrões sozinho me diz muita coisa. É a combinação que me fala: ativação alta, humor baixo, ruminação presente, e quase nenhuma abertura pra pedir ajuda quando o conflito aparece. Locus externo e hostilidade ficam mais discretos, então eu não empurraria força pra esse lado. Meu olho fica no par humor + ruminação: é aí que eu sinto o peso concentrado.</p>
+            </div>
           </div>
 
           <div class="panel full">
@@ -938,7 +996,7 @@
           <div class="panel">
             <div class="panel-head"><h2>Saída do seu extractor</h2><span class="panel-tag">heurística didática</span></div>
             <div id="student-output" class="out-metric"></div>
-            <p class="panel-caption">Heurística simplificada para aprendizado. Usa contagem de léxico, não o modelo de produção da Ayla. O raciocínio de tradução domínio para sinal é o mesmo.</p>
+            <p class="panel-caption">Heurística simplificada para aprendizado, cada linha simula um extractor real do arsenal da Ayla (estilo linguístico, LIWC, distorção cognitiva, minimização, atos de fala, orientação temporal). Aqui roda por contagem de léxico; em produção, o mesmo raciocínio roda sobre um modelo estatístico treinado.</p>
           </div>
 
           <div class="panel full">
@@ -959,6 +1017,25 @@
       <span>Anamnésis, por Ayla · pesquisa aplicada em observação multimodal</span>
       <span>Ambiente piloto · Jornada Cearense de Psiquiatria 2026</span>
     </footer>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="new-session-modal" hidden role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-card">
+    <h3 id="modal-title">Nova sessão</h3>
+    <p>Envie a gravação da entrevista para processamento. Isso pode levar alguns minutos, dependendo da duração.</p>
+    <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Selecionar arquivo de vídeo para enviar">
+      <strong>Clique para selecionar o vídeo</strong>
+      MP4, MOV ou WEBM — máximo 2 GB
+    </div>
+    <div class="upload-progress" id="upload-progress">
+      <div class="upload-bar"><div class="upload-bar-fill" id="upload-bar-fill"></div></div>
+      <span class="upload-status" id="upload-status">Enviando…</span>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="modal-btn" id="modal-cancel">Cancelar</button>
+      <button type="button" class="modal-btn primary" id="modal-confirm" disabled>Iniciar processamento</button>
+    </div>
   </div>
 </div>
 
@@ -1018,10 +1095,10 @@
 
   /* ---- session queue switching ---- */
   var SESSIONS = {
-    'STAND-014': { status:'ready', label:'pronta para revisão', sub:'gravada em 30/08/2026, processada em 29 min', gravacao:'30/08/2026 · 14:12', analise:'30/08/2026 · 14:41', dur:'17:04', maiorSinal:'Humor depressivo · 71%', contradicoes:'3' },
-    'STAND-013': { status:'processing', label:'em processamento', sub:'gravada em 30/08/2026, análise ainda em andamento', gravacao:'30/08/2026 · 15:20', dur:'16:40' },
-    'STAND-012': { status:'ready', label:'revisada pela Dra.', sub:'gravada em 29/08/2026, revisão concluída', gravacao:'29/08/2026 · 10:05', analise:'29/08/2026 · 10:33', dur:'15:52', maiorSinal:'Ativação e mania · 68%', contradicoes:'2' },
-    'STAND-011': { status:'ready', label:'revisada pela Dra.', sub:'gravada em 29/08/2026, revisão concluída', gravacao:'29/08/2026 · 09:10', analise:'29/08/2026 · 09:36', dur:'16:20', maiorSinal:'Ansiedade e medo · 74%', contradicoes:'4' }
+    'Paciente 4': { status:'ready', label:'pronta para revisão', sub:'gravada em 30/08/2026, processada em 29 min', gravacao:'30/08/2026 · 14:12', analise:'30/08/2026 · 14:41', dur:'17:04', maiorSinal:'Humor depressivo · 71%', contradicoes:'3' },
+    'Paciente 3': { status:'processing', label:'em processamento', sub:'gravada em 30/08/2026, análise ainda em andamento', gravacao:'30/08/2026 · 15:20', dur:'16:40' },
+    'Paciente 2': { status:'ready', label:'revisada pela Dra.', sub:'gravada em 29/08/2026, revisão concluída', gravacao:'29/08/2026 · 10:05', analise:'29/08/2026 · 10:33', dur:'15:52', maiorSinal:'Ativação e mania · 68%', contradicoes:'2' },
+    'Paciente 1': { status:'ready', label:'revisada pela Dra.', sub:'gravada em 29/08/2026, revisão concluída', gravacao:'29/08/2026 · 09:10', analise:'29/08/2026 · 09:36', dur:'16:20', maiorSinal:'Ansiedade e medo · 74%', contradicoes:'4' }
   };
 
   var queueButtons = document.querySelectorAll('.queue-item');
@@ -1079,13 +1156,17 @@
   }
   queueButtons.forEach(function(b){ b.addEventListener('click', function(){ selectSession(b.dataset.id); }); });
 
-  /* ---- student extractor heuristic ---- */
+  /* ---- student extractor heuristic (simula parte do arsenal real: LIWC-like, CBT distortion, minimização/invalidação, orientação temporal) ---- */
   var LEX = {
     pos: ['feliz','alegre','tranquilo','calmo','bem','grato','agradecido','confiante','animado','leve','gosto','gostei','tranquila'],
     neg: ['triste','ansioso','ansiosa','cansado','cansada','medo','raiva','irritado','desanimado','sozinho','sozinha','preocupado','mal','péssimo','exausto','exausta','sem vontade'],
     negation: ['não','nunca','nada','jamais','ninguém','nem'],
     hedge: ['talvez','acho','meio','tipo','sei lá','possivelmente','às vezes'],
-    self: ['eu','me','mim','meu','minha','comigo','tô','to']
+    self: ['eu','me','mim','meu','minha','comigo','tô','to'],
+    catastrophizing: ['sempre','nunca vou','tudo dá errado','pior','desastre','impossível','não aguento mais','vai dar tudo errado','arruinado','acabou'],
+    minimization: ['não é nada','não foi nada','tudo bem','tanto faz','não importa','deixa pra lá','sem problema','normal isso'],
+    future: ['vou','vai','amanhã','depois','futuro','ainda vai','vai acontecer'],
+    past: ['era','fui','tinha','antes','naquela época','antigamente','já foi']
   };
 
   function countMatches(text, list){
@@ -1116,37 +1197,51 @@
     var negation = countMatches(lowered, LEX.negation);
     var hedge = countMatches(lowered, LEX.hedge);
     var self = countMatches(lowered, LEX.self);
+    var catastro = countMatches(lowered, LEX.catastrophizing);
+    var minim = countMatches(lowered, LEX.minimization);
+    var future = countMatches(lowered, LEX.future);
+    var past = countMatches(lowered, LEX.past);
 
     var posN = pos.reduce(function(a,f){return a+f.n;},0);
     var negN = neg.reduce(function(a,f){return a+f.n;},0);
     var selfN = self.reduce(function(a,f){return a+f.n;},0);
     var negationN = negation.reduce(function(a,f){return a+f.n;},0);
     var hedgeN = hedge.reduce(function(a,f){return a+f.n;},0);
+    var catastroN = catastro.reduce(function(a,f){return a+f.n;},0);
+    var minimN = minim.reduce(function(a,f){return a+f.n;},0);
+    var futureN = future.reduce(function(a,f){return a+f.n;},0);
+    var pastN = past.reduce(function(a,f){return a+f.n;},0);
 
     var valence = clamp(50 + ((posN - negN) / wc) * 400, 0, 100);
     var selfDensity = clamp((selfN / wc) * 100 * 3, 0, 100);
     var ruminationScore = clamp((negationN / wc) * 100 * 6, 0, 100);
     var hedgeScore = clamp((hedgeN / wc) * 100 * 6, 0, 100);
+    var catastroScore = clamp((catastroN / wc) * 100 * 10, 0, 100);
+    var minimScore = clamp((minimN / wc) * 100 * 10, 0, 100);
+    var timeOrientation = clamp(50 + ((futureN - pastN) / wc) * 300, 0, 100);
 
     function chips(list){
       if (!list.length) return '<span class="chip">nenhum marcador encontrado</span>';
       return list.map(function(f){ return '<span class="chip">"'+f.term+'" ×'+f.n+'</span>'; }).join('');
     }
 
-    function row(name, val, chipsHtml){
+    function row(name, val, chipsHtml, tag){
       return '' +
         '<div class="out-row">' +
-          '<div class="out-row-head"><span class="out-name">'+name+'</span><span class="out-num">'+Math.round(val)+'/100</span></div>' +
+          '<div class="out-row-head"><span class="out-name">'+name+(tag ? ' <span class="extractor-tag-inline">'+tag+'</span>' : '')+'</span><span class="out-num">'+Math.round(val)+'/100</span></div>' +
           '<div class="out-bar"><div class="out-bar-fill" style="width:'+val+'%"></div></div>' +
           '<div class="out-chips">'+chipsHtml+'</div>' +
         '</div>';
     }
 
     out.innerHTML =
-      row('Valência estimada', valence, chips(posN||negN ? pos.concat(neg) : [])) +
-      row('Densidade de autofoco', selfDensity, chips(self)) +
-      row('Negação / ruminação', ruminationScore, chips(negation)) +
-      row('Hedging / incerteza', hedgeScore, chips(hedge));
+      row('Valência estimada', valence, chips(posN||negN ? pos.concat(neg) : []), 'estilo linguístico') +
+      row('Densidade de autofoco', selfDensity, chips(self), 'LIWC-like') +
+      row('Negação / ruminação', ruminationScore, chips(negation), 'padrão relacional') +
+      row('Distorção catastrófica', catastroScore, chips(catastro), 'distorção cognitiva') +
+      row('Minimização / invalidação', minimScore, chips(minim), 'minimização') +
+      row('Hedging / incerteza', hedgeScore, chips(hedge), 'atos de fala') +
+      row('Orientação temporal (futuro vs. passado)', timeOrientation, chips(future.concat(past)), 'temporal') ;
   }
 
   var MIN_CHARS = 120;
@@ -1202,6 +1297,77 @@
         ? 'A Dra. assume a condução clínica agora. A demonstração é interrompida até a avaliação de risco ser concluída.'
         : 'Autoagressão, ideação suicida e psicose aguda foram avaliados nesta sessão. Revisão da Dra. obrigatória antes de fechar o atendimento.';
     });
+  });
+
+  /* ---- new session modal (simulated upload) ---- */
+  var modal = document.getElementById('new-session-modal');
+  var openBtn = document.getElementById('new-session-btn');
+  var cancelBtn = document.getElementById('modal-cancel');
+  var confirmBtn = document.getElementById('modal-confirm');
+  var dropzone = document.getElementById('dropzone');
+  var progressWrap = document.getElementById('upload-progress');
+  var progressFill = document.getElementById('upload-bar-fill');
+  var progressStatus = document.getElementById('upload-status');
+  var fileChosen = false;
+
+  function openModal(){
+    modal.hidden = false;
+    fileChosen = false;
+    progressWrap.classList.remove('active');
+    progressFill.style.width = '0%';
+    dropzone.hidden = false;
+    confirmBtn.disabled = true;
+    dropzone.focus();
+  }
+  function closeModal(){ modal.hidden = true; }
+
+  openBtn.addEventListener('click', openModal);
+  cancelBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e){ if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !modal.hidden) closeModal(); });
+
+  function simulateUpload(){
+    dropzone.hidden = true;
+    progressWrap.classList.add('active');
+    var pct = 0;
+    progressStatus.textContent = 'Enviando vídeo, 0%';
+    var timer = setInterval(function(){
+      pct += Math.random() * 18 + 8;
+      if (pct >= 100){
+        pct = 100;
+        clearInterval(timer);
+        progressStatus.textContent = 'Envio concluído, na fila de processamento';
+        fileChosen = true;
+        confirmBtn.disabled = false;
+      } else {
+        progressStatus.textContent = 'Enviando vídeo, ' + Math.round(pct) + '%';
+      }
+      progressFill.style.width = pct + '%';
+    }, 260);
+  }
+
+  dropzone.addEventListener('click', simulateUpload);
+  dropzone.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); simulateUpload(); } });
+
+  confirmBtn.addEventListener('click', function(){
+    if (!fileChosen) return;
+    var nextNum = Object.keys(SESSIONS).length + 1;
+    var id = 'Paciente ' + nextNum;
+    var now = new Date();
+    var dateStr = now.toLocaleDateString('pt-BR') + ' · ' + now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+    SESSIONS[id] = { status:'processing', label:'em processamento', sub:'gravada agora, análise ainda em andamento', gravacao:dateStr, dur:'—' };
+
+    var item = document.createElement('button');
+    item.type = 'button';
+    item.className = 'queue-item';
+    item.dataset.id = id;
+    item.innerHTML = '<span class="qid">' + id + '</span><span class="qstatus proc">processando</span>';
+    item.addEventListener('click', function(){ selectSession(id); });
+    var queue = document.querySelector('.queue');
+    queue.insertBefore(item, queue.firstChild);
+
+    closeModal();
+    selectSession(id);
   });
 })();
 </script>

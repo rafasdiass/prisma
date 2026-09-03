@@ -201,6 +201,10 @@
   .status-badge.done .d{ background:var(--good); }
   .status-badge.proc{ background:var(--pilot-soft); color:var(--pilot); }
   .status-badge.proc .d{ background:var(--pilot); }
+  .save-status{ font-size:12px; color:var(--ink-faint); font-family:"IBM Plex Mono", monospace; }
+  .save-btn{ appearance:none; border:1px solid var(--line-strong); background:var(--surface); color:var(--ink); font-size:13px; font-weight:600; padding:7px 14px; border-radius:8px; cursor:pointer; }
+  .save-btn:hover{ border-color:var(--pedagogic); color:var(--pedagogic); }
+  .save-btn.saved{ border-color:var(--good); color:var(--good); background:var(--good-soft); }
 
   /* ---------- session header (video placeholder + meta) ---------- */
   .session-header{ display:grid; grid-template-columns:300px 1fr; gap:20px; margin-bottom:22px; }
@@ -411,6 +415,19 @@
   .opinion-scope{ font-size:12.5px; color:rgba(243,245,241,0.6); font-style:normal; }
 
   /* ---------- síntese ayla / traits ---------- */
+  /* ---------- clinical section tabs ---------- */
+  .clinical-tabs{ display:flex; gap:4px; margin-bottom:20px; border-bottom:1px solid var(--line); overflow-x:auto; }
+  .clinical-tab{
+    appearance:none; border:none; background:transparent; cursor:pointer;
+    padding:11px 16px; font-size:13.5px; font-weight:600; color:var(--ink-faint);
+    border-bottom:2px solid transparent; white-space:nowrap; margin-bottom:-1px;
+  }
+  .clinical-tab .tab-count{ font-family:"IBM Plex Mono", monospace; font-size:11px; font-weight:600; color:var(--ink-faint); margin-left:5px; }
+  .clinical-tab:hover{ color:var(--ink); }
+  .clinical-tab.active{ color:var(--clinical); border-bottom-color:var(--clinical); }
+  .clinical-tab.active .tab-count{ color:var(--clinical); }
+  [data-tab-content]{ display:none; }
+  [data-tab-content].active{ display:block; }
   .synthesis-panel{ border-color:var(--clinical); }
   .synthesis-text{ font-size:15px; color:var(--ink); line-height:1.65; margin:0 0 14px; max-width:76ch; }
   .synthesis-text b{ color:var(--clinical); font-weight:600; }
@@ -601,10 +618,11 @@
     <div class="topbar" data-topbar="pedagogic" style="display:none">
       <div class="topbar-title">
         <h1 id="pedagogic-title">Meu extractor · Humor / depressividade</h1>
-        <span class="sub">Mentes Artificiais, UniAteneu</span>
+        <span class="sub">Extensão Mentes Artificiais · UniAteneu</span>
       </div>
       <div class="topbar-right">
-        <span class="sub" style="font-family:'IBM Plex Mono',monospace;color:var(--ink-faint)">salvo automaticamente</span>
+        <span class="save-status" id="save-status">Rascunho não salvo</span>
+        <button type="button" class="save-btn" id="save-btn">Salvar</button>
       </div>
     </div>
 
@@ -665,6 +683,15 @@
           </div>
         </div>
 
+        <nav class="clinical-tabs" role="tablist" aria-label="Seções da avaliação">
+          <button type="button" class="clinical-tab active" data-tab="resumo" role="tab" aria-selected="true">Resumo</button>
+          <button type="button" class="clinical-tab" data-tab="linguagem" role="tab" aria-selected="false">Linguagem <span class="tab-count">12</span></button>
+          <button type="button" class="clinical-tab" data-tab="voz-corpo" role="tab" aria-selected="false">Voz e corpo <span class="tab-count">3</span></button>
+          <button type="button" class="clinical-tab" data-tab="vinculo" role="tab" aria-selected="false">Vínculo <span class="tab-count">12</span></button>
+          <button type="button" class="clinical-tab" data-tab="notas" role="tab" aria-selected="false">Notas da Dra.</button>
+        </nav>
+
+        <div data-tab-content="resumo" class="active">
         <div class="tiles">
           <div class="tile"><span class="k">Canais captados</span><span class="v good" style="font-size:14px">Texto, áudio e vídeo</span></div>
           <div class="tile"><span class="k">Transcrição</span><span class="v good">100%</span></div>
@@ -713,8 +740,9 @@
           <div class="tl-caption"><span>00:00</span><span>largura de cada bloco é proporcional ao tempo real dele na sessão</span><span id="tl-end">17:04</span></div>
           <div class="tl-detail" id="tl-detail"></div>
         </div>
+        </div>
 
-        <div class="panel-grid" id="clinical-panels">
+        <div data-tab-content="linguagem" class="panel-grid" id="clinical-panels">
 
           <div class="panel full synthesis-panel">
             <div class="panel-head"><h2>Síntese Ayla, leitura da sessão</h2><span class="panel-tag">apoio à decisão, não diagnóstico</span></div>
@@ -730,9 +758,9 @@
                 </div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:64%"></div></div>
                 <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança alta</span></div>
-                <p class="trait-rationale">Hipervigilância verbal, autocontato gestual 2,4× acima do baseline e variação de pitch reduzida no bloco de emoção.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
                 <div class="trait-extra">
+                  <p class="trait-rationale">Hipervigilância verbal, autocontato gestual 2,4× acima do baseline e variação de pitch reduzida no bloco de emoção.</p>
                   <div class="out-chips"><span class="chip">3 episódios de autocontato prolongado</span><span class="chip">queda de 9% na amplitude vocal</span></div>
                   <p>Padrão mais evidente nos blocos de emoção e relações, coerente com o relato de preocupação antecipatória.</p>
                 </div>
@@ -745,9 +773,9 @@
                 </div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:71%"></div></div>
                 <div class="trait-meta"><span class="trait-band alta">banda alta</span><span class="trait-conf">confiança alta</span></div>
-                <p class="trait-rationale">Valência textual negativa persistente, lentificação em dois blocos e queda de prosódia ao longo da sessão.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
                 <div class="trait-extra">
+                  <p class="trait-rationale">Valência textual negativa persistente, lentificação em dois blocos e queda de prosódia ao longo da sessão.</p>
                   <div class="out-chips"><span class="chip">9 marcadores de valência negativa</span><span class="chip">lentificação em 2 blocos</span><span class="chip">queda de 14% na variação de pitch</span></div>
                   <p>Trajetória estável ao longo da sessão, sem picos isolados.</p>
                 </div>
@@ -760,9 +788,9 @@
                 </div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:58%"></div></div>
                 <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança média</span></div>
-                <p class="trait-rationale">Autocrítica recorrente no léxico, minimização de conquistas relatadas e postura fechada em dois blocos.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
                 <div class="trait-extra">
+                  <p class="trait-rationale">Autocrítica recorrente no léxico, minimização de conquistas relatadas e postura fechada em dois blocos.</p>
                   <div class="out-chips"><span class="chip">4 frases de minimização</span><span class="chip">ausência de fala de orgulho</span></div>
                   <p>Padrão presente principalmente ao relatar desempenho acadêmico e social.</p>
                 </div>
@@ -775,9 +803,9 @@
                 </div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:34%"></div></div>
                 <div class="trait-meta"><span class="trait-band baixa">banda baixa</span><span class="trait-conf">confiança baixa-média</span></div>
-                <p class="trait-rationale">Grandiosidade pontual no relato de conflito, mas sem padrão sustentado, abaixo do limiar de atenção clínica.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
                 <div class="trait-extra">
+                  <p class="trait-rationale">Grandiosidade pontual no relato de conflito, mas sem padrão sustentado, abaixo do limiar de atenção clínica.</p>
                   <div class="out-chips"><span class="chip">1 episódio de grandiosidade</span><span class="chip">sem padrão sustentado</span></div>
                   <p>Frequência bem abaixo do que costuma acompanhar um traço clinicamente relevante.</p>
                 </div>
@@ -790,9 +818,9 @@
                 </div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:45%"></div></div>
                 <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança média</span></div>
-                <p class="trait-rationale">Dificuldade de nomear afeto: incongruência entre relato e expressão facial, vocabulário emocional pouco diferenciado.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
                 <div class="trait-extra">
+                  <p class="trait-rationale">Dificuldade de nomear afeto: incongruência entre relato e expressão facial, vocabulário emocional pouco diferenciado.</p>
                   <div class="out-chips"><span class="chip">vocabulário emocional com 6 termos distintos</span><span class="chip">3 momentos de incongruência relato×face</span></div>
                   <p>Vale observar se o padrão se repete em sessões futuras antes de qualquer hipótese mais forte.</p>
                 </div>
@@ -805,9 +833,9 @@
                 </div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:52%"></div></div>
                 <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança média</span></div>
-                <p class="trait-rationale">Atribui resultados a fatores externos (sorte, outras pessoas, circunstância) com mais frequência do que a si mesma ao narrar os próprios eventos.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
                 <div class="trait-extra">
+                  <p class="trait-rationale">Atribui resultados a fatores externos (sorte, outras pessoas, circunstância) com mais frequência do que a si mesma ao narrar os próprios eventos.</p>
                   <div class="out-chips"><span class="chip">7 atribuições externas vs. 2 internas</span><span class="chip">voz passiva recorrente ao narrar decisões próprias</span></div>
                   <p>Extractor de LIWC (pronomes, agentividade) combinado com atos de fala do relato.</p>
                 </div>
@@ -820,9 +848,9 @@
                 </div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:67%"></div></div>
                 <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança alta</span></div>
-                <p class="trait-rationale">Retorna ao mesmo tema de conflito três vezes em blocos diferentes, sem avançar para resolução ou reinterpretação.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
                 <div class="trait-extra">
+                  <p class="trait-rationale">Retorna ao mesmo tema de conflito três vezes em blocos diferentes, sem avançar para resolução ou reinterpretação.</p>
                   <div class="out-chips"><span class="chip">3 retornos ao mesmo tema</span><span class="chip">nenhuma reinterpretação entre os retornos</span></div>
                   <p>Padrão de repetição temática sem progressão, medido por trajetória de tópico ao longo da sessão.</p>
                 </div>
@@ -835,9 +863,9 @@
                 </div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:41%"></div></div>
                 <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança média</span></div>
-                <p class="trait-rationale">Ao narrar conflitos, posiciona o outro como agressor e a si como reativa; padrão presente mas não dominante no discurso.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
                 <div class="trait-extra">
+                  <p class="trait-rationale">Ao narrar conflitos, posiciona o outro como agressor e a si como reativa; padrão presente mas não dominante no discurso.</p>
                   <div class="out-chips"><span class="chip">2 marcadores de power dynamics</span><span class="chip">nenhum marcador de DARVO sustentado</span></div>
                   <p>Extractor de dinâmica relacional e atos de fala; sem sinal de inversão de culpa persistente.</p>
                 </div>
@@ -850,9 +878,9 @@
                 </div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:55%"></div></div>
                 <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança média</span></div>
-                <p class="trait-rationale">Consegue nomear a emoção, mas o corpo segue ativado por mais tempo do que o relato verbal sugere, indicando esforço de contenção mais do que regulação completa.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
                 <div class="trait-extra">
+                  <p class="trait-rationale">Consegue nomear a emoção, mas o corpo segue ativado por mais tempo do que o relato verbal sugere, indicando esforço de contenção mais do que regulação completa.</p>
                   <div class="out-chips"><span class="chip">tempo de retorno ao baseline vocal: 2,1× o esperado</span><span class="chip">nomeação emocional presente</span></div>
                   <p>Cruza prosódia (retorno ao baseline) com vocabulário emocional do texto.</p>
                 </div>
@@ -930,6 +958,10 @@
             </div>
           </div>
 
+        </div>
+
+        <div data-tab-content="voz-corpo" class="panel-grid">
+
           <div class="panel">
             <div class="panel-head"><h2>Face &amp; microexpressões</h2><span class="panel-tag">eventos com timestamp</span></div>
             <div class="event-list">
@@ -963,6 +995,10 @@
             </div>
             <p class="panel-synthesis"><b>Leitura do conjunto:</b> autocontato alto e velocidade gestual elevada, com postura e orientação corporal estáveis. Sugere ansiedade contida no corpo, sem sinal de agitação psicomotora global.</p>
           </div>
+
+        </div>
+
+        <div data-tab-content="vinculo" class="panel-grid">
 
           <div class="panel">
             <div class="panel-head"><h2>Padrões relacionais</h2><span class="panel-tag">psicologia comportamental</span></div>
@@ -1002,76 +1038,80 @@
                 <div class="trait-head"><span class="trait-name-wrap"><span class="trait-name">Comunicação defensiva (4 Cavaleiros)</span></span><span class="trait-score">39%</span></div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:39%"></div></div>
                 <div class="trait-meta"><span class="trait-band baixa">banda baixa</span><span class="trait-conf">confiança média</span></div>
-                <p class="trait-rationale">Modelo de Gottman: crítica, desprezo, defensividade e esquiva. Aparece de forma leve ao narrar o conflito, sem desprezo presente.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
-                <div class="trait-extra"><div class="out-chips"><span class="chip">1 marcador de defensividade</span><span class="chip">nenhum marcador de desprezo</span></div><p>Extractor Gottman Four Horsemen, aplicado ao relato de conflito do bloco de relações.</p></div>
+                <div class="trait-extra">
+                  <p class="trait-rationale">Modelo de Gottman: crítica, desprezo, defensividade e esquiva. Aparece de forma leve ao narrar o conflito, sem desprezo presente.</p><div class="out-chips"><span class="chip">1 marcador de defensividade</span><span class="chip">nenhum marcador de desprezo</span></div><p>Extractor Gottman Four Horsemen, aplicado ao relato de conflito do bloco de relações.</p></div>
               </button>
 
               <button type="button" class="trait-card" aria-expanded="false">
                 <div class="trait-head"><span class="trait-name-wrap"><span class="trait-name">Tentativa de reparo</span></span><span class="trait-score">22%</span></div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:22%"></div></div>
                 <div class="trait-meta"><span class="trait-band baixa">banda baixa</span><span class="trait-conf">confiança alta</span></div>
-                <p class="trait-rationale">Quase ausente: ela não relata gestos de reconciliação depois dos conflitos que descreve, nem verbal nem de ação.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
-                <div class="trait-extra"><div class="out-chips"><span class="chip">0 tentativas de reparo relatadas em 3 conflitos</span></div><p>Extractor de repair attempts (Gottman); score baixo aqui reforça o padrão relacional já visto em "Rigidez em relato de conflito".</p></div>
+                <div class="trait-extra">
+                  <p class="trait-rationale">Quase ausente: ela não relata gestos de reconciliação depois dos conflitos que descreve, nem verbal nem de ação.</p><div class="out-chips"><span class="chip">0 tentativas de reparo relatadas em 3 conflitos</span></div><p>Extractor de repair attempts (Gottman); score baixo aqui reforça o padrão relacional já visto em "Rigidez em relato de conflito".</p></div>
               </button>
 
               <button type="button" class="trait-card" aria-expanded="false">
                 <div class="trait-head"><span class="trait-name-wrap"><span class="trait-name">Autodivulgação e vulnerabilidade</span></span><span class="trait-score">31%</span></div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:31%"></div></div>
                 <div class="trait-meta"><span class="trait-band baixa">banda baixa</span><span class="trait-conf">confiança média</span></div>
-                <p class="trait-rationale">Ela fala pouco sobre o próprio interior espontaneamente; a maior parte do que compartilha vem em resposta direta à pergunta, não por iniciativa.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
-                <div class="trait-extra"><div class="out-chips"><span class="chip">4 aberturas espontâneas em 17 min</span></div><p>Extractor de self-disclosure; coerente com o padrão de "segurar sozinha" descrito no parecer.</p></div>
+                <div class="trait-extra">
+                  <p class="trait-rationale">Ela fala pouco sobre o próprio interior espontaneamente; a maior parte do que compartilha vem em resposta direta à pergunta, não por iniciativa.</p><div class="out-chips"><span class="chip">4 aberturas espontâneas em 17 min</span></div><p>Extractor de self-disclosure; coerente com o padrão de "segurar sozinha" descrito no parecer.</p></div>
               </button>
 
               <button type="button" class="trait-card" aria-expanded="false">
                 <div class="trait-head"><span class="trait-name-wrap"><span class="trait-name">Resposta polivagal de contenção</span></span><span class="trait-score">61%</span></div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:61%"></div></div>
                 <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança média</span></div>
-                <p class="trait-rationale">Padrão de ativação autonômica que não se resolve dentro do bloco: o corpo continua alerta mesmo quando o assunto muda.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
-                <div class="trait-extra"><div class="out-chips"><span class="chip">retorno ao baseline vocal 2,1× mais lento</span></div><p>Extractor de resposta polivagal (Porges), cruzado com prosódia.</p></div>
+                <div class="trait-extra">
+                  <p class="trait-rationale">Padrão de ativação autonômica que não se resolve dentro do bloco: o corpo continua alerta mesmo quando o assunto muda.</p><div class="out-chips"><span class="chip">retorno ao baseline vocal 2,1× mais lento</span></div><p>Extractor de resposta polivagal (Porges), cruzado com prosódia.</p></div>
               </button>
 
               <button type="button" class="trait-card" aria-expanded="false">
                 <div class="trait-head"><span class="trait-name-wrap"><span class="trait-name">Distorção cognitiva catastrófica</span></span><span class="trait-score">44%</span></div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:44%"></div></div>
                 <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança média</span></div>
-                <p class="trait-rationale">Presente ao antecipar o futuro ("nunca vai melhorar"), típico de generalização e catastrofização da TCC.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
-                <div class="trait-extra"><div class="out-chips"><span class="chip">2 generalizações absolutas</span><span class="chip">1 previsão catastrófica</span></div><p>Extractor de distorções cognitivas (CBT distortion extractor).</p></div>
+                <div class="trait-extra">
+                  <p class="trait-rationale">Presente ao antecipar o futuro ("nunca vai melhorar"), típico de generalização e catastrofização da TCC.</p><div class="out-chips"><span class="chip">2 generalizações absolutas</span><span class="chip">1 previsão catastrófica</span></div><p>Extractor de distorções cognitivas (CBT distortion extractor).</p></div>
               </button>
 
               <button type="button" class="trait-card" aria-expanded="false">
                 <div class="trait-head"><span class="trait-name-wrap"><span class="trait-name">Minimização e invalidação (do próprio sofrimento)</span></span><span class="trait-score">53%</span></div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:53%"></div></div>
                 <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança média</span></div>
-                <p class="trait-rationale">Desqualifica o próprio incômodo ("não é nada demais") logo depois de descrever algo que a afeta claramente.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
-                <div class="trait-extra"><div class="out-chips"><span class="chip">3 desqualificações do próprio relato</span></div><p>Extractor de minimização/invalidação, aqui direcionado a si mesma, não a terceiros.</p></div>
+                <div class="trait-extra">
+                  <p class="trait-rationale">Desqualifica o próprio incômodo ("não é nada demais") logo depois de descrever algo que a afeta claramente.</p><div class="out-chips"><span class="chip">3 desqualificações do próprio relato</span></div><p>Extractor de minimização/invalidação, aqui direcionado a si mesma, não a terceiros.</p></div>
               </button>
 
               <button type="button" class="trait-card" aria-expanded="false">
                 <div class="trait-head"><span class="trait-name-wrap"><span class="trait-name">Emoção compartilhada / afeto positivo</span></span><span class="trait-score">18%</span></div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:18%"></div></div>
                 <div class="trait-meta"><span class="trait-band baixa">banda baixa</span><span class="trait-conf">confiança alta</span></div>
-                <p class="trait-rationale">Muito pouco espaço para alegria compartilhada ou celebração ao longo da sessão inteira, mesmo na narrativa livre do início.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
-                <div class="trait-extra"><div class="out-chips"><span class="chip">1 menção de alegria em 17 min</span></div><p>Extratores de savoring / shared positive emotion; score baixo aqui é dado relevante por ausência, não só por presença de algo negativo.</p></div>
+                <div class="trait-extra">
+                  <p class="trait-rationale">Muito pouco espaço para alegria compartilhada ou celebração ao longo da sessão inteira, mesmo na narrativa livre do início.</p><div class="out-chips"><span class="chip">1 menção de alegria em 17 min</span></div><p>Extratores de savoring / shared positive emotion; score baixo aqui é dado relevante por ausência, não só por presença de algo negativo.</p></div>
               </button>
 
               <button type="button" class="trait-card" aria-expanded="false">
                 <div class="trait-head"><span class="trait-name-wrap"><span class="trait-name">Marcadores de gaslighting recebido</span></span><span class="trait-score">27%</span></div>
                 <div class="trait-bar"><div class="trait-bar-fill" style="width:27%"></div></div>
                 <div class="trait-meta"><span class="trait-band baixa">banda baixa</span><span class="trait-conf">confiança baixa</span></div>
-                <p class="trait-rationale">Sinais leves de dúvida sobre a própria percepção ao narrar um conflito específico; não sustentado o bastante pra afirmar padrão.</p>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
-                <div class="trait-extra"><div class="out-chips"><span class="chip">1 episódio isolado</span></div><p>Extractor de gaslighting; aqui mede o que ela relata ter recebido de terceiros, não um traço dela.</p></div>
+                <div class="trait-extra">
+                  <p class="trait-rationale">Sinais leves de dúvida sobre a própria percepção ao narrar um conflito específico; não sustentado o bastante pra afirmar padrão.</p><div class="out-chips"><span class="chip">1 episódio isolado</span></div><p>Extractor de gaslighting; aqui mede o que ela relata ter recebido de terceiros, não um traço dela.</p></div>
               </button>
 
             </div>
           </div>
+
+        </div>
+
+        <div data-tab-content="notas" class="panel-grid">
 
           <div class="panel full doctor-field">
             <div class="panel-head"><h2>Campo da Dra. Ana Lívia</h2><span class="panel-tag">exclusivo médico</span></div>
@@ -1166,6 +1206,23 @@
     savedTheme = prefersDark ? 'dark' : 'light';
   }
   setTheme(savedTheme);
+
+  /* ---- clinical tabs ---- */
+  var clinicalTabs = document.querySelectorAll('.clinical-tab');
+  var clinicalTabContents = document.querySelectorAll('[data-tab-content]');
+  clinicalTabs.forEach(function(tabBtn){
+    tabBtn.addEventListener('click', function(){
+      var tab = tabBtn.dataset.tab;
+      clinicalTabs.forEach(function(b){
+        var active = b === tabBtn;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      clinicalTabContents.forEach(function(c){
+        c.classList.toggle('active', c.getAttribute('data-tab-content') === tab);
+      });
+    });
+  });
 
   var body = document.body;
   var modeButtons = document.querySelectorAll('.mode-switch button');
@@ -1380,6 +1437,19 @@
     countEl.textContent = ok ? (len + ' caracteres, pronto para analisar') : (len + ' de ' + MIN_CHARS + ' caracteres');
     runBtn.disabled = !ok;
   }
+  var saveBtn = document.getElementById('save-btn');
+  var saveStatus = document.getElementById('save-status');
+  saveBtn.addEventListener('click', function(){
+    saveBtn.classList.add('saved');
+    saveBtn.textContent = 'Salvo';
+    var now = new Date();
+    saveStatus.textContent = 'Salvo às ' + now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+  });
+  input.addEventListener('input', function(){
+    saveBtn.classList.remove('saved');
+    saveBtn.textContent = 'Salvar';
+    saveStatus.textContent = 'Rascunho não salvo';
+  });
   input.addEventListener('input', updateCount);
   updateCount();
   render('');

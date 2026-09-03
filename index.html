@@ -1,0 +1,1083 @@
+<title>Ayla Clínica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+<style>
+  :root{
+    --ground:#EDEFE9;
+    --surface:#F6F7F3;
+    --surface-raised:#FFFFFF;
+    --sidebar:#1C2320;
+    --sidebar-ink:#D9DED9;
+    --sidebar-ink-dim:#9BA5A0;
+    --sidebar-active:#2B332E;
+    --ink:#1C2320;
+    --ink-soft:#40483F;
+    --ink-faint:#5B655F;
+    --line:#D7DAD2;
+    --line-strong:#B9C0B7;
+    --clinical:#2B5D62;
+    --clinical-soft:#DCE7E6;
+    --pedagogic:#8A5A3B;
+    --pedagogic-soft:#EFE3D7;
+    --pilot:#96690F;
+    --pilot-soft:#F3E7D2;
+    --good:#2E6944;
+    --good-soft:#DFEFE2;
+    --warn:#96690F;
+    --crit:#8A3934;
+    --crit-soft:#F3DEDC;
+    --shadow: 0 1px 2px rgba(28,35,32,0.06), 0 8px 24px -10px rgba(28,35,32,0.14);
+    --radius: 10px;
+  }
+
+  :root:not([data-theme="light"]){
+    @media (prefers-color-scheme: dark){
+      --ground:#151816;
+      --surface:#1B201D;
+      --surface-raised:#232925;
+      --sidebar:#0F1311;
+      --sidebar-ink:#D9DED9;
+      --sidebar-ink-dim:#7E8983;
+      --sidebar-active:#1D2320;
+      --ink:#ECEEE9;
+      --ink-soft:#C2CAC4;
+      --ink-faint:#8B948D;
+      --line:#2E3532;
+      --line-strong:#3C453F;
+      --clinical:#6FB0AC;
+      --clinical-soft:#233230;
+      --pedagogic:#D6A374;
+      --pedagogic-soft:#2E241B;
+      --pilot:#D9A94F;
+      --pilot-soft:#2E2718;
+      --good:#6FBE85;
+      --good-soft:#1E2C22;
+      --warn:#D9A94F;
+      --crit:#E28B85;
+      --crit-soft:#2E1F1E;
+      --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 10px 28px -10px rgba(0,0,0,0.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#151816; --surface:#1B201D; --surface-raised:#232925;
+    --sidebar:#0F1311; --sidebar-ink:#D9DED9; --sidebar-ink-dim:#7E8983; --sidebar-active:#1D2320;
+    --ink:#ECEEE9; --ink-soft:#C2CAC4; --ink-faint:#8B948D;
+    --line:#2E3532; --line-strong:#3C453F;
+    --clinical:#6FB0AC; --clinical-soft:#233230;
+    --pedagogic:#D6A374; --pedagogic-soft:#2E241B;
+    --pilot:#D9A94F; --pilot-soft:#2E2718;
+    --good:#6FBE85; --good-soft:#1E2C22;
+    --warn:#D9A94F; --crit:#E28B85; --crit-soft:#2E1F1E;
+    --shadow: 0 1px 2px rgba(0,0,0,0.35), 0 10px 28px -10px rgba(0,0,0,0.55);
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; height:100%; }
+  body{
+    background:var(--ground);
+    color:var(--ink);
+    font-family:"IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+  }
+  ::selection{ background:var(--clinical-soft); color:var(--ink); }
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:.001ms !important; transition-duration:.001ms !important; } }
+  button{ font-family:inherit; }
+  ::-webkit-scrollbar{ width:9px; height:9px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+  textarea:focus-visible, button:focus-visible{ outline:2px solid var(--clinical); outline-offset:2px; }
+
+  /* ================= APP SHELL ================= */
+  .app{ display:grid; grid-template-columns: 236px 1fr; min-height:100vh; }
+  @media (max-width: 760px){
+    .app{ grid-template-columns: 1fr; }
+    .sidebar{ position:static; height:auto; }
+  }
+
+  /* ---------- sidebar ---------- */
+  .sidebar{
+    background:var(--sidebar); color:var(--sidebar-ink);
+    position:sticky; top:0; height:100vh;
+    display:flex; flex-direction:column;
+    padding:18px 14px 20px; overflow-y:auto;
+  }
+  .brand{ display:flex; align-items:center; gap:9px; padding:6px 8px 18px; }
+  .brand-mark{ width:26px; height:26px; border-radius:7px; background:linear-gradient(155deg, var(--clinical), #4a8a86); flex:0 0 auto; }
+  .brand-name{ font-family:"Source Serif 4", serif; font-weight:600; font-size:16.5px; color:#F3F5F1; letter-spacing:0.01em; }
+
+  .mode-switch{ display:flex; flex-direction:column; gap:3px; margin-bottom:22px; }
+  .mode-switch button{
+    appearance:none; border:none; background:transparent; text-align:left;
+    color:var(--sidebar-ink-dim); font-size:13.5px; font-weight:600;
+    padding:10px 12px; border-radius:8px; cursor:pointer;
+    display:flex; align-items:center; gap:9px;
+    transition:background .15s ease, color .15s ease;
+  }
+  .mode-switch button:hover{ background:var(--sidebar-active); color:var(--sidebar-ink); }
+  .mode-switch button.active{ background:var(--sidebar-active); color:#F3F5F1; }
+  .mode-switch button .sw-dot{ width:6px; height:6px; border-radius:50%; background:var(--sidebar-ink-dim); flex:0 0 auto; }
+  .mode-switch button.active[data-set="clinical"] .sw-dot{ background:var(--clinical); }
+  .mode-switch button.active[data-set="pedagogic"] .sw-dot{ background:var(--pedagogic); }
+
+  .side-label{ font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:0.07em; text-transform:uppercase; color:var(--sidebar-ink-dim); padding:0 12px; margin-bottom:8px; }
+
+  .queue{ display:flex; flex-direction:column; gap:3px; margin-bottom:20px; width:100%; }
+  .queue-item{
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    width:100%; background:transparent; border:none;
+    padding:9px 12px; border-radius:8px;
+    font-size:13px; color:var(--sidebar-ink-dim); cursor:pointer;
+  }
+  .queue-item:hover{ background:var(--sidebar-active); }
+  .queue-item.active{ background:var(--sidebar-active); color:#F3F5F1; }
+  .queue-item .qid{ font-family:"IBM Plex Mono", monospace; font-size:12px; }
+  .qstatus{ font-size:11px; padding:2px 8px; border-radius:999px; font-weight:600; white-space:nowrap; }
+  .qstatus.proc{ background:rgba(111,176,172,0.24); color:#9FD4CF; }
+  .qstatus.done{ background:rgba(63,122,82,0.24); color:#9AD8A9; }
+  .qstatus.wait{ background:rgba(217,169,79,0.24); color:#EFC272; }
+
+  .modules{ display:flex; flex-direction:column; gap:2px; margin-bottom:20px; width:100%; }
+  .module-item{
+    display:flex; align-items:center; gap:9px; width:100%;
+    background:transparent; border:none; text-align:left;
+    padding:8px 12px; border-radius:8px;
+    font-size:13px; color:var(--sidebar-ink-dim); cursor:pointer;
+  }
+  .module-item:hover{ background:var(--sidebar-active); }
+  .module-item.active{ background:var(--sidebar-active); color:#F3F5F1; font-weight:600; }
+  .module-check{
+    width:15px; height:15px; border-radius:4px; flex:0 0 auto;
+    border:1.5px solid var(--sidebar-ink-dim);
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; color:transparent;
+  }
+  .module-item.done .module-check{ background:var(--good); border-color:var(--good); color:#0F1311; }
+  .module-item.active .module-check{ border-color:var(--pedagogic); }
+
+  .sidebar-foot{ margin-top:auto; padding:12px; font-size:11.5px; color:var(--sidebar-ink-dim); border-top:1px solid rgba(255,255,255,0.08); padding-top:14px; }
+  .env-badge{ display:inline-flex; align-items:center; gap:6px; font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--pilot); font-weight:600; }
+  .env-badge .d{ width:6px; height:6px; border-radius:50%; background:var(--pilot); }
+
+  /* ---------- main / topbar ---------- */
+  .main{ min-width:0; }
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:16px 28px; background:var(--surface-raised);
+    border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; flex-wrap:wrap;
+  }
+  .topbar-title{ display:flex; flex-direction:column; gap:2px; }
+  .topbar-title h1{ font-family:"Source Serif 4", serif; font-weight:600; font-size:19px; margin:0; }
+  .topbar-title .sub{ font-size:12.5px; color:var(--ink-faint); font-family:"IBM Plex Mono", monospace; }
+  .topbar-right{ display:flex; align-items:center; gap:10px; }
+  .status-badge{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; padding:5px 12px; border-radius:999px; font-family:"IBM Plex Mono", monospace; }
+  .status-badge .d{ width:6px; height:6px; border-radius:50%; }
+  .status-badge.done{ background:var(--good-soft); color:var(--good); }
+  .status-badge.done .d{ background:var(--good); }
+  .status-badge.proc{ background:var(--pilot-soft); color:var(--pilot); }
+  .status-badge.proc .d{ background:var(--pilot); }
+
+  /* ---------- session header (video placeholder + meta) ---------- */
+  .session-header{ display:grid; grid-template-columns:300px 1fr; gap:20px; margin-bottom:22px; }
+  @media (max-width: 700px){ .session-header{ grid-template-columns:1fr; } }
+  .video-placeholder{ border-radius:var(--radius); overflow:hidden; border:1px solid var(--line); box-shadow:var(--shadow); }
+  .video-frame{
+    aspect-ratio:16/9; position:relative;
+    background: radial-gradient(120% 140% at 30% 20%, #2E3A36 0%, #171C1A 55%, #0F1311 100%);
+    display:flex; align-items:center; justify-content:center;
+    transition:box-shadow .15s ease;
+  }
+  .video-frame::after{
+    content:""; position:absolute; inset:0;
+    background-image:repeating-linear-gradient(90deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 40px);
+  }
+  .video-frame.playing{ box-shadow: inset 0 0 0 3px var(--clinical); }
+  .play-btn{
+    position:relative; z-index:1; appearance:none;
+    width:48px; height:48px; border-radius:50%;
+    background:rgba(255,255,255,0.16); border:1px solid rgba(255,255,255,0.35);
+    color:#F3F5F1; font-size:16px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; backdrop-filter:blur(2px);
+  }
+  .play-btn:hover{ background:rgba(255,255,255,0.24); }
+  .video-chip{ position:absolute; z-index:1; font-family:"IBM Plex Mono", monospace; font-size:11.5px; color:#F3F5F1; background:rgba(0,0,0,0.5); padding:3px 8px; border-radius:5px; }
+  .video-chip.dur{ bottom:10px; right:10px; }
+  .video-chip.id{ top:10px; left:10px; }
+  .session-info{ display:flex; flex-direction:column; }
+  .info-row{ display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); gap:10px; }
+  .info-row:last-child{ border-bottom:none; }
+  .info-row .k{ font-family:"IBM Plex Mono", monospace; font-size:11.5px; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-faint); }
+  .info-row .v{ font-size:13.5px; font-weight:500; font-variant-numeric:tabular-nums; text-align:right; }
+
+  .content{ padding:24px 28px 80px; max-width:1220px; }
+  [data-panel]{ display:none; }
+  body[data-lens="clinical"] [data-panel="clinical"]{ display:block; }
+  body[data-lens="pedagogic"] [data-panel="pedagogic"]{ display:block; }
+
+  h2{ font-family:"Source Serif 4", serif; font-weight:600; font-size:16.5px; margin:0 0 12px; }
+
+  /* ---------- overview tiles ---------- */
+  .tiles{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(160px,1fr));
+    gap:1px; background:var(--line); border:1px solid var(--line);
+    border-radius:var(--radius); overflow:hidden; margin-bottom:22px;
+  }
+  .tile{ background:var(--surface-raised); padding:14px 16px; }
+  .tile .k{ font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; color:var(--ink-faint); display:block; margin-bottom:6px; }
+  .tile .v{ font-size:17px; font-weight:600; font-variant-numeric:tabular-nums; font-family:"IBM Plex Mono", monospace; }
+  .tile .v.good{ color:var(--good); }
+  .tile .v.warn{ color:var(--warn); }
+
+  /* ---------- processing overlay ---------- */
+  .processing-note{ background:var(--pilot-soft); border:1px solid var(--pilot); color:var(--ink); border-radius:var(--radius); padding:14px 16px; font-size:13.5px; line-height:1.55; margin-bottom:20px; }
+  .processing-note strong{ color:var(--pilot); }
+  #clinical-panels.is-processing{ opacity:.42; filter:grayscale(.35); pointer-events:none; transition:opacity .2s ease; }
+
+  /* ---------- timeline ---------- */
+  .timeline-panel{ margin-bottom:24px; background:var(--surface-raised); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px 20px; }
+  .timeline-track{ position:relative; height:52px; border-radius:8px; background:var(--surface); border:1px solid var(--line); display:flex; overflow:hidden; }
+  .tl-block{
+    flex:1; position:relative; background:transparent; border:none; border-right:1px solid var(--line);
+    display:flex; align-items:flex-end; justify-content:center; cursor:pointer; padding:0;
+  }
+  .tl-block:last-child{ border-right:none; }
+  .tl-block:hover .lbl{ color:var(--clinical); }
+  .tl-block.active{ outline:2px solid var(--clinical); outline-offset:-2px; background:var(--clinical-soft); }
+  .tl-block.active .lbl{ color:var(--clinical); font-weight:600; }
+  .tl-block .lbl{ font-family:"IBM Plex Mono", monospace; font-size:11px; color:var(--ink-faint); padding-bottom:4px; letter-spacing:0.02em; }
+  .tl-block .fill{ position:absolute; bottom:0; left:0; right:0; background:linear-gradient(180deg, transparent, var(--clinical-soft)); }
+  .tl-event{ position:absolute; top:6px; width:3px; height:14px; border-radius:1.5px; background:var(--crit); }
+  .tl-count{ position:absolute; top:6px; right:6px; font-family:"IBM Plex Mono", monospace; font-size:9.5px; font-weight:600; color:var(--ink-faint); background:var(--surface-raised); border:1px solid var(--line); border-radius:999px; padding:1px 5px; line-height:1.4; }
+  .tl-count.has-events{ color:var(--crit); border-color:var(--crit); }
+  .tl-caption{ display:flex; justify-content:space-between; font-size:11.5px; color:var(--ink-faint); margin-top:8px; font-family:"IBM Plex Mono", monospace; }
+  .tl-detail{ margin-top:12px; padding-top:12px; border-top:1px dashed var(--line); font-size:13px; color:var(--ink-soft); line-height:1.55; }
+  .tl-detail strong{ color:var(--ink); font-weight:600; }
+
+  /* ---------- panel grid ---------- */
+  .panel-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:22px; margin-bottom:24px; }
+  @media (max-width: 900px){ .panel-grid{ grid-template-columns:1fr; } }
+  .panel{ background:var(--surface-raised); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 22px; }
+  .panel.full{ grid-column:1 / -1; }
+  .panel-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; gap:10px; flex-wrap:wrap; }
+  .panel-head h2{ margin:0; }
+  .panel-tag{ font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-faint); }
+
+  /* ---------- pattern cards (clickable / expandable) ---------- */
+  .patterns{ display:flex; flex-direction:column; gap:14px; }
+  .pattern-card{
+    width:100%; background:var(--surface-raised); border:1px solid var(--line); border-radius:9px; padding:15px 17px;
+    display:grid; grid-template-columns:1fr auto; gap:10px 16px; text-align:left; cursor:pointer;
+  }
+  .pattern-card:hover{ border-color:var(--line-strong); }
+  .pattern-domain{ font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:0.04em; text-transform:uppercase; color:var(--clinical); margin:0 0 3px; }
+  .pattern-name{ font-family:"Source Serif 4", serif; font-weight:600; font-size:14.5px; margin:0; }
+  .score-block{ display:flex; align-items:center; gap:10px; }
+  .sparkline{ width:52px; height:22px; }
+  .score-num{ font-family:"IBM Plex Mono", monospace; font-size:19px; font-weight:600; font-variant-numeric:tabular-nums; }
+  .score-num small{ font-size:11px; color:var(--ink-faint); font-weight:400; }
+  .chevron{ font-size:11px; color:var(--ink-faint); transition:transform .15s ease; }
+  .pattern-card[aria-expanded="true"] .chevron, .trait-card[aria-expanded="true"] .chevron{ transform:rotate(180deg); }
+  .pattern-evidence{ grid-column:1/-1; display:flex; flex-wrap:wrap; gap:6px; }
+  .chip{ font-size:12px; font-family:"IBM Plex Mono", monospace; padding:3px 9px; border-radius:6px; background:var(--surface); border:1px solid var(--line); color:var(--ink-soft); }
+  .confidence-pill{ font-size:11.5px; font-weight:600; padding:2px 9px; border-radius:999px; }
+  .confidence-pill.alta{ background:var(--clinical-soft); color:var(--clinical); }
+  .confidence-pill.media{ background:var(--pilot-soft); color:var(--pilot); }
+  .pattern-detail{ display:none; grid-column:1/-1; font-size:12.5px; color:var(--ink-soft); line-height:1.55; padding-top:10px; border-top:1px dashed var(--line); }
+  .pattern-card[aria-expanded="true"] .pattern-detail{ display:block; }
+  .click-hint{ font-size:11px; color:var(--ink-faint); grid-column:1/-1; }
+
+  /* ---------- micro-events (face) ---------- */
+  .event-list{ display:flex; flex-direction:column; gap:12px; }
+  .event-row{ display:flex; align-items:flex-start; gap:10px; }
+  .event-time{ font-family:"IBM Plex Mono", monospace; font-size:11.5px; color:var(--ink-faint); width:46px; flex:0 0 auto; padding-top:1px; }
+  .event-main{ flex:1; display:flex; flex-direction:column; gap:3px; min-width:0; }
+  .event-name{ font-size:13.5px; }
+  .event-code{ font-family:"IBM Plex Mono", monospace; font-size:11.5px; color:var(--ink-faint); }
+  .event-note{ font-size:12px; color:var(--clinical); }
+  .intensity-bar{ width:56px; height:6px; border-radius:4px; background:var(--surface); border:1px solid var(--line); overflow:hidden; flex:0 0 auto; margin-top:6px; }
+  .intensity-fill{ height:100%; background:var(--clinical); }
+  .panel-caption{ font-size:12.5px; color:var(--ink-faint); margin-top:12px; padding-top:10px; border-top:1px dashed var(--line); line-height:1.5; }
+  .panel-synthesis{ font-size:13px; color:var(--ink-soft); margin-top:12px; padding-top:10px; border-top:1px dashed var(--line); line-height:1.55; }
+  .panel-synthesis b{ color:var(--ink); font-weight:600; }
+
+  /* ---------- parecer da ayla (opinion block) ---------- */
+  .opinion-block{
+    position:relative;
+    background:#16302F;
+    background-image:
+      radial-gradient(680px 280px at 100% 0%, rgba(111,176,172,0.28), transparent 60%),
+      linear-gradient(155deg, #1B3E3C 0%, #10201F 100%);
+    color:#F3F5F1;
+    border-radius:14px;
+    padding:0;
+    margin-bottom:24px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    display:grid;
+    grid-template-columns: 168px 1fr;
+  }
+  @media (max-width: 760px){ .opinion-block{ grid-template-columns:1fr; } }
+  .opinion-rail{
+    background:rgba(0,0,0,0.16);
+    border-right:1px solid rgba(255,255,255,0.1);
+    padding:26px 20px;
+    display:flex; flex-direction:column; gap:16px;
+  }
+  @media (max-width: 760px){ .opinion-rail{ border-right:none; border-bottom:1px solid rgba(255,255,255,0.1); flex-direction:row; align-items:center; justify-content:space-between; padding:18px 22px; } }
+  .opinion-mark{
+    width:44px; height:44px; border-radius:11px;
+    background:linear-gradient(155deg, #8FD4CE, #4a8a86);
+    display:flex; align-items:center; justify-content:center;
+    font-family:"Source Serif 4", serif; font-weight:700; font-size:19px; color:#0F1311;
+  }
+  .opinion-eyebrow{ font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:0.07em; text-transform:uppercase; color:rgba(243,245,241,0.72); line-height:1.5; }
+  .opinion-stat{ display:flex; flex-direction:column; gap:2px; }
+  .opinion-stat .k{ font-family:"IBM Plex Mono", monospace; font-size:10.5px; letter-spacing:0.05em; text-transform:uppercase; color:rgba(243,245,241,0.55); }
+  .opinion-stat .v{ font-size:13.5px; font-weight:600; color:#F3F5F1; }
+  .opinion-main{ padding:26px 30px 24px; display:flex; flex-direction:column; gap:16px; }
+  .opinion-title{ font-family:"Source Serif 4", serif; font-weight:600; font-size:21px; margin:0; text-wrap:balance; }
+  .opinion-body{ font-size:15.5px; line-height:1.72; max-width:70ch; columns: 1; }
+  .opinion-body p{ margin:0 0 13px; }
+  .opinion-body p:last-child{ margin-bottom:0; }
+  .opinion-verdict{ font-weight:600; background:rgba(143,212,206,0.18); padding:1px 6px; border-radius:4px; }
+  .opinion-foot{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding-top:14px; border-top:1px solid rgba(255,255,255,0.14); font-size:12.5px; color:rgba(243,245,241,0.75); }
+  .opinion-foot .sep{ opacity:.4; }
+  .opinion-scope{ font-size:12.5px; color:rgba(243,245,241,0.6); font-style:normal; }
+
+  /* ---------- síntese ayla / traits ---------- */
+  .synthesis-panel{ border-color:var(--clinical); }
+  .synthesis-text{ font-size:15px; color:var(--ink); line-height:1.65; margin:0 0 14px; max-width:76ch; }
+  .synthesis-text b{ color:var(--clinical); font-weight:600; }
+  .band-legend{ font-size:13px; color:var(--ink-faint); margin:0 0 16px; line-height:1.55; max-width:76ch; }
+  .band-legend span{ font-weight:600; }
+  .trait-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:14px; margin-bottom:14px; }
+  .trait-card{
+    width:100%; text-align:left; cursor:pointer;
+    border:1px solid var(--line); border-radius:9px; padding:14px 16px;
+    display:flex; flex-direction:column; gap:9px; background:var(--surface);
+  }
+  .trait-card:hover{ border-color:var(--line-strong); }
+  .trait-head{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+  .trait-name-wrap{ display:flex; align-items:baseline; gap:6px; }
+  .trait-name{ font-family:"Source Serif 4", serif; font-weight:600; font-size:14px; line-height:1.3; }
+  .trait-score{ font-family:"IBM Plex Mono", monospace; font-size:18px; font-weight:600; flex:0 0 auto; }
+  .trait-bar{ height:6px; border-radius:4px; background:var(--surface-raised); border:1px solid var(--line); overflow:hidden; }
+  .trait-bar-fill{ height:100%; background:var(--clinical); }
+  .trait-rationale{ font-size:13px; color:var(--ink-soft); line-height:1.5; }
+  .trait-meta{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .trait-band{ font-size:11px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; padding:2px 9px; border-radius:999px; }
+  .trait-band.baixa{ background:var(--surface-raised); color:var(--ink-faint); border:1px solid var(--line-strong); }
+  .trait-band.moderada{ background:var(--pilot-soft); color:var(--pilot); }
+  .trait-band.alta{ background:var(--clinical-soft); color:var(--clinical); }
+  .trait-conf{ font-size:11.5px; color:var(--ink-faint); font-family:"IBM Plex Mono", monospace; }
+  .trait-extra{ display:none; flex-direction:column; gap:8px; padding-top:9px; border-top:1px dashed var(--line); }
+  .trait-card[aria-expanded="true"] .trait-extra{ display:flex; }
+  .trait-extra .out-chips{ display:flex; flex-wrap:wrap; gap:5px; }
+  .trait-extra p{ margin:0; font-size:12.5px; color:var(--ink-soft); line-height:1.5; }
+
+  /* ---------- metric tiles (voz / psicomotricidade) ---------- */
+  .metric-list{ display:flex; flex-direction:column; gap:13px; }
+  .metric-row{ display:flex; align-items:center; gap:12px; }
+  .metric-name{ font-size:13px; color:var(--ink-soft); flex:1; }
+  .metric-gauge{ width:110px; height:6px; border-radius:4px; background:var(--surface); border:1px solid var(--line); position:relative; overflow:hidden; flex:0 0 auto; }
+  .metric-gauge .g-fill{ position:absolute; top:0; bottom:0; left:0; background:var(--clinical); }
+  .metric-gauge .g-mid{ position:absolute; top:-2px; bottom:-2px; left:50%; width:1px; background:var(--line-strong); }
+  .metric-val{ font-family:"IBM Plex Mono", monospace; font-size:12.5px; width:56px; text-align:right; font-variant-numeric:tabular-nums; }
+  .metric-val.up{ color:var(--warn); }
+  .metric-val.down{ color:var(--clinical); }
+
+  /* ---------- relational panel ---------- */
+  .rel-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:12px; }
+  .rel-stat{ text-align:left; }
+  .rel-stat .k{ font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-faint); display:block; margin-bottom:5px; }
+  .rel-stat .v{ font-family:"IBM Plex Mono", monospace; font-size:18px; font-weight:600; }
+  .tag-flag{ display:inline-block; font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:999px; background:var(--crit-soft); color:var(--crit); margin-top:2px; }
+  .tag-flag.ok{ background:var(--good-soft); color:var(--good); }
+
+  /* ---------- divergences ---------- */
+  .diverg-list{ display:flex; flex-direction:column; gap:10px; }
+  .diverg-row{ display:flex; gap:10px; align-items:flex-start; font-size:13.5px; padding:10px 0; border-bottom:1px solid var(--line); }
+  .diverg-row:last-child{ border-bottom:none; padding-bottom:0; }
+  .diverg-mods{ display:flex; gap:4px; flex:0 0 auto; padding-top:4px; }
+  .mod-dot{ width:8px; height:8px; border-radius:50%; }
+  .mod-dot.txt{ background:#5578C9; }
+  .mod-dot.audio{ background:#B25E97; }
+  .mod-dot.video{ background:var(--pedagogic); }
+  .diverg-text{ color:var(--ink-soft); }
+  .diverg-text b{ color:var(--ink); font-weight:600; }
+
+  /* ---------- doctor field ---------- */
+  .doctor-field{ display:flex; flex-direction:column; gap:12px; }
+  .status-options{ display:flex; flex-wrap:wrap; gap:8px; }
+  .status-options button{
+    appearance:none; font-size:13px; padding:7px 14px; border-radius:999px;
+    border:1px solid var(--line-strong); background:transparent; color:var(--ink-soft); cursor:pointer;
+  }
+  .status-options button.selected{ border-color:var(--clinical); color:var(--clinical); background:var(--clinical-soft); font-weight:600; }
+  textarea{
+    width:100%; min-height:70px; resize:vertical;
+    border:1px solid var(--line); border-radius:8px; padding:11px 13px;
+    font-family:"IBM Plex Sans", sans-serif; font-size:13.5px; color:var(--ink);
+    background:var(--surface); line-height:1.5;
+  }
+
+  /* ================= PEDAGOGIC / STUDENT WORKSPACE ================= */
+  .workspace-grid{ display:grid; grid-template-columns: 1.1fr 0.9fr; gap:22px; align-items:start; }
+  @media (max-width: 900px){ .workspace-grid{ grid-template-columns:1fr; } }
+
+  .domain-brief{ font-size:14px; color:var(--ink-soft); margin:0 0 16px; max-width:64ch; line-height:1.55; }
+  .domain-brief b{ color:var(--pedagogic); font-weight:600; }
+
+  .run-btn{
+    appearance:none; border:none; border-radius:8px;
+    background:var(--pedagogic); color:#fff;
+    font-size:13.5px; font-weight:600; padding:11px 20px;
+    cursor:pointer; display:inline-flex; align-items:center; gap:8px;
+  }
+  .run-btn:hover{ filter:brightness(1.08); }
+
+  .char-count{ font-family:"IBM Plex Mono", monospace; font-size:12px; color:var(--ink-faint); margin-top:6px; }
+
+  .output-empty{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:40px 20px; text-align:center; color:var(--ink-faint); font-size:13.5px; }
+
+  .out-metric{ display:flex; flex-direction:column; gap:15px; }
+  .out-row{ display:flex; flex-direction:column; gap:6px; }
+  .out-row-head{ display:flex; justify-content:space-between; align-items:baseline; }
+  .out-name{ font-size:13.5px; font-weight:600; }
+  .out-num{ font-family:"IBM Plex Mono", monospace; font-size:16px; font-weight:600; }
+  .out-bar{ height:6px; border-radius:4px; background:var(--surface); border:1px solid var(--line); overflow:hidden; }
+  .out-bar-fill{ height:100%; background:var(--pedagogic); }
+  .out-chips{ display:flex; flex-wrap:wrap; gap:5px; }
+
+  .history-list{ display:flex; flex-direction:column; gap:2px; }
+  .history-row{ display:flex; justify-content:space-between; gap:10px; padding:9px 0; border-bottom:1px solid var(--line); font-size:13px; }
+  .history-row:last-child{ border-bottom:none; }
+  .history-row .t{ color:var(--ink-faint); font-family:"IBM Plex Mono", monospace; font-size:11.5px; }
+  .history-row .d{ color:var(--ink-soft); flex:1; }
+
+  footer.appfoot{ padding:16px 28px 40px; font-size:12.5px; color:var(--ink-faint); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+</style>
+
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <span class="brand-name">Ayla Clínica</span>
+    </div>
+
+    <nav class="mode-switch" role="tablist" aria-label="Área de trabalho">
+      <button type="button" data-set="clinical" class="active" role="tab" aria-selected="true">
+        <span class="sw-dot" aria-hidden="true"></span> Consulta
+      </button>
+      <button type="button" data-set="pedagogic" role="tab" aria-selected="false">
+        <span class="sw-dot" aria-hidden="true"></span> Estudo
+      </button>
+    </nav>
+
+    <div data-sidebar-panel="clinical">
+      <div class="side-label">Fila de hoje, clique para abrir</div>
+      <div class="queue">
+        <button type="button" class="queue-item active" data-id="STAND-014"><span class="qid">STAND-014</span><span class="qstatus wait">para revisão</span></button>
+        <button type="button" class="queue-item" data-id="STAND-013"><span class="qid">STAND-013</span><span class="qstatus proc">processando</span></button>
+        <button type="button" class="queue-item" data-id="STAND-012"><span class="qid">STAND-012</span><span class="qstatus done">revisada</span></button>
+        <button type="button" class="queue-item" data-id="STAND-011"><span class="qid">STAND-011</span><span class="qstatus done">revisada</span></button>
+      </div>
+    </div>
+
+    <div data-sidebar-panel="pedagogic" style="display:none">
+      <div class="side-label">Módulos, clique para trocar</div>
+      <div class="modules">
+        <button type="button" class="module-item done" data-domain="Ativação e mania" data-brief="Energia elevada, menor necessidade de sono, impulsividade." data-example="Eu tô muito ligado esses dias, quase não durmo e nem sinto falta. Minha cabeça não para, tenho um milhão de ideia ao mesmo tempo e não consigo ficar parado."><span class="module-check">✓</span> Ativação / mania</button>
+        <button type="button" class="module-item done" data-domain="Ansiedade e medo" data-brief="Tensão, antecipação, evitação, sintomas físicos." data-example="Fico tenso antes de qualquer prova, meu coração dispara e eu começo a pensar em tudo que pode dar errado. Às vezes evito nem estudar direito de tanto medo de ver o quanto falta."><span class="module-check">✓</span> Ansiedade / medo</button>
+        <button type="button" class="module-item active" data-domain="Humor e depressividade" data-brief="Queda de interesse, desânimo, energia reduzida." data-example="Não sei, ultimamente eu acho que tô meio sem vontade pra nada. Tipo, eu me sinto cansado o tempo todo e não consigo ficar animado nem com coisas que eu gostava. Às vezes eu fico sozinho e nem sei explicar direito o que eu sinto."><span class="module-check"></span> Humor / depressividade</button>
+        <button type="button" class="module-item" data-domain="Funcionamento interpessoal" data-brief="Conflito, medo de abandono, dificuldade de reparo." data-example="Toda vez que eu brigo com alguém eu prefiro sumir um tempo em vez de conversar. Depois fico com medo de que a pessoa não queira mais falar comigo, mas não consigo ser o primeiro a chamar."><span class="module-check"></span> Funcionamento interpessoal</button>
+        <button type="button" class="module-item" data-domain="Sono" data-brief="Insônia, fragmentação, hipersonia, mudança de padrão." data-example="Faz um tempo que eu durmo tarde e acordo cansado mesmo dormindo bastante. Às vezes acordo no meio da noite e demoro pra voltar a dormir."><span class="module-check"></span> Sono</button>
+        <button type="button" class="module-item" data-domain="Memória e atenção" data-brief="Esquecimento, distração, dificuldade de planejar." data-example="Eu começo uma tarefa e do nada já tô pensando em outra coisa. Esqueço compromisso direto e preciso anotar tudo, se não simplesmente some da minha cabeça."><span class="module-check"></span> Memória / atenção</button>
+        <button type="button" class="module-item" data-domain="Dissociação" data-brief="Desconexão, sensação de irrealidade, lacunas de memória subjetiva." data-example="Às vezes eu sinto que não tô presente de verdade, como se eu tivesse vendo tudo de fora. Depois nem lembro direito o que aconteceu naquele pedaço de tempo."><span class="module-check"></span> Dissociação</button>
+      </div>
+    </div>
+
+    <div class="sidebar-foot">
+      <span class="env-badge"><span class="d"></span> ambiente piloto</span>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+
+    <!-- ---- clinical topbar ---- -->
+    <div class="topbar" data-topbar="clinical">
+      <div class="topbar-title">
+        <h1 id="clinical-title">STAND-014, pronta para revisão</h1>
+        <span class="sub" id="clinical-sub">gravada em 30/08/2026, processada em 29 min</span>
+      </div>
+      <div class="topbar-right">
+        <span class="status-badge done" id="clinical-status"><span class="d"></span> análise concluída</span>
+      </div>
+    </div>
+
+    <!-- ---- pedagogic topbar ---- -->
+    <div class="topbar" data-topbar="pedagogic" style="display:none">
+      <div class="topbar-title">
+        <h1 id="pedagogic-title">Meu extractor · Humor / depressividade</h1>
+        <span class="sub">Mentes Artificiais, UniAteneu</span>
+      </div>
+      <div class="topbar-right">
+        <span class="sub" style="font-family:'IBM Plex Mono',monospace;color:var(--ink-faint)">salvo automaticamente</span>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ============ CLINICAL WORKSPACE ============ -->
+      <div data-panel="clinical">
+
+        <div class="session-header">
+          <div class="video-placeholder">
+            <div class="video-frame">
+              <span class="video-chip id" id="video-id">STAND-014</span>
+              <button type="button" class="play-btn" aria-label="Reproduzir gravação">▶</button>
+              <span class="video-chip dur" id="video-dur">17:04</span>
+            </div>
+          </div>
+          <div class="session-info">
+            <div class="info-row"><span class="k">Gravação</span><span class="v" id="info-gravacao">30/08/2026 · 14:12</span></div>
+            <div class="info-row"><span class="k">Análise concluída</span><span class="v" id="info-analise">30/08/2026 · 14:41</span></div>
+            <div class="info-row"><span class="k">Modalidades processadas</span><span class="v">texto, áudio e vídeo</span></div>
+            <div class="info-row"><span class="k">Duração</span><span class="v" id="info-dur">17:04</span></div>
+            <div class="info-row"><span class="k">Status</span><span class="status-badge done" id="info-status"><span class="d"></span> concluída</span></div>
+          </div>
+        </div>
+
+        <div class="opinion-block" id="opinion-block">
+          <div class="opinion-rail">
+            <div class="opinion-mark" aria-hidden="true">A</div>
+            <span class="opinion-eyebrow">Parecer da Ayla<br>leitura integrada</span>
+            <div class="opinion-stat"><span class="k">Confiança</span><span class="v">Alta</span></div>
+            <div class="opinion-stat"><span class="k">Modalidades</span><span class="v">3/3 concordantes</span></div>
+            <div class="opinion-stat"><span class="k">Decisão final</span><span class="v">Dra. Ana Lívia</span></div>
+          </div>
+          <div class="opinion-main">
+            <h3 class="opinion-title">STAND-014 — sofrimento ativo com forte autocontenção</h3>
+            <div class="opinion-body">
+              <p>Fechando os seis blocos da entrevista, minha leitura é que esta pessoa está em <span class="opinion-verdict">sofrimento ativo com forte autocontenção</span>: o discurso minimiza o que o corpo e a voz mostram o tempo todo. Não é uma queixa vaga, é um padrão sustentado, repetido em três modalidades independentes, que se intensifica exatamente quando o tema toca pressão e conflito.</p>
+              <p>O que mais me chama atenção não é nenhum sinal isolado, é a combinação: humor rebaixado com banda alta, ativação ansiosa contida no corpo, e um padrão relacional que evita reparo. Juntos, isso desenha alguém que carrega o peso sozinho e não tem, ou não usa, um caminho de alívio disponível. Essa é a peça que eu recomendo priorizar na devolutiva, mais do que qualquer score individual.</p>
+              <p>Minha leitura é interpretação de padrão, não diagnóstico; essa fronteira eu sustento comigo mesma. Mas dentro do que me cabe dizer, minha opinião é clara: este caso merece aprofundamento clínico, não uma nota de rotina.</p>
+            </div>
+            <div class="opinion-foot">
+              <span class="opinion-scope">Este parecer é gerado pela Ayla a partir dos padrões desta sessão. Ele orienta a revisão, não substitui o julgamento clínico.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tiles">
+          <div class="tile"><span class="k">Canais captados</span><span class="v good" style="font-size:14px">Texto, áudio e vídeo</span></div>
+          <div class="tile"><span class="k">Transcrição</span><span class="v good">100%</span></div>
+          <div class="tile"><span class="k">Confiança geral</span><span class="v good">alta</span></div>
+          <div class="tile"><span class="k">Maior sinal</span><span class="v warn" id="tile-maior-sinal" style="font-size:14px">Humor depressivo · 71%</span></div>
+          <div class="tile"><span class="k">Contradições identificadas</span><span class="v warn" id="tile-contradicoes">3</span></div>
+        </div>
+
+        <div class="processing-note" id="processing-note" hidden>
+          <strong>Sessão em processamento.</strong> A síntese e os padrões abaixo ficam disponíveis assim que a análise for concluída. Os painéis exibidos agora ainda mostram a última sessão revisada.
+        </div>
+
+        <div class="timeline-panel">
+          <div class="panel-head"><h2>Estrutura da entrevista</h2><span class="panel-tag">6 blocos, clique para ver o que cada um captura</span></div>
+          <div class="timeline-track">
+            <button type="button" class="tl-block" data-name="Narrativa espontânea" data-desc="Gera fala natural, prosódia, postura e organização do relato." data-dur="3 min" data-events="nenhum evento marcado neste bloco"><div class="fill" style="height:20%"></div><span class="tl-count">0</span><span class="lbl">Narrativa</span></button>
+            <button type="button" class="tl-block" data-name="Funcionamento e mudança" data-desc="Identifica mudanças percebidas em rotina, energia, sono, memória e autocuidado." data-dur="3 min" data-events="nenhum evento marcado neste bloco"><div class="fill" style="height:35%"></div><span class="tl-count">0</span><span class="lbl">Função</span></button>
+            <button type="button" class="tl-block" data-name="Emoção e ativação" data-desc="Explora humor, ansiedade, irritabilidade, energia e sinais somáticos. Concentra a maior parte dos eventos desta sessão." data-dur="3 min" data-events="2 eventos marcados neste bloco"><div class="fill" style="height:70%"></div><span class="tl-count has-events">2</span><span class="lbl">Emoção</span><div class="tl-event" style="left:40%"></div><div class="tl-event" style="left:75%"></div></button>
+            <button type="button" class="tl-block" data-name="Pensamento, percepção e cognição" data-desc="Abre espaço para velocidade do pensamento, memória, concentração e experiências incomuns." data-dur="3 min" data-events="nenhum evento marcado neste bloco"><div class="fill" style="height:30%"></div><span class="tl-count">0</span><span class="lbl">Cognição</span></button>
+            <button type="button" class="tl-block" data-name="Relações e padrão comportamental" data-desc="Gera dados sobre conflito, regulação, impulsividade e dinâmica interpessoal." data-dur="3 min" data-events="1 evento marcado neste bloco"><div class="fill" style="height:50%"></div><span class="tl-count has-events">1</span><span class="lbl">Relações</span><div class="tl-event" style="left:20%"></div></button>
+            <button type="button" class="tl-block" data-name="Fechamento aberto" data-desc="Dá espaço para um domínio não provocado emergir e registra autorreflexão." data-dur="2 a 3 min" data-events="nenhum evento marcado neste bloco"><div class="fill" style="height:15%"></div><span class="tl-count">0</span><span class="lbl">Fechamento</span></button>
+          </div>
+          <div class="tl-caption"><span>00:00</span><span>número no canto = eventos marcados no bloco (vermelho = pelo menos 1)</span><span id="tl-end">17:04</span></div>
+          <div class="tl-detail" id="tl-detail"></div>
+        </div>
+
+        <div class="panel-grid" id="clinical-panels">
+
+          <div class="panel full synthesis-panel">
+            <div class="panel-head"><h2>Síntese Ayla, leitura da sessão</h2><span class="panel-tag">apoio à decisão, não diagnóstico</span></div>
+            <p class="synthesis-text">Os três modalidades convergem para um padrão de <b>ativação ansiosa com autocontenção afetiva</b>: o participante nega desconforto verbalmente, mas voz e corpo mostram tensão sustentada, concentrada no bloco de pressão (Emoção). O relato sobre relações mostra baixa reciprocidade e ausência de reparo, o que reforça, sem confirmar, um padrão relacional mais rígido.</p>
+
+            <p class="band-legend">Cada card abaixo resume vários sinais, não um evento isolado. A banda de severidade segue a lógica de instrumentos de triagem como o PHQ-9: <span style="color:var(--ink-faint)">baixa</span> (abaixo de 40%), <span style="color:var(--pilot)">moderada</span> (40% a 69%), <span style="color:var(--clinical)">alta</span> (70% ou mais). Ela indica intensidade do padrão encontrado, não presença de diagnóstico. Clique em um card para ver mais evidências.</p>
+
+            <div class="trait-grid">
+              <button type="button" class="trait-card" aria-expanded="false">
+                <div class="trait-head">
+                  <span class="trait-name-wrap"><span class="trait-name">Ativação ansiosa</span><span class="chevron">▾</span></span>
+                  <span class="trait-score">64%</span>
+                </div>
+                <div class="trait-bar"><div class="trait-bar-fill" style="width:64%"></div></div>
+                <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança alta</span></div>
+                <p class="trait-rationale">Hipervigilância verbal, autocontato gestual 2,4× acima do baseline e variação de pitch reduzida no bloco de emoção.</p>
+                <div class="trait-extra">
+                  <div class="out-chips"><span class="chip">3 episódios de autocontato prolongado</span><span class="chip">queda de 9% na amplitude vocal</span></div>
+                  <p>Padrão mais evidente nos blocos de emoção e relações, coerente com o relato de preocupação antecipatória.</p>
+                </div>
+              </button>
+
+              <button type="button" class="trait-card" aria-expanded="false">
+                <div class="trait-head">
+                  <span class="trait-name-wrap"><span class="trait-name">Humor depressivo</span><span class="chevron">▾</span></span>
+                  <span class="trait-score">71%</span>
+                </div>
+                <div class="trait-bar"><div class="trait-bar-fill" style="width:71%"></div></div>
+                <div class="trait-meta"><span class="trait-band alta">banda alta</span><span class="trait-conf">confiança alta</span></div>
+                <p class="trait-rationale">Valência textual negativa persistente, lentificação em dois blocos e queda de prosódia ao longo da sessão.</p>
+                <div class="trait-extra">
+                  <div class="out-chips"><span class="chip">9 marcadores de valência negativa</span><span class="chip">lentificação em 2 blocos</span><span class="chip">queda de 14% na variação de pitch</span></div>
+                  <p>Trajetória estável ao longo da sessão, sem picos isolados.</p>
+                </div>
+              </button>
+
+              <button type="button" class="trait-card" aria-expanded="false">
+                <div class="trait-head">
+                  <span class="trait-name-wrap"><span class="trait-name">Padrão de baixa autoestima</span><span class="chevron">▾</span></span>
+                  <span class="trait-score">58%</span>
+                </div>
+                <div class="trait-bar"><div class="trait-bar-fill" style="width:58%"></div></div>
+                <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança média</span></div>
+                <p class="trait-rationale">Autocrítica recorrente no léxico, minimização de conquistas relatadas e postura fechada em dois blocos.</p>
+                <div class="trait-extra">
+                  <div class="out-chips"><span class="chip">4 frases de minimização</span><span class="chip">ausência de fala de orgulho</span></div>
+                  <p>Padrão presente principalmente ao relatar desempenho acadêmico e social.</p>
+                </div>
+              </button>
+
+              <button type="button" class="trait-card" aria-expanded="false">
+                <div class="trait-head">
+                  <span class="trait-name-wrap"><span class="trait-name">Traços narcisistas</span><span class="chevron">▾</span></span>
+                  <span class="trait-score">34%</span>
+                </div>
+                <div class="trait-bar"><div class="trait-bar-fill" style="width:34%"></div></div>
+                <div class="trait-meta"><span class="trait-band baixa">banda baixa</span><span class="trait-conf">confiança baixa-média</span></div>
+                <p class="trait-rationale">Grandiosidade pontual no relato de conflito, mas sem padrão sustentado, abaixo do limiar de atenção clínica.</p>
+                <div class="trait-extra">
+                  <div class="out-chips"><span class="chip">1 episódio de grandiosidade</span><span class="chip">sem padrão sustentado</span></div>
+                  <p>Frequência bem abaixo do que costuma acompanhar um traço clinicamente relevante.</p>
+                </div>
+              </button>
+
+              <button type="button" class="trait-card" aria-expanded="false">
+                <div class="trait-head">
+                  <span class="trait-name-wrap"><span class="trait-name">Alexitimia</span><span class="chevron">▾</span></span>
+                  <span class="trait-score">45%</span>
+                </div>
+                <div class="trait-bar"><div class="trait-bar-fill" style="width:45%"></div></div>
+                <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança média</span></div>
+                <p class="trait-rationale">Dificuldade de nomear afeto: incongruência entre relato e expressão facial, vocabulário emocional pouco diferenciado.</p>
+                <div class="trait-extra">
+                  <div class="out-chips"><span class="chip">vocabulário emocional com 6 termos distintos</span><span class="chip">3 momentos de incongruência relato×face</span></div>
+                  <p>Vale observar se o padrão se repete em sessões futuras antes de qualquer hipótese mais forte.</p>
+                </div>
+              </button>
+            </div>
+
+            <p class="panel-caption">Percentuais representam compatibilidade de padrão com os mecanismos computacionais da Ayla, não probabilidade diagnóstica, prevalência populacional, sensibilidade ou especificidade clínica. A conclusão diagnóstica é exclusiva da Dra. Ana Lívia.</p>
+          </div>
+
+          <div class="panel full">
+            <div class="panel-head"><h2>Padrões ranqueados</h2><span class="panel-tag">linguagem e comportamento, clique para detalhes</span></div>
+            <div class="patterns">
+              <button type="button" class="pattern-card" aria-expanded="false">
+                <div>
+                  <p class="pattern-domain">Ativação / regulação psicomotora</p>
+                  <h3 class="pattern-name">Aceleração psicomotora-linguística</h3>
+                </div>
+                <div class="score-block">
+                  <svg class="sparkline" viewBox="0 0 52 22"><polyline points="0,18 9,15 18,16 27,9 36,7 44,4 52,3" fill="none" stroke="var(--clinical)" stroke-width="2"/></svg>
+                  <span class="score-num">78<small>/100</small></span>
+                  <span class="confidence-pill alta">alta</span>
+                  <span class="chevron">▾</span>
+                </div>
+                <div class="pattern-evidence">
+                  <span class="chip">fala +32% vs. baseline</span>
+                  <span class="chip">latência −18%</span>
+                  <span class="chip">gestualidade ↑</span>
+                  <span class="chip">sono reduzido (relato)</span>
+                </div>
+                <p class="pattern-detail">Esse padrão costuma aparecer em quadros de ativação simpática aguda. Vale cruzar com histórico de sono e uso de substâncias antes de qualquer hipótese.</p>
+              </button>
+
+              <button type="button" class="pattern-card" aria-expanded="false">
+                <div>
+                  <p class="pattern-domain">Ansiedade / medo</p>
+                  <h3 class="pattern-name">Hipervigilância com evitação verbal</h3>
+                </div>
+                <div class="score-block">
+                  <svg class="sparkline" viewBox="0 0 52 22"><polyline points="0,6 9,9 18,7 27,12 36,14 44,17 52,18" fill="none" stroke="var(--clinical)" stroke-width="2"/></svg>
+                  <span class="score-num">64<small>/100</small></span>
+                  <span class="confidence-pill media">média</span>
+                  <span class="chevron">▾</span>
+                </div>
+                <div class="pattern-evidence">
+                  <span class="chip">autocontato +2,4x</span>
+                  <span class="chip">mudança de tópico em 3 blocos</span>
+                  <span class="chip">hedging elevado</span>
+                </div>
+                <p class="pattern-detail">A mudança repetida de tópico pode indicar desconforto com o conteúdo abordado, não falta de memória ou desorganização de pensamento.</p>
+              </button>
+
+              <button type="button" class="pattern-card" aria-expanded="false">
+                <div>
+                  <p class="pattern-domain">Funcionamento interpessoal</p>
+                  <h3 class="pattern-name">Rigidez em relato de conflito</h3>
+                </div>
+                <div class="score-block">
+                  <svg class="sparkline" viewBox="0 0 52 22"><polyline points="0,10 9,11 18,10 27,12 36,11 44,13 52,12" fill="none" stroke="var(--clinical)" stroke-width="2"/></svg>
+                  <span class="score-num">61<small>/100</small></span>
+                  <span class="confidence-pill media">média</span>
+                  <span class="chevron">▾</span>
+                </div>
+                <div class="pattern-evidence">
+                  <span class="chip">LSM baixo</span>
+                  <span class="chip">ausência de fala de reparo</span>
+                  <span class="chip">tema recorrente ×3</span>
+                </div>
+                <p class="pattern-detail">A ausência de fala de reparo é mais informativa quando aparece em mais de um relato de conflito ao longo da sessão, o que já se confirma aqui.</p>
+              </button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>Face &amp; microexpressões</h2><span class="panel-tag">eventos com timestamp</span></div>
+            <div class="event-list">
+              <div class="event-row"><span class="event-time">00:34</span><div class="event-main"><span class="event-name">Contração do corrugador <span class="event-code">AU4</span></span><span class="event-note">indicativo isolado: tensão ou concentração</span></div><div class="intensity-bar"><div class="intensity-fill" style="width:60%"></div></div></div>
+              <div class="event-row"><span class="event-time">02:11</span><div class="event-main"><span class="event-name">Sorriso assimétrico <span class="event-code">AU12 unilat.</span></span><span class="event-note">indicativo isolado: afeto não totalmente congruente com o discurso</span></div><div class="intensity-bar"><div class="intensity-fill" style="width:40%"></div></div></div>
+              <div class="event-row"><span class="event-time">06:42</span><div class="event-main"><span class="event-name">Congelamento de expressão</span><span class="event-note">indicativo isolado: supressão de resposta afetiva</span></div><div class="intensity-bar"><div class="intensity-fill" style="width:75%"></div></div></div>
+              <div class="event-row"><span class="event-time">08:10</span><div class="event-main"><span class="event-name">Elevação de sobrancelha <span class="event-code">AU1+2</span></span><span class="event-note">indicativo isolado: surpresa ou alerta pontual</span></div><div class="intensity-bar"><div class="intensity-fill" style="width:30%"></div></div></div>
+              <div class="event-row"><span class="event-time">09:03</span><div class="event-main"><span class="event-name">Piscar acelerado</span><span class="event-note">indicativo isolado: ativação simpática</span></div><div class="intensity-bar"><div class="intensity-fill" style="width:55%"></div></div></div>
+            </div>
+            <p class="panel-synthesis"><b>Leitura do conjunto:</b> congelamento, sorriso assimétrico e ativação recorrente do corrugador se concentram entre 06:42 e 09:03. Juntos, sugerem tensão contida não verbalizada, não uma emoção isolada. Nenhum evento único tem valor interpretativo sozinho; a leitura vem da soma e da temporalidade.</p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>Voz &amp; prosódia</h2><span class="panel-tag">áudio</span></div>
+            <div class="metric-list">
+              <div class="metric-row"><span class="metric-name">Taxa de fala</span><div class="metric-gauge"><div class="g-mid"></div><div class="g-fill" style="left:50%;width:24%"></div></div><span class="metric-val up">+32%</span></div>
+              <div class="metric-row"><span class="metric-name">Latência de resposta</span><div class="metric-gauge"><div class="g-mid"></div><div class="g-fill" style="left:32%;width:18%"></div></div><span class="metric-val down">−18%</span></div>
+              <div class="metric-row"><span class="metric-name">Variação de pitch</span><div class="metric-gauge"><div class="g-mid"></div><div class="g-fill" style="left:50%;width:9%"></div></div><span class="metric-val up">+12%</span></div>
+              <div class="metric-row"><span class="metric-name">Pausas por minuto</span><div class="metric-gauge"><div class="g-mid"></div><div class="g-fill" style="left:38%;width:12%"></div></div><span class="metric-val down">−8%</span></div>
+            </div>
+            <p class="panel-synthesis"><b>Leitura do conjunto:</b> fala mais rápida, com latência menor e pitch mais variável, sem aumento de pausa. É uma combinação típica de ativação, não de desorganização de pensamento.</p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>Psicomotricidade</h2><span class="panel-tag">vídeo</span></div>
+            <div class="metric-list">
+              <div class="metric-row"><span class="metric-name">Velocidade gestual</span><div class="metric-gauge"><div class="g-mid"></div><div class="g-fill" style="left:50%;width:21%"></div></div><span class="metric-val up">+27%</span></div>
+              <div class="metric-row"><span class="metric-name">Autocontato</span><div class="metric-gauge"><div class="g-mid"></div><div class="g-fill" style="left:50%;width:30%"></div></div><span class="metric-val up">+2,4×</span></div>
+              <div class="metric-row"><span class="metric-name">Amplitude postural</span><div class="metric-gauge"><div class="g-mid"></div><div class="g-fill" style="left:44%;width:6%"></div></div><span class="metric-val down">−6%</span></div>
+              <div class="metric-row"><span class="metric-name">Orientação corporal</span><div class="metric-gauge"><div class="g-mid"></div><div class="g-fill" style="left:50%;width:4%"></div></div><span class="metric-val">estável</span></div>
+            </div>
+            <p class="panel-synthesis"><b>Leitura do conjunto:</b> autocontato alto e velocidade gestual elevada, com postura e orientação corporal estáveis. Sugere ansiedade contida no corpo, sem sinal de agitação psicomotora global.</p>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>Padrões relacionais</h2><span class="panel-tag">psicologia comportamental</span></div>
+            <div class="rel-grid">
+              <div class="rel-stat"><span class="k">LSM (sincronia)</span><span class="v">0,31</span></div>
+              <div class="rel-stat"><span class="k">Condução do turno</span><span class="v">participante</span></div>
+              <div class="rel-stat"><span class="k">Reparo pós-conflito</span><span class="tag-flag">ausente</span></div>
+              <div class="rel-stat"><span class="k">Padrão de evitação</span><span class="tag-flag">presente</span></div>
+            </div>
+            <p class="panel-caption">Sinais de dinâmica relacional cruzados com atos de fala e power dynamics. Interpretação clínica pertence à Dra.</p>
+          </div>
+
+          <div class="panel full">
+            <div class="panel-head"><h2>Divergências multimodais</h2><span class="panel-tag">texto, áudio e vídeo</span></div>
+            <div class="diverg-list">
+              <div class="diverg-row">
+                <div class="diverg-mods"><span class="mod-dot txt"></span><span class="mod-dot video"></span></div>
+                <div class="diverg-text"><b>Relata "estou tranquilo"</b>, mas ativação motora e vocal aumentam no bloco de pressão, entre 06:42 e 08:10.</div>
+              </div>
+              <div class="diverg-row">
+                <div class="diverg-mods"><span class="mod-dot txt"></span><span class="mod-dot audio"></span></div>
+                <div class="diverg-text"><b>Nega irritação</b>, porém a prosódia mostra pressão de fala e volume elevado nos mesmos trechos.</div>
+              </div>
+              <div class="diverg-row">
+                <div class="diverg-mods"><span class="mod-dot video"></span></div>
+                <div class="diverg-text"><b>Congelamento de expressão em 06:42</b> coincide com uma pausa de 4,2 segundos antes de mudar de assunto.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel full doctor-field">
+            <div class="panel-head"><h2>Campo da Dra. Ana Lívia</h2><span class="panel-tag">exclusivo médico</span></div>
+            <div class="status-options">
+              <button type="button" class="selected">Concorda</button>
+              <button type="button">Parcialmente</button>
+              <button type="button">Discorda</button>
+              <button type="button">Requer aprofundamento</button>
+            </div>
+            <textarea placeholder="Notas clínicas da sessão…" aria-label="Notas clínicas"></textarea>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ============ PEDAGOGIC / STUDENT WORKSPACE ============ -->
+      <div data-panel="pedagogic">
+        <p class="domain-brief">Domínio ativo: <span id="domain-dynamic"><b>Humor / depressividade</b>. Queda de interesse, desânimo, energia reduzida.</span> Cole um trecho de texto, seu ou de exemplo, e rode seu extractor para ver o que ele detecta.</p>
+
+        <div class="workspace-grid">
+
+          <div class="panel">
+            <div class="panel-head"><h2>Entrada</h2><span class="panel-tag">texto</span></div>
+            <textarea id="student-input" style="min-height:160px" placeholder="Cole aqui um trecho de texto: relato, mensagem ou transcrição de entrevista.">Não sei, ultimamente eu acho que tô meio sem vontade pra nada. Tipo, eu me sinto cansado o tempo todo e não consigo ficar animado nem com coisas que eu gostava. Às vezes eu fico sozinho e nem sei explicar direito o que eu sinto.</textarea>
+            <div class="char-count" id="student-count">0 palavras</div>
+            <div style="margin-top:14px">
+              <button type="button" class="run-btn" id="run-analysis">▸ Rodar análise</button>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>Saída do seu extractor</h2><span class="panel-tag">heurística didática</span></div>
+            <div id="student-output" class="out-metric"></div>
+            <p class="panel-caption">Heurística simplificada para aprendizado. Usa contagem de léxico, não o modelo de produção da Ayla. O raciocínio de tradução domínio para sinal é o mesmo.</p>
+          </div>
+
+          <div class="panel full">
+            <div class="panel-head"><h2>Histórico de execuções</h2><span class="panel-tag">seus experimentos</span></div>
+            <div class="history-list">
+              <div class="history-row"><span class="t">ontem 14:20</span><span class="d">trecho sobre período de provas · valência −0,4</span></div>
+              <div class="history-row"><span class="t">ontem 11:05</span><span class="d">mensagem de colega · autofoco alto, hedging elevado</span></div>
+              <div class="history-row"><span class="t">seg 19:40</span><span class="d">transcrição de entrevista simulada · negação/ruminação: 3 marcadores</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="appfoot">
+      <span>Ayla Clínica · pesquisa aplicada em observação multimodal</span>
+      <span>Ambiente piloto · Jornada Cearense de Psiquiatria 2026</span>
+    </footer>
+  </div>
+</div>
+
+<script>
+(function(){
+  var body = document.body;
+  var modeButtons = document.querySelectorAll('.mode-switch button');
+
+  function setLens(lens){
+    body.setAttribute('data-lens', lens);
+    modeButtons.forEach(function(b){
+      var active = b.dataset.set === lens;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    document.querySelectorAll('[data-sidebar-panel]').forEach(function(el){
+      el.style.display = el.getAttribute('data-sidebar-panel') === lens ? '' : 'none';
+    });
+    document.querySelectorAll('[data-topbar]').forEach(function(el){
+      el.style.display = el.getAttribute('data-topbar') === lens ? '' : 'none';
+    });
+    try { localStorage.setItem('ayla-clinica-lens', lens); } catch(e){}
+  }
+  modeButtons.forEach(function(b){ b.addEventListener('click', function(){ setLens(b.dataset.set); }); });
+
+  var savedLens = null;
+  try { savedLens = localStorage.getItem('ayla-clinica-lens'); } catch(e){}
+  setLens(savedLens === 'pedagogic' ? 'pedagogic' : 'clinical');
+
+  /* ---- accordion: pattern cards + trait cards ---- */
+  document.querySelectorAll('.pattern-card, .trait-card').forEach(function(el){
+    el.addEventListener('click', function(){
+      var expanded = el.getAttribute('aria-expanded') === 'true';
+      el.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+    });
+  });
+
+  /* ---- timeline blocks ---- */
+  var tlBlocks = document.querySelectorAll('.tl-block');
+  var tlDetail = document.getElementById('tl-detail');
+  function selectBlock(btn){
+    tlBlocks.forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    tlDetail.innerHTML = '<strong>' + btn.dataset.name + '</strong> · ' + btn.dataset.dur + ' · ' + btn.dataset.events + '<br>' + btn.dataset.desc;
+  }
+  tlBlocks.forEach(function(b){ b.addEventListener('click', function(){ selectBlock(b); }); });
+  selectBlock(tlBlocks[2]);
+
+  /* ---- video play toggle ---- */
+  var playBtn = document.querySelector('.play-btn');
+  var videoFrame = document.querySelector('.video-frame');
+  playBtn.addEventListener('click', function(){
+    var playing = videoFrame.classList.toggle('playing');
+    playBtn.textContent = playing ? '❚❚' : '▶';
+    playBtn.setAttribute('aria-label', playing ? 'Pausar' : 'Reproduzir gravação');
+  });
+
+  /* ---- session queue switching ---- */
+  var SESSIONS = {
+    'STAND-014': { status:'ready', label:'pronta para revisão', sub:'gravada em 30/08/2026, processada em 29 min', gravacao:'30/08/2026 · 14:12', analise:'30/08/2026 · 14:41', dur:'17:04', maiorSinal:'Humor depressivo · 71%', contradicoes:'3' },
+    'STAND-013': { status:'processing', label:'em processamento', sub:'gravada em 30/08/2026, análise ainda em andamento', gravacao:'30/08/2026 · 15:20', dur:'16:40' },
+    'STAND-012': { status:'ready', label:'revisada pela Dra.', sub:'gravada em 29/08/2026, revisão concluída', gravacao:'29/08/2026 · 10:05', analise:'29/08/2026 · 10:33', dur:'15:52', maiorSinal:'Ativação e mania · 68%', contradicoes:'2' },
+    'STAND-011': { status:'ready', label:'revisada pela Dra.', sub:'gravada em 29/08/2026, revisão concluída', gravacao:'29/08/2026 · 09:10', analise:'29/08/2026 · 09:36', dur:'16:20', maiorSinal:'Ansiedade e medo · 74%', contradicoes:'4' }
+  };
+
+  var queueButtons = document.querySelectorAll('.queue-item');
+  var clinicalTitle = document.getElementById('clinical-title');
+  var clinicalSub = document.getElementById('clinical-sub');
+  var clinicalStatus = document.getElementById('clinical-status');
+  var panelGrid = document.getElementById('clinical-panels');
+  var processingNote = document.getElementById('processing-note');
+  var videoId = document.getElementById('video-id');
+  var videoDur = document.getElementById('video-dur');
+  var tlEnd = document.getElementById('tl-end');
+  var infoGravacao = document.getElementById('info-gravacao');
+  var infoAnalise = document.getElementById('info-analise');
+  var infoDur = document.getElementById('info-dur');
+  var infoStatus = document.getElementById('info-status');
+  var tileMaiorSinal = document.getElementById('tile-maior-sinal');
+  var tileContradicoes = document.getElementById('tile-contradicoes');
+
+  function selectSession(id){
+    var s = SESSIONS[id];
+    queueButtons.forEach(function(b){ b.classList.toggle('active', b.dataset.id === id); });
+    videoId.textContent = id;
+    videoDur.textContent = s.dur;
+    tlEnd.textContent = s.dur;
+
+    if (s.status === 'processing'){
+      clinicalTitle.textContent = id + ', ' + s.label;
+      clinicalSub.textContent = s.sub;
+      clinicalStatus.className = 'status-badge proc';
+      clinicalStatus.innerHTML = '<span class="d"></span> processando';
+      infoStatus.className = 'status-badge proc';
+      infoStatus.innerHTML = '<span class="d"></span> processando';
+      infoGravacao.textContent = s.gravacao;
+      infoAnalise.textContent = 'em andamento';
+      infoDur.textContent = s.dur;
+      tileMaiorSinal.textContent = '—';
+      tileContradicoes.textContent = '—';
+      panelGrid.classList.add('is-processing');
+      processingNote.hidden = false;
+    } else {
+      clinicalTitle.textContent = id + ', ' + s.label;
+      clinicalSub.textContent = s.sub;
+      clinicalStatus.className = 'status-badge done';
+      clinicalStatus.innerHTML = '<span class="d"></span> análise concluída';
+      infoStatus.className = 'status-badge done';
+      infoStatus.innerHTML = '<span class="d"></span> concluída';
+      infoGravacao.textContent = s.gravacao;
+      infoAnalise.textContent = s.analise;
+      infoDur.textContent = s.dur;
+      tileMaiorSinal.textContent = s.maiorSinal;
+      tileContradicoes.textContent = s.contradicoes;
+      panelGrid.classList.remove('is-processing');
+      processingNote.hidden = true;
+    }
+  }
+  queueButtons.forEach(function(b){ b.addEventListener('click', function(){ selectSession(b.dataset.id); }); });
+
+  /* ---- student extractor heuristic ---- */
+  var LEX = {
+    pos: ['feliz','alegre','tranquilo','calmo','bem','grato','agradecido','confiante','animado','leve','gosto','gostei','tranquila'],
+    neg: ['triste','ansioso','ansiosa','cansado','cansada','medo','raiva','irritado','desanimado','sozinho','sozinha','preocupado','mal','péssimo','exausto','exausta','sem vontade'],
+    negation: ['não','nunca','nada','jamais','ninguém','nem'],
+    hedge: ['talvez','acho','meio','tipo','sei lá','possivelmente','às vezes'],
+    self: ['eu','me','mim','meu','minha','comigo','tô','to']
+  };
+
+  function countMatches(text, list){
+    var found = [];
+    list.forEach(function(term){
+      var re = new RegExp('(^|[^a-zà-úA-ZÀ-Ú])' + term.replace(/\s/g,'\\s') + '([^a-zà-úA-ZÀ-Ú]|$)', 'gi');
+      var m = text.match(re);
+      if (m) found.push({ term: term, n: m.length });
+    });
+    return found;
+  }
+
+  function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
+
+  function render(text){
+    var out = document.getElementById('student-output');
+    text = (text || '').trim();
+    if (!text){
+      out.innerHTML = '<div class="output-empty">Cole um trecho de texto e clique em "Rodar análise".</div>';
+      return;
+    }
+    var words = text.split(/\s+/).filter(Boolean);
+    var wc = words.length || 1;
+    var lowered = text.toLowerCase();
+
+    var pos = countMatches(lowered, LEX.pos);
+    var neg = countMatches(lowered, LEX.neg);
+    var negation = countMatches(lowered, LEX.negation);
+    var hedge = countMatches(lowered, LEX.hedge);
+    var self = countMatches(lowered, LEX.self);
+
+    var posN = pos.reduce(function(a,f){return a+f.n;},0);
+    var negN = neg.reduce(function(a,f){return a+f.n;},0);
+    var selfN = self.reduce(function(a,f){return a+f.n;},0);
+    var negationN = negation.reduce(function(a,f){return a+f.n;},0);
+    var hedgeN = hedge.reduce(function(a,f){return a+f.n;},0);
+
+    var valence = clamp(50 + ((posN - negN) / wc) * 400, 0, 100);
+    var selfDensity = clamp((selfN / wc) * 100 * 3, 0, 100);
+    var ruminationScore = clamp((negationN / wc) * 100 * 6, 0, 100);
+    var hedgeScore = clamp((hedgeN / wc) * 100 * 6, 0, 100);
+
+    function chips(list){
+      if (!list.length) return '<span class="chip">nenhum marcador encontrado</span>';
+      return list.map(function(f){ return '<span class="chip">"'+f.term+'" ×'+f.n+'</span>'; }).join('');
+    }
+
+    function row(name, val, chipsHtml){
+      return '' +
+        '<div class="out-row">' +
+          '<div class="out-row-head"><span class="out-name">'+name+'</span><span class="out-num">'+Math.round(val)+'/100</span></div>' +
+          '<div class="out-bar"><div class="out-bar-fill" style="width:'+val+'%"></div></div>' +
+          '<div class="out-chips">'+chipsHtml+'</div>' +
+        '</div>';
+    }
+
+    out.innerHTML =
+      row('Valência estimada', valence, chips(posN||negN ? pos.concat(neg) : [])) +
+      row('Densidade de autofoco', selfDensity, chips(self)) +
+      row('Negação / ruminação', ruminationScore, chips(negation)) +
+      row('Hedging / incerteza', hedgeScore, chips(hedge));
+  }
+
+  var input = document.getElementById('student-input');
+  var countEl = document.getElementById('student-count');
+  function updateCount(){
+    var wc = input.value.trim() ? input.value.trim().split(/\s+/).length : 0;
+    countEl.textContent = wc + (wc === 1 ? ' palavra' : ' palavras');
+  }
+  input.addEventListener('input', updateCount);
+  updateCount();
+
+  document.getElementById('run-analysis').addEventListener('click', function(){ render(input.value); });
+  render(input.value);
+
+  /* ---- module switching (student sidebar) ---- */
+  var moduleButtons = document.querySelectorAll('.module-item');
+  var domainDynamic = document.getElementById('domain-dynamic');
+  var pedagogicTitle = document.getElementById('pedagogic-title');
+  moduleButtons.forEach(function(b){
+    b.addEventListener('click', function(){
+      moduleButtons.forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      var domain = b.dataset.domain, brief = b.dataset.brief, example = b.dataset.example;
+      domainDynamic.innerHTML = '<b>' + domain + '</b>. ' + brief;
+      pedagogicTitle.textContent = 'Meu extractor · ' + domain;
+      input.value = example;
+      updateCount();
+      render('');
+    });
+  });
+})();
+</script>

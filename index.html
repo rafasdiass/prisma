@@ -271,8 +271,15 @@
   .tile .v.warn{ color:var(--warn); }
 
   /* ---------- processing overlay ---------- */
-  .differentiator-note{ background:var(--clinical-soft); border:1px solid var(--clinical); color:var(--ink); border-radius:var(--radius); padding:14px 16px; font-size:13px; line-height:1.55; margin-bottom:20px; }
-  .differentiator-note strong{ color:var(--clinical); }
+  .diff-showcase{ background:var(--clinical-soft); border:1px solid var(--clinical); border-radius:var(--radius); padding:18px 20px; margin-bottom:20px; }
+  .diff-showcase-head{ display:flex; flex-direction:column; gap:3px; margin-bottom:16px; }
+  .diff-showcase-head strong{ color:var(--clinical); font-size:14.5px; }
+  .diff-showcase-head span{ font-size:13px; color:var(--ink-soft); }
+  .diff-preview-cards{ display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:10px; margin-bottom:14px; }
+  .diff-preview-card{ background:var(--surface-raised); border:1px solid var(--line); border-radius:9px; padding:12px 14px; display:flex; flex-direction:column; gap:8px; }
+  .diff-preview-name{ font-size:13px; font-weight:600; color:var(--ink); }
+  .diff-showcase-cta{ appearance:none; border:1px solid var(--clinical); background:var(--clinical); color:#F3F5F1; font-size:13px; font-weight:700; padding:10px 16px; border-radius:8px; cursor:pointer; }
+  .diff-showcase-cta:hover{ filter:brightness(1.08); }
   .processing-note{ background:var(--pilot-soft); border:1px solid var(--pilot); color:var(--ink); border-radius:var(--radius); padding:14px 16px; font-size:13.5px; line-height:1.55; margin-bottom:20px; }
   .processing-note strong{ color:var(--pilot); }
   #clinical-panels.is-processing{ opacity:.42; filter:grayscale(.35); pointer-events:none; transition:opacity .2s ease; }
@@ -742,8 +749,22 @@
           <div class="tile"><span class="k">Extratores rodados</span><span class="v good">17 de 91</span></div>
         </div>
 
-        <div class="differentiator-note">
-          <strong>Por que o Prisma não é mais um Lyssn ou Eleos Health:</strong> instrumentos de triagem padrão (PHQ-9, GAD-7) e plataformas de nota de sessão medem humor e ansiedade em texto. Nenhum deles cruza padrão relacional real (DARVO, os 4 Cavaleiros de Gottman, love bombing, resposta polivagal) com voz e vídeo da mesma sessão. É esse cruzamento, aba <b>Vínculo</b>, que ninguém mais oferece hoje.
+        <div class="diff-showcase">
+          <div class="diff-showcase-head">
+            <strong>O que o PHQ-9, o GAD-7 e o Lyssn não fazem</strong>
+            <span>Eles medem humor e ansiedade em texto. Eu cruzo padrão relacional com voz e vídeo da mesma sessão.</span>
+          </div>
+          <div class="diff-preview-cards">
+            <div class="diff-preview-card">
+              <span class="diff-preview-name">Comunicação defensiva (4 Cavaleiros)</span>
+              <div class="channel-chips"><span class="ch-chip on txt">Texto</span><span class="ch-chip on audio">Voz</span><span class="ch-chip video">Vídeo</span><span class="ch-badge">2 canais convergem</span></div>
+            </div>
+            <div class="diff-preview-card">
+              <span class="diff-preview-name">Resposta polivagal de contenção</span>
+              <div class="channel-chips"><span class="ch-chip txt">Texto</span><span class="ch-chip on audio">Voz</span><span class="ch-chip on video">Vídeo</span><span class="ch-badge">2 canais convergem</span></div>
+            </div>
+          </div>
+          <button type="button" class="diff-showcase-cta" id="diff-goto-vinculo">Ver os 8 padrões completos, aba Vínculo →</button>
         </div>
 
         <div class="processing-note" id="processing-note" hidden>
@@ -1264,19 +1285,26 @@
   /* ---- clinical tabs ---- */
   var clinicalTabs = document.querySelectorAll('.clinical-tab');
   var clinicalTabContents = document.querySelectorAll('[data-tab-content]');
-  clinicalTabs.forEach(function(tabBtn){
-    tabBtn.addEventListener('click', function(){
-      var tab = tabBtn.dataset.tab;
-      clinicalTabs.forEach(function(b){
-        var active = b === tabBtn;
-        b.classList.toggle('active', active);
-        b.setAttribute('aria-selected', active ? 'true' : 'false');
-      });
-      clinicalTabContents.forEach(function(c){
-        c.classList.toggle('active', c.getAttribute('data-tab-content') === tab);
-      });
+  function activateClinicalTab(tab){
+    clinicalTabs.forEach(function(b){
+      var active = b.dataset.tab === tab;
+      b.classList.toggle('active', active);
+      b.setAttribute('aria-selected', active ? 'true' : 'false');
     });
+    clinicalTabContents.forEach(function(c){
+      c.classList.toggle('active', c.getAttribute('data-tab-content') === tab);
+    });
+  }
+  clinicalTabs.forEach(function(tabBtn){
+    tabBtn.addEventListener('click', function(){ activateClinicalTab(tabBtn.dataset.tab); });
   });
+  var diffGotoBtn = document.getElementById('diff-goto-vinculo');
+  if (diffGotoBtn){
+    diffGotoBtn.addEventListener('click', function(){
+      activateClinicalTab('vinculo');
+      diffGotoBtn.closest('.content').scrollIntoView({ behavior:'smooth', block:'start' });
+    });
+  }
 
   var body = document.body;
   var modeButtons = document.querySelectorAll('.mode-switch button');

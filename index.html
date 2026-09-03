@@ -20,7 +20,7 @@
     --clinical-soft:#DCE7E6;
     --pedagogic:#8A5A3B;
     --pedagogic-soft:#EFE3D7;
-    --pilot:#96690F;
+    --pilot:#7A5300;
     --pilot-soft:#F3E7D2;
     --good:#2E6944;
     --good-soft:#DFEFE2;
@@ -301,6 +301,31 @@
   .panel-synthesis{ font-size:13px; color:var(--ink-soft); margin-top:12px; padding-top:10px; border-top:1px dashed var(--line); line-height:1.55; }
   .panel-synthesis b{ color:var(--ink); font-weight:600; }
 
+  /* ---------- safety gate ---------- */
+  .safety-gate{
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    background:var(--surface-raised); border:1.5px solid var(--crit);
+    border-radius:var(--radius); padding:14px 18px; margin-bottom:18px;
+  }
+  .safety-gate.cleared{ border-color:var(--good); }
+  .safety-gate.pending{ border-color:var(--pilot); }
+  .safety-icon{ width:28px; height:28px; border-radius:50%; flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; background:var(--crit-soft); color:var(--crit); }
+  .safety-gate.cleared .safety-icon{ background:var(--good-soft); color:var(--good); }
+  .safety-gate.pending .safety-icon{ background:var(--pilot-soft); color:var(--pilot); }
+  .safety-text{ flex:1; min-width:220px; }
+  .safety-text strong{ display:block; font-size:13.5px; margin-bottom:2px; }
+  .safety-text span{ font-size:12.5px; color:var(--ink-faint); }
+  .safety-actions{ display:flex; gap:8px; flex-wrap:wrap; }
+  .safety-btn{ appearance:none; border:1px solid var(--line-strong); background:transparent; color:var(--ink-soft); font-size:12.5px; font-weight:600; padding:7px 13px; border-radius:8px; cursor:pointer; }
+  .safety-btn.escalate{ border-color:var(--crit); color:var(--crit); }
+  .safety-btn.escalate:hover{ background:var(--crit-soft); }
+  .safety-btn.selected{ border-color:var(--good); color:var(--good); background:var(--good-soft); }
+
+  /* ---------- consentimento ---------- */
+  .consent-row .v{ display:flex; gap:6px; align-items:center; }
+  .consent-chip{ font-size:11px; font-family:"IBM Plex Mono", monospace; padding:2px 7px; border-radius:5px; background:var(--good-soft); color:var(--good); font-weight:600; }
+  .withdraw-link{ appearance:none; background:none; border:none; color:var(--crit); font-size:12px; text-decoration:underline; cursor:pointer; padding:0; margin-top:8px; }
+
   /* ---------- parecer da ayla (opinion block) ---------- */
   .opinion-block{
     position:relative;
@@ -351,7 +376,7 @@
   .synthesis-text b{ color:var(--clinical); font-weight:600; }
   .band-legend{ font-size:13px; color:var(--ink-faint); margin:0 0 16px; line-height:1.55; max-width:76ch; }
   .band-legend span{ font-weight:600; }
-  .trait-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:14px; margin-bottom:14px; }
+  .trait-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:14px; margin-bottom:14px; }
   .trait-card{
     width:100%; text-align:left; cursor:pointer;
     border:1px solid var(--line); border-radius:9px; padding:14px 16px;
@@ -436,6 +461,8 @@
     cursor:pointer; display:inline-flex; align-items:center; gap:8px;
   }
   .run-btn:hover{ filter:brightness(1.08); }
+  .run-btn:disabled{ opacity:.45; cursor:not-allowed; filter:none; }
+  .visually-hidden{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 
   .char-count{ font-family:"IBM Plex Mono", monospace; font-size:12px; color:var(--ink-faint); margin-top:6px; }
 
@@ -490,13 +517,13 @@
     <div data-sidebar-panel="pedagogic" style="display:none">
       <div class="side-label">Módulos, clique para trocar</div>
       <div class="modules">
-        <button type="button" class="module-item done" data-domain="Ativação e mania" data-brief="Energia elevada, menor necessidade de sono, impulsividade." data-example="Eu tô muito ligado esses dias, quase não durmo e nem sinto falta. Minha cabeça não para, tenho um milhão de ideia ao mesmo tempo e não consigo ficar parado."><span class="module-check">✓</span> Ativação / mania</button>
-        <button type="button" class="module-item done" data-domain="Ansiedade e medo" data-brief="Tensão, antecipação, evitação, sintomas físicos." data-example="Fico tenso antes de qualquer prova, meu coração dispara e eu começo a pensar em tudo que pode dar errado. Às vezes evito nem estudar direito de tanto medo de ver o quanto falta."><span class="module-check">✓</span> Ansiedade / medo</button>
-        <button type="button" class="module-item active" data-domain="Humor e depressividade" data-brief="Queda de interesse, desânimo, energia reduzida." data-example="Não sei, ultimamente eu acho que tô meio sem vontade pra nada. Tipo, eu me sinto cansado o tempo todo e não consigo ficar animado nem com coisas que eu gostava. Às vezes eu fico sozinho e nem sei explicar direito o que eu sinto."><span class="module-check"></span> Humor / depressividade</button>
-        <button type="button" class="module-item" data-domain="Funcionamento interpessoal" data-brief="Conflito, medo de abandono, dificuldade de reparo." data-example="Toda vez que eu brigo com alguém eu prefiro sumir um tempo em vez de conversar. Depois fico com medo de que a pessoa não queira mais falar comigo, mas não consigo ser o primeiro a chamar."><span class="module-check"></span> Funcionamento interpessoal</button>
-        <button type="button" class="module-item" data-domain="Sono" data-brief="Insônia, fragmentação, hipersonia, mudança de padrão." data-example="Faz um tempo que eu durmo tarde e acordo cansado mesmo dormindo bastante. Às vezes acordo no meio da noite e demoro pra voltar a dormir."><span class="module-check"></span> Sono</button>
-        <button type="button" class="module-item" data-domain="Memória e atenção" data-brief="Esquecimento, distração, dificuldade de planejar." data-example="Eu começo uma tarefa e do nada já tô pensando em outra coisa. Esqueço compromisso direto e preciso anotar tudo, se não simplesmente some da minha cabeça."><span class="module-check"></span> Memória / atenção</button>
-        <button type="button" class="module-item" data-domain="Dissociação" data-brief="Desconexão, sensação de irrealidade, lacunas de memória subjetiva." data-example="Às vezes eu sinto que não tô presente de verdade, como se eu tivesse vendo tudo de fora. Depois nem lembro direito o que aconteceu naquele pedaço de tempo."><span class="module-check"></span> Dissociação</button>
+        <button type="button" class="module-item done" data-domain="Ativação e mania" data-brief="Energia elevada, menor necessidade de sono, impulsividade." data-prompt="Escreva, com suas palavras, um relato de exemplo de alguém em estado de ativação: energia elevada, pouca necessidade de sono, pensamento acelerado."><span class="module-check">✓</span> Ativação / mania</button>
+        <button type="button" class="module-item done" data-domain="Ansiedade e medo" data-brief="Tensão, antecipação, evitação, sintomas físicos." data-prompt="Escreva um relato de exemplo de ansiedade antecipatória: tensão antes de um evento, sintomas físicos, evitação."><span class="module-check">✓</span> Ansiedade / medo</button>
+        <button type="button" class="module-item active" data-domain="Humor e depressividade" data-brief="Queda de interesse, desânimo, energia reduzida." data-prompt="Escreva um relato de exemplo de humor rebaixado: queda de interesse, desânimo, energia reduzida."><span class="module-check"></span> Humor / depressividade</button>
+        <button type="button" class="module-item" data-domain="Funcionamento interpessoal" data-brief="Conflito, medo de abandono, dificuldade de reparo." data-prompt="Escreva um relato de exemplo de conflito relacional: evitação após briga, medo de abandono, dificuldade de reparo."><span class="module-check"></span> Funcionamento interpessoal</button>
+        <button type="button" class="module-item" data-domain="Sono" data-brief="Insônia, fragmentação, hipersonia, mudança de padrão." data-prompt="Escreva um relato de exemplo de mudança no padrão de sono: insônia, fragmentação ou sono excessivo."><span class="module-check"></span> Sono</button>
+        <button type="button" class="module-item" data-domain="Memória e atenção" data-brief="Esquecimento, distração, dificuldade de planejar." data-prompt="Escreva um relato de exemplo de dificuldade de atenção: esquecimento, distração, dificuldade de planejar."><span class="module-check"></span> Memória / atenção</button>
+        <button type="button" class="module-item" data-domain="Dissociação" data-brief="Desconexão, sensação de irrealidade, lacunas de memória subjetiva." data-prompt="Escreva um relato de exemplo de desconexão: sensação de irrealidade, lacunas de memória subjetiva."><span class="module-check"></span> Dissociação</button>
       </div>
     </div>
 
@@ -535,6 +562,18 @@
       <!-- ============ CLINICAL WORKSPACE ============ -->
       <div data-panel="clinical">
 
+        <div class="safety-gate cleared" id="safety-gate" role="status" aria-live="polite">
+          <span class="safety-icon" aria-hidden="true">✓</span>
+          <div class="safety-text">
+            <strong>Gate de segurança: sem sinais de risco identificados</strong>
+            <span>Autoagressão, ideação suicida e psicose aguda foram avaliados nesta sessão. Revisão da Dra. obrigatória antes de fechar o atendimento.</span>
+          </div>
+          <div class="safety-actions">
+            <button type="button" class="safety-btn selected" data-safety="clear">Sem sinais</button>
+            <button type="button" class="safety-btn escalate" data-safety="risk">Sinal presente, escalar agora</button>
+          </div>
+        </div>
+
         <div class="session-header">
           <div class="video-placeholder">
             <div class="video-frame">
@@ -548,9 +587,11 @@
             <div class="info-row"><span class="k">Análise concluída</span><span class="v" id="info-analise">30/08/2026 · 14:41</span></div>
             <div class="info-row"><span class="k">Modalidades processadas</span><span class="v">texto, áudio e vídeo</span></div>
             <div class="info-row"><span class="k">Duração</span><span class="v" id="info-dur">17:04</span></div>
+            <div class="info-row consent-row"><span class="k">Consentimento</span><span class="v"><span class="consent-chip">texto</span><span class="consent-chip">áudio</span><span class="consent-chip">vídeo</span></span></div>
             <div class="info-row"><span class="k">Status</span><span class="status-badge done" id="info-status"><span class="d"></span> concluída</span></div>
           </div>
         </div>
+        <button type="button" class="withdraw-link">Retirar esta sessão do estudo</button>
 
         <div class="opinion-block" id="opinion-block">
           <div class="opinion-rail">
@@ -563,9 +604,9 @@
           <div class="opinion-main">
             <h3 class="opinion-title">STAND-014 — sofrimento ativo com forte autocontenção</h3>
             <div class="opinion-body">
-              <p>Fechando os seis blocos da entrevista, minha leitura é que esta pessoa está em <span class="opinion-verdict">sofrimento ativo com forte autocontenção</span>: o discurso minimiza o que o corpo e a voz mostram o tempo todo. Não é uma queixa vaga, é um padrão sustentado, repetido em três modalidades independentes, que se intensifica exatamente quando o tema toca pressão e conflito.</p>
-              <p>O que mais me chama atenção não é nenhum sinal isolado, é a combinação: humor rebaixado com banda alta, ativação ansiosa contida no corpo, e um padrão relacional que evita reparo. Juntos, isso desenha alguém que carrega o peso sozinho e não tem, ou não usa, um caminho de alívio disponível. Essa é a peça que eu recomendo priorizar na devolutiva, mais do que qualquer score individual.</p>
-              <p>Minha leitura é interpretação de padrão, não diagnóstico; essa fronteira eu sustento comigo mesma. Mas dentro do que me cabe dizer, minha opinião é clara: este caso merece aprofundamento clínico, não uma nota de rotina.</p>
+              <p>Terminei de acompanhar os seis blocos e quero te dizer o que eu vi, não só o que os números mostram. Essa pessoa está carregando algo pesado sozinha. Ela diz que está tranquila, mas o corpo dela não concorda, a voz sobe justo quando o assunto aperta, e isso se repete o suficiente pra eu confiar que não é acaso de um momento.</p>
+              <p>O que mais me toca aqui não é um sinal isolado, é o conjunto: o humor baixo, a ansiedade que ela mantém em contenção, e o jeito como ela fala de conflito sem deixar espaço pra reparo. Junto, isso me parece alguém que aprendeu a segurar sozinha e talvez nem tenha, hoje, um caminho de alívio à mão. Se eu pudesse apontar uma coisa pra você olhar primeiro na devolutiva, seria essa, não qualquer score isolado.</p>
+              <p>Eu leio padrão, não decido diagnóstico, essa linha eu não cruzo. Mas dentro do que é meu de dizer, eu digo com convicção: isso merece seu tempo de verdade, não uma nota rápida de passagem.</p>
             </div>
             <div class="opinion-foot">
               <span class="opinion-scope">Este parecer é gerado pela Ayla a partir dos padrões desta sessão. Ele orienta a revisão, não substitui o julgamento clínico.</span>
@@ -675,6 +716,62 @@
                 <div class="trait-extra">
                   <div class="out-chips"><span class="chip">vocabulário emocional com 6 termos distintos</span><span class="chip">3 momentos de incongruência relato×face</span></div>
                   <p>Vale observar se o padrão se repete em sessões futuras antes de qualquer hipótese mais forte.</p>
+                </div>
+              </button>
+
+              <button type="button" class="trait-card" aria-expanded="false">
+                <div class="trait-head">
+                  <span class="trait-name-wrap"><span class="trait-name">Locus de controle externo</span><span class="chevron">▾</span></span>
+                  <span class="trait-score">52%</span>
+                </div>
+                <div class="trait-bar"><div class="trait-bar-fill" style="width:52%"></div></div>
+                <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança média</span></div>
+                <p class="trait-rationale">Atribui resultados a fatores externos (sorte, outras pessoas, circunstância) com mais frequência do que a si mesma ao narrar os próprios eventos.</p>
+                <div class="trait-extra">
+                  <div class="out-chips"><span class="chip">7 atribuições externas vs. 2 internas</span><span class="chip">voz passiva recorrente ao narrar decisões próprias</span></div>
+                  <p>Extractor de LIWC (pronomes, agentividade) combinado com atos de fala do relato.</p>
+                </div>
+              </button>
+
+              <button type="button" class="trait-card" aria-expanded="false">
+                <div class="trait-head">
+                  <span class="trait-name-wrap"><span class="trait-name">Ruminação</span><span class="chevron">▾</span></span>
+                  <span class="trait-score">67%</span>
+                </div>
+                <div class="trait-bar"><div class="trait-bar-fill" style="width:67%"></div></div>
+                <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança alta</span></div>
+                <p class="trait-rationale">Retorna ao mesmo tema de conflito três vezes em blocos diferentes, sem avançar para resolução ou reinterpretação.</p>
+                <div class="trait-extra">
+                  <div class="out-chips"><span class="chip">3 retornos ao mesmo tema</span><span class="chip">nenhuma reinterpretação entre os retornos</span></div>
+                  <p>Padrão de repetição temática sem progressão, medido por trajetória de tópico ao longo da sessão.</p>
+                </div>
+              </button>
+
+              <button type="button" class="trait-card" aria-expanded="false">
+                <div class="trait-head">
+                  <span class="trait-name-wrap"><span class="trait-name">Hostilidade / dinâmica de poder no relato</span><span class="chevron">▾</span></span>
+                  <span class="trait-score">41%</span>
+                </div>
+                <div class="trait-bar"><div class="trait-bar-fill" style="width:41%"></div></div>
+                <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança média</span></div>
+                <p class="trait-rationale">Ao narrar conflitos, posiciona o outro como agressor e a si como reativa; padrão presente mas não dominante no discurso.</p>
+                <div class="trait-extra">
+                  <div class="out-chips"><span class="chip">2 marcadores de power dynamics</span><span class="chip">nenhum marcador de DARVO sustentado</span></div>
+                  <p>Extractor de dinâmica relacional e atos de fala; sem sinal de inversão de culpa persistente.</p>
+                </div>
+              </button>
+
+              <button type="button" class="trait-card" aria-expanded="false">
+                <div class="trait-head">
+                  <span class="trait-name-wrap"><span class="trait-name">Regulação emocional</span><span class="chevron">▾</span></span>
+                  <span class="trait-score">55%</span>
+                </div>
+                <div class="trait-bar"><div class="trait-bar-fill" style="width:55%"></div></div>
+                <div class="trait-meta"><span class="trait-band moderada">banda moderada</span><span class="trait-conf">confiança média</span></div>
+                <p class="trait-rationale">Consegue nomear a emoção, mas o corpo segue ativado por mais tempo do que o relato verbal sugere, indicando esforço de contenção mais do que regulação completa.</p>
+                <div class="trait-extra">
+                  <div class="out-chips"><span class="chip">tempo de retorno ao baseline vocal: 2,1× o esperado</span><span class="chip">nomeação emocional presente</span></div>
+                  <p>Cruza prosódia (retorno ao baseline) com vocabulário emocional do texto.</p>
                 </div>
               </button>
             </div>
@@ -824,16 +921,17 @@
 
       <!-- ============ PEDAGOGIC / STUDENT WORKSPACE ============ -->
       <div data-panel="pedagogic">
-        <p class="domain-brief">Domínio ativo: <span id="domain-dynamic"><b>Humor / depressividade</b>. Queda de interesse, desânimo, energia reduzida.</span> Cole um trecho de texto, seu ou de exemplo, e rode seu extractor para ver o que ele detecta.</p>
+        <p class="domain-brief">Domínio ativo: <span id="domain-dynamic"><b>Humor / depressividade</b>. Queda de interesse, desânimo, energia reduzida.</span> Você escreve um relato de exemplo (não use dados reais de ninguém) e roda seu extractor para ver o que ele detecta. Precisa de pelo menos <b>120 caracteres</b> para a análise ficar confiável.</p>
 
         <div class="workspace-grid">
 
           <div class="panel">
-            <div class="panel-head"><h2>Entrada</h2><span class="panel-tag">texto</span></div>
-            <textarea id="student-input" style="min-height:160px" placeholder="Cole aqui um trecho de texto: relato, mensagem ou transcrição de entrevista.">Não sei, ultimamente eu acho que tô meio sem vontade pra nada. Tipo, eu me sinto cansado o tempo todo e não consigo ficar animado nem com coisas que eu gostava. Às vezes eu fico sozinho e nem sei explicar direito o que eu sinto.</textarea>
-            <div class="char-count" id="student-count">0 palavras</div>
+            <div class="panel-head"><h2>Entrada</h2><span class="panel-tag">seu texto, min. 120 caracteres</span></div>
+            <label for="student-input" class="visually-hidden">Escreva um relato de exemplo para o domínio ativo</label>
+            <textarea id="student-input" style="min-height:160px" placeholder="Escreva aqui, com suas palavras, um relato de exemplo para o domínio ativo. Não use trechos reais de sessões ou de outras pessoas." aria-describedby="student-count"></textarea>
+            <div class="char-count" id="student-count" role="status" aria-live="polite">0 de 120 caracteres</div>
             <div style="margin-top:14px">
-              <button type="button" class="run-btn" id="run-analysis">▸ Rodar análise</button>
+              <button type="button" class="run-btn" id="run-analysis" disabled>▸ Rodar análise</button>
             </div>
           </div>
 
@@ -1051,17 +1149,23 @@
       row('Hedging / incerteza', hedgeScore, chips(hedge));
   }
 
+  var MIN_CHARS = 120;
   var input = document.getElementById('student-input');
   var countEl = document.getElementById('student-count');
+  var runBtn = document.getElementById('run-analysis');
   function updateCount(){
-    var wc = input.value.trim() ? input.value.trim().split(/\s+/).length : 0;
-    countEl.textContent = wc + (wc === 1 ? ' palavra' : ' palavras');
+    var len = input.value.trim().length;
+    var ok = len >= MIN_CHARS;
+    countEl.textContent = ok ? (len + ' caracteres, pronto para analisar') : (len + ' de ' + MIN_CHARS + ' caracteres');
+    runBtn.disabled = !ok;
   }
   input.addEventListener('input', updateCount);
   updateCount();
+  render('');
 
-  document.getElementById('run-analysis').addEventListener('click', function(){ render(input.value); });
-  render(input.value);
+  document.getElementById('run-analysis').addEventListener('click', function(){
+    if (!runBtn.disabled) render(input.value);
+  });
 
   /* ---- module switching (student sidebar) ---- */
   var moduleButtons = document.querySelectorAll('.module-item');
@@ -1071,12 +1175,32 @@
     b.addEventListener('click', function(){
       moduleButtons.forEach(function(x){ x.classList.remove('active'); });
       b.classList.add('active');
-      var domain = b.dataset.domain, brief = b.dataset.brief, example = b.dataset.example;
+      var domain = b.dataset.domain, brief = b.dataset.brief, prompt = b.dataset.prompt;
       domainDynamic.innerHTML = '<b>' + domain + '</b>. ' + brief;
       pedagogicTitle.textContent = 'Meu extractor · ' + domain;
-      input.value = example;
+      input.placeholder = prompt;
+      input.value = '';
       updateCount();
       render('');
+    });
+  });
+
+  /* ---- safety gate ---- */
+  var gate = document.getElementById('safety-gate');
+  var gateButtons = gate.querySelectorAll('.safety-btn');
+  gateButtons.forEach(function(b){
+    b.addEventListener('click', function(){
+      gateButtons.forEach(function(x){ x.classList.remove('selected'); });
+      b.classList.add('selected');
+      var risk = b.dataset.safety === 'risk';
+      gate.className = 'safety-gate ' + (risk ? 'pending' : 'cleared');
+      gate.querySelector('.safety-icon').textContent = risk ? '!' : '✓';
+      gate.querySelector('.safety-text strong').textContent = risk
+        ? 'Sinal de risco marcado, protocolo de escalonamento acionado'
+        : 'Gate de segurança: sem sinais de risco identificados';
+      gate.querySelector('.safety-text span').textContent = risk
+        ? 'A Dra. assume a condução clínica agora. A demonstração é interrompida até a avaliação de risco ser concluída.'
+        : 'Autoagressão, ideação suicida e psicose aguda foram avaliados nesta sessão. Revisão da Dra. obrigatória antes de fechar o atendimento.';
     });
   });
 })();

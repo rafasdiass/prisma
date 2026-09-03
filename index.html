@@ -129,6 +129,7 @@
   .mode-switch button .sw-dot{ width:6px; height:6px; border-radius:50%; background:var(--sidebar-ink-dim); flex:0 0 auto; }
   .mode-switch button.active[data-set="clinical"] .sw-dot{ background:#6FB0AC; }
   .mode-switch button.active[data-set="pedagogic"] .sw-dot{ background:#D6A374; }
+  .mode-switch button.active[data-set="faculty"] .sw-dot{ background:#8FA8D9; }
 
   .side-label{ font-family:"IBM Plex Mono", monospace; font-size:11px; letter-spacing:0.07em; text-transform:uppercase; color:var(--sidebar-ink-dim); }
   .side-label-row{ display:flex; align-items:center; justify-content:space-between; gap:8px; padding:0 12px; margin-bottom:8px; }
@@ -169,19 +170,20 @@
   .qstatus.done{ background:rgba(63,122,82,0.24); color:#9AD8A9; }
   .qstatus.wait{ background:rgba(217,169,79,0.24); color:#EFC272; }
 
-  .modules{ display:flex; flex-direction:column; gap:2px; margin-bottom:20px; width:100%; }
+  .domain-results-panel{ margin-bottom:20px; }
+  .modules-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:6px; }
   .module-item{
     display:flex; align-items:center; justify-content:space-between; gap:9px; width:100%;
-    background:transparent; border:none; text-align:left;
-    padding:7px 12px; border-radius:8px;
-    font-size:12.5px; color:var(--sidebar-ink-dim); cursor:default; line-height:1.3;
+    background:var(--surface); border:1px solid var(--line); text-align:left;
+    padding:8px 12px; border-radius:8px;
+    font-size:12.5px; color:var(--ink-soft); cursor:default; line-height:1.3;
   }
-  .module-item.detected{ background:var(--sidebar-active); color:#F3F5F1; font-weight:600; }
+  .module-item.detected{ background:var(--pedagogic-soft); border-color:var(--pedagogic); color:var(--pedagogic); font-weight:600; }
   .module-score{
-    font-family:"IBM Plex Mono", monospace; font-size:11px; font-weight:600;
-    color:var(--sidebar-ink-dim); flex:0 0 auto; min-width:22px; text-align:right;
+    font-family:"IBM Plex Mono", monospace; font-size:12px; font-weight:600;
+    color:var(--ink-faint); flex:0 0 auto; min-width:22px; text-align:right;
   }
-  .module-item.detected .module-score{ color:#D6A374; }
+  .module-item.detected .module-score{ color:var(--pedagogic); }
 
   .sidebar-foot{ margin-top:auto; padding:12px; font-size:11.5px; color:var(--sidebar-ink-dim); border-top:1px solid rgba(255,255,255,0.08); padding-top:14px; display:flex; align-items:center; justify-content:space-between; gap:8px; }
   .theme-toggle{ display:inline-flex; align-items:center; gap:2px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.16); border-radius:999px; padding:2px; }
@@ -662,24 +664,7 @@
     </div>
 
     <div data-sidebar-panel="pedagogic" style="display:none">
-      <div class="side-label">13 domínios, resultado ao vivo</div>
-      <div class="modules">
-        <button type="button" class="module-item" data-domain="Humor e depressividade" data-brief="Queda de interesse, desânimo, energia reduzida." data-prompt="Escreva um relato de exemplo de humor rebaixado: queda de interesse, desânimo, energia reduzida."> Humor / depressividade<span class="module-score">—</span></button>
-        <button type="button" class="module-item" data-domain="Irritabilidade e raiva" data-brief="Reatividade, explosividade, hostilidade contida." data-prompt="Escreva um relato de exemplo de irritabilidade: reatividade a pequenas coisas, vontade de explodir contida."> Irritabilidade / raiva<span class="module-score">—</span></button>
-        <button type="button" class="module-item" data-domain="Ativação e mania" data-brief="Energia elevada, menor necessidade de sono, impulsividade." data-prompt="Escreva, com suas palavras, um relato de exemplo de alguém em estado de ativação: energia elevada, pouca necessidade de sono, pensamento acelerado."> Ativação / hipomania-mania<span class="module-score">—</span></button>
-        <button type="button" class="module-item" data-domain="Ansiedade e medo" data-brief="Tensão, antecipação, evitação, sintomas físicos." data-prompt="Escreva um relato de exemplo de ansiedade antecipatória: tensão antes de um evento, sintomas físicos, evitação."> Ansiedade / medo<span class="module-score">—</span></button>
-        <button type="button" class="module-item" data-domain="Sintomas corporais" data-brief="Desconforto físico recorrente ligado a estresse." data-prompt="Escreva um relato de exemplo de sintoma físico recorrente que piora com estresse, sem causa médica clara ainda."> Sintomas corporais<span class="module-score">—</span></button>
-        <button type="button" class="module-item" data-domain="Segurança e autoagressão" data-brief="Domínio sensível: aqui o foco é reconhecer marcadores linguísticos de desesperança, não simular crise." data-prompt="Escreva, em tom acadêmico, sobre como a linguagem de desesperança costuma aparecer num relato (sem descrever um método ou ato). O foco é reconhecer o marcador, não produzir conteúdo de crise."> Segurança / autoagressão<span class="module-score">—</span></button>
-        <button type="button" class="module-item" data-domain="Percepção e psicose" data-brief="Experiências perceptivas incomuns e a crítica sobre elas." data-prompt="Escreva um relato de exemplo onde a pessoa descreve uma percepção incomum e comenta com crítica se aquilo faz sentido pra ela ou não."> Percepção / psicose<span class="module-score">—</span></button>
-        <button type="button" class="module-item" data-domain="Sono" data-brief="Insônia, fragmentação, hipersonia, mudança de padrão." data-prompt="Escreva um relato de exemplo de mudança no padrão de sono: insônia, fragmentação ou sono excessivo."> Sono<span class="module-score">—</span></button>
-        <button type="button" class="module-item" data-domain="Memória e atenção" data-brief="Esquecimento, distração, dificuldade de planejar." data-prompt="Escreva um relato de exemplo de dificuldade de atenção: esquecimento, distração, dificuldade de planejar."> Memória / atenção<span class="module-score">—</span></button>
-        <button type="button" class="module-item" data-domain="Pensamentos repetitivos" data-brief="Ruminação, checagens, rituais difíceis de interromper." data-prompt="Escreva um relato de exemplo de pensamento repetitivo: uma checagem ou preocupação que volta mesmo sabendo que é excessiva."> Pensamentos repetitivos / compulsões<span class="module-score">—</span></button>
-        <button type="button" class="module-item" data-domain="Dissociação" data-brief="Desconexão, sensação de irrealidade, lacunas de memória subjetiva." data-prompt="Escreva um relato de exemplo de desconexão: sensação de irrealidade, lacunas de memória subjetiva."> Dissociação / desligamento<span class="module-score">—</span></button>
-        <button type="button" class="module-item" data-domain="Funcionamento interpessoal" data-brief="Conflito, medo de abandono, dificuldade de reparo." data-prompt="Escreva um relato de exemplo de conflito relacional: evitação após briga, medo de abandono, dificuldade de reparo."> Funcionamento da personalidade / relações<span class="module-score">—</span></button>
-        <button type="button" class="module-item" data-domain="Substâncias e medicações" data-brief="Uso recente e relação temporal com sono, humor ou percepção." data-prompt="Escreva um relato de exemplo relacionando uso de alguma substância ou medicação a uma mudança recente de sono, humor ou energia."> Substâncias / medicações<span class="module-score">—</span></button>
-      </div>
-
-      <div class="side-label" style="margin-top:16px">Suas análises</div>
+      <div class="side-label">Suas análises</div>
       <div class="sidebar-history" id="sidebar-history"></div>
     </div>
 
@@ -1244,6 +1229,25 @@
         <div class="domain-match" id="domain-match"><span class="output-empty">Adicione trechos à sessão para eu apontar qual domínio pontua mais alto, em todos os 13 ao mesmo tempo.</span></div>
         <div class="student-safety-note" id="student-safety-note" hidden role="status">
           <strong>Antes de continuar.</strong> Este texto pontuou no domínio de segurança/autoagressão. Se você escreveu algo real sobre você mesmo, isso vai além do exercício, procure o CVV (188, ligação gratuita) ou o serviço de apoio psicológico da sua faculdade. Se foi só um exemplo de estudo, siga tranquilo.
+        </div>
+
+        <div class="panel domain-results-panel">
+          <div class="panel-head"><h2>Os 13 domínios, resultado desta sessão</h2><span class="panel-tag">score ao vivo, atualiza a cada trecho</span></div>
+          <div class="modules-grid">
+            <button type="button" class="module-item" data-domain="Humor e depressividade"> Humor / depressividade<span class="module-score">—</span></button>
+            <button type="button" class="module-item" data-domain="Irritabilidade e raiva"> Irritabilidade / raiva<span class="module-score">—</span></button>
+            <button type="button" class="module-item" data-domain="Ativação e mania"> Ativação / hipomania-mania<span class="module-score">—</span></button>
+            <button type="button" class="module-item" data-domain="Ansiedade e medo"> Ansiedade / medo<span class="module-score">—</span></button>
+            <button type="button" class="module-item" data-domain="Sintomas corporais"> Sintomas corporais<span class="module-score">—</span></button>
+            <button type="button" class="module-item" data-domain="Segurança e autoagressão"> Segurança / autoagressão<span class="module-score">—</span></button>
+            <button type="button" class="module-item" data-domain="Percepção e psicose"> Percepção / psicose<span class="module-score">—</span></button>
+            <button type="button" class="module-item" data-domain="Sono"> Sono<span class="module-score">—</span></button>
+            <button type="button" class="module-item" data-domain="Memória e atenção"> Memória / atenção<span class="module-score">—</span></button>
+            <button type="button" class="module-item" data-domain="Pensamentos repetitivos"> Pensamentos repetitivos / compulsões<span class="module-score">—</span></button>
+            <button type="button" class="module-item" data-domain="Dissociação"> Dissociação / desligamento<span class="module-score">—</span></button>
+            <button type="button" class="module-item" data-domain="Funcionamento interpessoal"> Funcionamento da personalidade / relações<span class="module-score">—</span></button>
+            <button type="button" class="module-item" data-domain="Substâncias e medicações"> Substâncias / medicações<span class="module-score">—</span></button>
+          </div>
         </div>
 
         <div class="progress-panel">

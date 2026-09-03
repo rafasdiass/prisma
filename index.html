@@ -1255,6 +1255,13 @@
             <p class="panel-caption" style="margin-top:0">O que você está vendo é uma simulação por contagem de léxico, feita pra ensinar o raciocínio de cada extractor isoladamente. Em produção, o mesmo extractor roda sobre um modelo estatístico treinado, não sobre uma lista de palavras. Troque de ferramenta ao lado pra ver o que cada uma mede especificamente no mesmo texto.</p>
           </div>
 
+          <div class="panel full">
+            <div class="panel-head"><h2>Histórico de análises</h2><span class="panel-tag" id="history-count">nenhuma execução ainda</span></div>
+            <div class="history-list" id="history-list">
+              <div class="output-empty">Suas execuções aparecem aqui conforme você roda os extratores, com domínio, ferramenta e o sinal mais forte encontrado.</div>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -1625,9 +1632,50 @@
   updateCount();
   render('');
 
+  var HISTORY = [];
+  var historyListEl = document.getElementById('history-list');
+  var historyCountEl = document.getElementById('history-count');
+
+  function getTopSignal(){
+    var rows = document.querySelectorAll('#student-output .out-row');
+    var top = null;
+    rows.forEach(function(r){
+      var name = r.querySelector('.out-name').textContent;
+      var num = parseInt(r.querySelector('.out-num').textContent, 10) || 0;
+      if (!top || num > top.score) top = { name: name, score: num };
+    });
+    return top;
+  }
+
+  function currentDomainLabel(){
+    var active = document.querySelector('.module-item.active');
+    return active ? active.dataset.domain : 'Domínio';
+  }
+
+  function renderHistory(){
+    if (!HISTORY.length){
+      historyListEl.innerHTML = '<div class="output-empty">Suas execuções aparecem aqui conforme você roda os extratores, com domínio, ferramenta e o sinal mais forte encontrado.</div>';
+      historyCountEl.textContent = 'nenhuma execução ainda';
+      return;
+    }
+    historyCountEl.textContent = HISTORY.length + (HISTORY.length === 1 ? ' execução' : ' execuções');
+    historyListEl.innerHTML = HISTORY.slice().reverse().map(function(h){
+      return '<div class="history-row"><span class="t">' + h.time + '</span><span class="d">' + h.domain + ' · ' + h.tool + (h.top ? ' · ' + h.top.name + ' ' + h.top.score + '/100' : '') + '</span></div>';
+    }).join('');
+  }
+
   document.getElementById('run-analysis').addEventListener('click', function(){
     if (runBtn.disabled) return;
     render(input.value);
+    var top = getTopSignal();
+    var now = new Date();
+    HISTORY.push({
+      time: now.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}),
+      domain: currentDomainLabel(),
+      tool: TOOLS[activeTool].label,
+      top: top
+    });
+    renderHistory();
   });
 
   /* ---- module switching (student sidebar) ---- */

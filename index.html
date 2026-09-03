@@ -179,6 +179,12 @@
   }
   .ayla-domain-narrative{ font-size:14px; color:var(--ink); line-height:1.6; margin:0 0 18px; max-width:76ch; }
   .ayla-domain-narrative b{ color:var(--pedagogic); font-weight:600; }
+
+  .domain-checklist{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:8px; margin-top:14px; }
+  .domain-checklist label{ display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink-soft); background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:8px 10px; cursor:pointer; }
+  .domain-checklist input{ accent-color:var(--pedagogic); }
+  .report-warning{ background:var(--pilot-soft); border:1px solid var(--pilot); border-radius:9px; padding:13px 15px; font-size:13px; color:var(--ink); line-height:1.5; margin:16px 0; }
+  .report-warning strong{ color:var(--pilot); }
   .modules-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:9px; }
   .module-item{
     display:flex; align-items:center; justify-content:space-between; gap:12px; width:100%;
@@ -1304,6 +1310,36 @@
             <p class="panel-caption" style="margin-top:0">O que você está vendo é uma simulação por contagem de léxico, feita pra ensinar o raciocínio de cada extractor isoladamente. Em produção, o mesmo extractor roda sobre um modelo estatístico treinado, não sobre uma lista de palavras. Troque de ferramenta ao lado pra ver o que cada uma mede especificamente no mesmo texto.</p>
           </div>
 
+          <div class="panel full">
+            <div class="panel-head"><h2>Seu laudo</h2><span class="panel-tag">a atividade de verdade é esta, não os scores</span></div>
+            <p class="panel-caption" style="margin-top:0">Os extratores discordam entre si o tempo todo, isso é esperado. O exercício não é rodar a ferramenta, é você escrever a leitura clínica: por que este trecho pontuou o que pontuou, o que um extractor viu que o outro não viu, e o que isso muda na leitura do caso.</p>
+
+            <div class="domain-checklist" id="domain-checklist"></div>
+
+            <label for="justification-input" class="visually-hidden">Sua justificativa clínica</label>
+            <textarea id="justification-input" style="min-height:120px; margin-top:12px" placeholder="Escreva sua leitura clínica: cite os extratores que rodou, os domínios marcados acima, e onde eles concordam ou discordam."></textarea>
+            <div class="char-count" id="justification-count">0 de 400 caracteres sugeridos</div>
+
+            <div class="report-warning">
+              <strong>O que este exercício NÃO permite concluir:</strong> um trecho isolado, sem entrevista, sem história e sem contexto de vida, nunca sustenta diagnóstico. O score de um domínio é hipótese de leitura, não conclusão clínica. Isso vale mesmo com um laudo bem escrito.
+            </div>
+
+            <div id="justification-idle">
+              <button type="button" class="run-btn secondary" id="submit-justification-btn" disabled>Enviar minha submissão</button>
+            </div>
+            <div id="justification-sent" hidden>
+              <div class="feedback-box">
+                <div class="feedback-head">
+                  <span class="feedback-grade">✓</span>
+                  <div>
+                    <strong>Enviado, aguardando revisão</strong>
+                    <span class="feedback-sub">Salvo neste navegador. Este é seu histórico de sessões, a correção é humana e acontece fora da ferramenta.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -1816,6 +1852,61 @@
     'Funcionamento interpessoal': ['brigo direto','medo de ser abandonado','medo de ser abandonada','desconfio','difícil confiar','afasto as pessoas','ciúme','fico esperando ser deixado'],
     'Substâncias e medicações': ['bebo mais','uso remédio','parei de tomar','aumentei a dose','fumo pra relaxar','ressaca','bebida pra dormir','remédio pra ansiedade']
   };
+
+  /* ---- checklist de domínios do laudo, reaproveita as chaves do DOMAIN_LEX ---- */
+  var checklistEl = document.getElementById('domain-checklist');
+  if (checklistEl){
+    checklistEl.innerHTML = Object.keys(DOMAIN_LEX).map(function(key){
+      return '<label><input type="checkbox" value="' + key + '"> ' + key.replace(' e ', ' / ') + '</label>';
+    }).join('');
+  }
+
+  /* ---- laudo do aluno: justificativa + submissão travada, sem nota simulada ---- */
+  var justInput = document.getElementById('justification-input');
+  var justCount = document.getElementById('justification-count');
+  var justSubmitBtn = document.getElementById('submit-justification-btn');
+  var justIdleEl = document.getElementById('justification-idle');
+  var justSentEl = document.getElementById('justification-sent');
+  var JUST_MIN = 400;
+
+  function updateJustCount(){
+    if (!justInput) return;
+    var len = justInput.value.trim().length;
+    var checked = checklistEl ? checklistEl.querySelectorAll('input:checked').length : 0;
+    var ok = len >= JUST_MIN && checked > 0;
+    justCount.textContent = len + ' de ' + JUST_MIN + ' caracteres sugeridos' + (checked ? ', ' + checked + ' domínio(s) marcado(s)' : ', marque ao menos 1 domínio acima');
+    justSubmitBtn.disabled = !ok;
+  }
+  if (justInput){
+    justInput.addEventListener('input', updateJustCount);
+    if (checklistEl) checklistEl.addEventListener('change', updateJustCount);
+    updateJustCount();
+  }
+
+  if (justSubmitBtn){
+    justSubmitBtn.addEventListener('click', function(){
+      if (justSubmitBtn.disabled) return;
+      var markedDomains = Array.prototype.slice.call(checklistEl.querySelectorAll('input:checked')).map(function(c){ return c.value; });
+      var record = {
+        sessionId: 'sess-' + Date.now(),
+        trechoOriginal: sessionFullText(),
+        extractorRodado: TOOLS[activeTool].label,
+        dominiosMarcados: markedDomains,
+        justificativa: justInput.value.trim(),
+        timestamp: new Date().toISOString(),
+        status: 'enviado'
+      };
+      try {
+        var subs = JSON.parse(localStorage.getItem('prisma-student-submissions') || '[]');
+        subs.push(record);
+        localStorage.setItem('prisma-student-submissions', JSON.stringify(subs));
+      } catch(e){}
+      justInput.disabled = true;
+      checklistEl.querySelectorAll('input').forEach(function(c){ c.disabled = true; });
+      justIdleEl.hidden = true;
+      justSentEl.hidden = false;
+    });
+  }
 
   function computeDomainMatch(text){
     var lowered = (text || '').toLowerCase();

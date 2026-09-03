@@ -749,23 +749,6 @@
           <div class="tile"><span class="k">Extratores rodados</span><span class="v good">17 de 91</span></div>
         </div>
 
-        <div class="diff-showcase">
-          <div class="diff-showcase-head">
-            <strong>Convergência entre modalidades</strong>
-            <span>Padrões confirmados em mais de um canal ao mesmo tempo, texto, voz e vídeo concordando entre si.</span>
-          </div>
-          <div class="diff-preview-cards">
-            <div class="diff-preview-card">
-              <span class="diff-preview-name">Comunicação defensiva (4 Cavaleiros)</span>
-              <div class="channel-chips"><span class="ch-chip on txt">Texto</span><span class="ch-chip on audio">Voz</span><span class="ch-chip video">Vídeo</span><span class="ch-badge">2 canais convergem</span></div>
-            </div>
-            <div class="diff-preview-card">
-              <span class="diff-preview-name">Resposta polivagal de contenção</span>
-              <div class="channel-chips"><span class="ch-chip txt">Texto</span><span class="ch-chip on audio">Voz</span><span class="ch-chip on video">Vídeo</span><span class="ch-badge">2 canais convergem</span></div>
-            </div>
-          </div>
-          <button type="button" class="diff-showcase-cta" id="diff-goto-vinculo">Ver os 8 padrões completos, aba Vínculo →</button>
-        </div>
 
         <div class="processing-note" id="processing-note" hidden>
           <strong>Sessão em processamento.</strong> A síntese e os padrões abaixo ficam disponíveis assim que a análise for concluída. Os painéis exibidos agora ainda mostram a última sessão revisada.
@@ -981,6 +964,7 @@
                   <span class="chip">gestualidade ↑</span>
                   <span class="chip">sono reduzido (relato)</span>
                 </div>
+                <div class="channel-chips"><span class="ch-chip on txt">Texto</span><span class="ch-chip on audio">Voz</span><span class="ch-chip on video">Vídeo</span><span class="ch-badge">3 canais convergem</span></div>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
                 <p class="pattern-detail">Esse padrão costuma aparecer em quadros de ativação simpática aguda. Vale cruzar com histórico de sono e uso de substâncias antes de qualquer hipótese.</p>
               </button>
@@ -1000,6 +984,7 @@
                   <span class="chip">mudança de tópico em 3 blocos</span>
                   <span class="chip">hedging elevado</span>
                 </div>
+                <div class="channel-chips"><span class="ch-chip on txt">Texto</span><span class="ch-chip audio">Voz</span><span class="ch-chip on video">Vídeo</span><span class="ch-badge">2 canais convergem</span></div>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
                 <p class="pattern-detail">A mudança repetida de tópico pode indicar desconforto com o conteúdo abordado, não falta de memória ou desorganização de pensamento.</p>
               </button>
@@ -1019,6 +1004,7 @@
                   <span class="chip">ausência de fala de reparo</span>
                   <span class="chip">tema recorrente ×3</span>
                 </div>
+                <div class="channel-chips"><span class="ch-chip on txt">Texto</span><span class="ch-chip audio">Voz</span><span class="ch-chip video">Vídeo</span><span class="ch-badge single">1 canal só</span></div>
                 <span class="expand-hint"><span class="hint-text"></span><span class="chevron">▾</span></span>
                 <p class="pattern-detail">A ausência de fala de reparo é mais informativa quando aparece em mais de um relato de conflito ao longo da sessão, o que já se confirma aqui.</p>
               </button>
@@ -1298,13 +1284,6 @@
   clinicalTabs.forEach(function(tabBtn){
     tabBtn.addEventListener('click', function(){ activateClinicalTab(tabBtn.dataset.tab); });
   });
-  var diffGotoBtn = document.getElementById('diff-goto-vinculo');
-  if (diffGotoBtn){
-    diffGotoBtn.addEventListener('click', function(){
-      activateClinicalTab('vinculo');
-      diffGotoBtn.closest('.content').scrollIntoView({ behavior:'smooth', block:'start' });
-    });
-  }
 
   var body = document.body;
   var modeButtons = document.querySelectorAll('.mode-switch button');

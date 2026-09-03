@@ -422,21 +422,27 @@
   .opinion-scope{ font-size:12.5px; color:rgba(243,245,241,0.6); font-style:normal; }
 
   /* ---------- síntese ayla / traits ---------- */
-  /* ---------- clinical section tabs (parte do topbar, sem sticky/offset próprio) ---------- */
+  /* ---------- clinical section tabs, estilo abas de navegador (Chrome) ---------- */
   .clinical-tabs{
-    display:flex; gap:4px; overflow-x:auto;
-    padding:0 28px 10px;
+    display:flex; align-items:flex-end; gap:3px; overflow-x:auto;
+    padding:6px 22px 0; border-bottom:1px solid var(--line);
   }
   .clinical-tab{
-    appearance:none; border:none; cursor:pointer;
-    padding:8px 14px; font-size:13.5px; font-weight:600; color:var(--ink-faint);
-    border-radius:999px; white-space:nowrap; background:transparent;
+    appearance:none; cursor:pointer; position:relative; z-index:0;
+    padding:9px 16px 10px; font-size:13px; font-weight:600; color:var(--ink-faint);
+    white-space:nowrap; margin-bottom:-1px;
+    background:var(--surface); border:1px solid var(--line); border-bottom:none;
+    border-radius:9px 9px 0 0;
   }
-  .clinical-tab:hover{ background:var(--surface); color:var(--ink); }
-  .clinical-tab .tab-count{ font-family:"IBM Plex Mono", monospace; font-size:11px; font-weight:600; color:inherit; margin-left:5px; opacity:.75; }
-  .clinical-tab.active{ background:var(--clinical); color:#F3F5F1; font-weight:700; }
-  .clinical-tab.active:hover{ background:var(--clinical); color:#F3F5F1; }
-  .clinical-tab.active .tab-count{ color:#F3F5F1; opacity:.85; }
+  .clinical-tab:hover{ background:var(--ground); color:var(--ink); }
+  .clinical-tab .tab-count{ font-family:"IBM Plex Mono", monospace; font-size:11px; font-weight:600; color:inherit; margin-left:5px; opacity:.7; }
+  .clinical-tab.active{
+    background:var(--ground); color:var(--clinical); font-weight:700; z-index:1;
+    border-color:var(--line); border-bottom:1px solid var(--ground);
+    box-shadow:0 -1px 4px rgba(0,0,0,0.04);
+  }
+  .clinical-tab.active:hover{ background:var(--ground); color:var(--clinical); }
+  .clinical-tab.active .tab-count{ color:var(--clinical); opacity:.85; }
   [data-tab-content]{ display:none; }
   [data-tab-content].active{ display:block; }
   .synthesis-panel{ border-color:var(--clinical); }
@@ -652,6 +658,8 @@
       <!-- ============ CLINICAL WORKSPACE ============ -->
       <div data-panel="clinical">
 
+        <div data-tab-content="resumo" class="active">
+
         <div class="safety-gate cleared" id="safety-gate" role="status" aria-live="polite">
           <span class="safety-icon" aria-hidden="true">✓</span>
           <div class="safety-text">
@@ -704,7 +712,6 @@
           </div>
         </div>
 
-        <div data-tab-content="resumo" class="active">
         <div class="tiles">
           <div class="tile"><span class="k">Canais captados</span><span class="v good" style="font-size:14px">Texto, áudio e vídeo</span></div>
           <div class="tile"><span class="k">Transcrição</span><span class="v good">100%</span></div>

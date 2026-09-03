@@ -20,6 +20,7 @@
     --clinical-soft:#DCE7E6;
     --pedagogic:#8A5A3B;
     --pedagogic-soft:#EFE3D7;
+    --pedagogic-contrast:#FFFFFF;
     --pilot:#7A5300;
     --pilot-soft:#F3E7D2;
     --good:#2E6944;
@@ -49,6 +50,7 @@
       --clinical-soft:#233230;
       --pedagogic:#D6A374;
       --pedagogic-soft:#2E241B;
+      --pedagogic-contrast:#2E1F14;
       --pilot:#D9A94F;
       --pilot-soft:#2E2718;
       --good:#6FBE85;
@@ -65,7 +67,7 @@
     --ink:#ECEEE9; --ink-soft:#C2CAC4; --ink-faint:#8B948D;
     --line:#2E3532; --line-strong:#3C453F;
     --clinical:#6FB0AC; --clinical-soft:#233230;
-    --pedagogic:#D6A374; --pedagogic-soft:#2E241B;
+    --pedagogic:#D6A374; --pedagogic-soft:#2E241B; --pedagogic-contrast:#2E1F14;
     --pilot:#D9A94F; --pilot-soft:#2E2718;
     --good:#6FBE85; --good-soft:#1E2C22;
     --warn:#D9A94F; --crit:#E28B85; --crit-soft:#2E1F1E;
@@ -207,6 +209,11 @@
   .topbar-title h1{ font-family:"Source Serif 4", serif; font-weight:600; font-size:19px; margin:0; }
   .topbar-title .sub{ font-size:12.5px; color:var(--ink-faint); font-family:"IBM Plex Mono", monospace; }
   .topbar-right{ display:flex; align-items:center; gap:10px; }
+  .topbar-row-centered{ position:relative; justify-content:center; }
+  .topbar-title-centered{ align-items:center; text-align:center; gap:4px; }
+  .uniateneu-logo{ height:26px; width:auto; margin-bottom:2px; }
+  .topbar-right-pinned{ position:absolute; right:28px; top:50%; transform:translateY(-50%); }
+  @media (max-width: 640px){ .topbar-right-pinned{ position:static; transform:none; margin-top:10px; justify-content:center; width:100%; } .topbar-row-centered{ flex-direction:column; } }
   .status-badge{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:600; padding:5px 12px; border-radius:999px; font-family:"IBM Plex Mono", monospace; }
   .status-badge .d{ width:6px; height:6px; border-radius:50%; }
   .status-badge.done{ background:var(--good-soft); color:var(--good); }
@@ -494,13 +501,13 @@
 
   /* ---------- convergência de canais (diferencial visível) ---------- */
   .channel-chips{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-top:8px; }
-  .ch-chip{ font-family:"IBM Plex Mono", monospace; font-size:10.5px; font-weight:700; padding:3px 8px; border-radius:5px; border:1px solid var(--line); color:var(--ink-faint); background:var(--surface-raised); opacity:.5; }
-  .ch-chip.on{ opacity:1; }
+  .ch-chip{ font-family:"IBM Plex Mono", monospace; font-size:10.5px; font-weight:700; padding:3px 8px; border-radius:5px; border:1px solid var(--line-strong); color:var(--ink-soft); background:var(--surface-raised); text-decoration:line-through; text-decoration-color:var(--line-strong); }
+  .ch-chip.on{ text-decoration:none; }
   .ch-chip.on.txt{ background:rgba(85,120,201,0.14); border-color:#5578C9; color:#5578C9; }
   .ch-chip.on.audio{ background:rgba(178,94,151,0.14); border-color:#B25E97; color:#B25E97; }
   .ch-chip.on.video{ background:var(--pedagogic-soft); border-color:var(--pedagogic); color:var(--pedagogic); }
-  .ch-badge{ margin-left:auto; font-family:"IBM Plex Mono", monospace; font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:999px; background:var(--clinical-soft); color:var(--clinical); border:1px solid var(--clinical); white-space:nowrap; }
-  .ch-badge.single{ background:var(--surface); color:var(--ink-faint); border-color:var(--line-strong); font-weight:600; }
+  .ch-badge{ font-family:"IBM Plex Mono", monospace; font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:999px; background:var(--clinical-soft); color:var(--clinical); border:1px solid var(--clinical); white-space:nowrap; }
+  .ch-badge.single{ background:var(--surface); color:var(--ink-soft); border-color:var(--line-strong); font-weight:600; }
   .differentiator-count{ font-family:"IBM Plex Mono", monospace; font-size:11px; color:var(--clinical); font-weight:600; }
 
   /* ---------- metric tiles (voz / psicomotricidade) ---------- */
@@ -566,12 +573,12 @@
   .tool-grid{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
   .tool-btn{ appearance:none; border:1px solid var(--line-strong); background:var(--surface); color:var(--ink-soft); font-size:12.5px; font-weight:600; padding:7px 12px; border-radius:999px; cursor:pointer; }
   .tool-btn:hover{ border-color:var(--pedagogic); color:var(--pedagogic); }
-  .tool-btn.active{ background:var(--pedagogic); border-color:var(--pedagogic); color:#fff; }
+  .tool-btn.active{ background:var(--pedagogic); border-color:var(--pedagogic); color:var(--pedagogic-contrast); }
   .tool-explainer{ font-size:12.5px; color:var(--ink-soft); line-height:1.5; margin:0 0 14px; padding:10px 12px; background:var(--pedagogic-soft); border-radius:8px; }
 
   .run-btn{
     appearance:none; border:none; border-radius:8px;
-    background:var(--pedagogic); color:#fff;
+    background:var(--pedagogic); color:var(--pedagogic-contrast);
     font-size:13.5px; font-weight:600; padding:11px 20px;
     cursor:pointer; display:inline-flex; align-items:center; gap:8px;
   }
@@ -684,13 +691,16 @@
 
     <!-- ---- pedagogic topbar ---- -->
     <div class="topbar" data-topbar="pedagogic" style="display:none">
-      <div class="topbar-title">
-        <h1 id="pedagogic-title">Meu extractor · Humor / depressividade</h1>
-        <span class="sub">Extensão Mentes Artificiais · UniAteneu</span>
-      </div>
-      <div class="topbar-right">
-        <span class="save-status" id="save-status">Rascunho não salvo</span>
-        <button type="button" class="save-btn" id="save-btn">Salvar</button>
+      <div class="topbar-row topbar-row-centered">
+        <div class="topbar-title topbar-title-centered">
+          <img class="uniateneu-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAAA8CAYAAADc3IdaAAAACXBIWXMAAAsTAAALEwEAmpwYAAAR1ElEQVR4nO2de7wcVX3AvzchuRcIwzMBQhYDghtI2IIQgo0VUKFWOxDM8pKHysoqjwJ+OvKy5akthVFjFLVrt6BIaXXB6PCOBKq5EQot9AqYjQQIK+UhhDAk3GwSsv3jzCabvTNnzszO7t1NzvfzuZ/cnDlzztm5u789v9/5PfpqtRoajUbTC4wZ7QVoNBqNKlpgaTSankELLI1G0zNogaXRaHqG7Zob+vr6RmMdSqQK2T7gQCADzAD2B6YCewK7ATsC23vd3waqwCrgJWAF8BxQqORLKzu5bo1G0xr1w8ERAqvbSBWyBwHHA8cBH0IIJhV29v6dBHwAeBX4LfDvgBZYGk0P0pUCK1XITgPOAuYC6RhDrAcGgV8BTwBPVfKl15JboUajGQ26RmClCtkB4FTgfODIGEOsBu4E7gIWVfKl1QkuT6PRdAGjLrBShewuwAXAJcAeMYZYtPuY2o+dA1a8kzrmibuSXJtGo+kuRk1gpQrZCQghZbHZ3qTKewhb1I3PTV+2FCgBOyB2VxqNZiul4wIrVciOAc4GbkCc7kWhBtwCXFvJl16qDmbGAD8BTODYRBeq0Wi6jo4KrFQhOwMoIE77orIQsCr50lBD2zeA04FH+2cPPdL6CjUaTTfTEYGVKmS3A64Aroox52vAlyr50oLGxupg5nyESglwXYtL1Gg0PUDbBVaqkN0P+DfgqBi3/wj4ciVfequxsTqY+Sgw3/vvcuD+lhap0Wh6grYKrFQheyJwK7BLxFtXAedU8qWfN1+oDmYmIwzuY72mQv/sIZ0jJ4hi2QCyiAgBF/gFufSzo7sojSYefc35sJIIzfFCaP6OeKraU0C2ki8tb75QHcyMBR4G/sJrWgfs0z976I2YS926KZZt4MuMjBldARxBLh37uRmmvQfCDWXAa3obeNl1rHVxx9zaMEx7DLAP4gu7/gW7EvGc3os4Vj+bw84AcB1rVeur7A3qcipxgZUqZMcjdlWnx7j9duALlXxprd/F6mDmK8CNDU13988eMpVHL5Z3AL4GGAE9hsil5wdcax7rIwhvfL8H9gpwNbn0RuW1JU2xfCKwQNLjGXLpGVGGNEx7APh74Fxgok+X9cA9QN51rD8FjHEocDfig9wuVgJnuI61hanAMO1xwBcR782DgF1jjl8D/hs42nWsd5svGqa9C/CP3jx+Ljsu8C3gWtexQrUDw7TnI3wVm794XgU+7DrWiC937779gUuBjwOTaRJ4EVgLXOU61k1N438V8X7ob+pfA37mOtapqhMYpn0q8ENgp6ZL64FPvP3Lv10ECauEnm/VAuBjMW6/Abiyki/5/gGrg5npwPVNzSNUxhAWA4dJexTLL5BLOyF9dkPs9GTZLuq7zNHiypDrB1Msb0cuvUFlMMO0xwOPALMk3cYBcxBB6McH9PkU7RVWIOJN59Jg2/SE1T2ImNRW6QOOAP4MEZ+6CcO0twMeQB6tYQBXI0wf82QTGaY9FhH94fde2wv4S+B7PvcdBTzISAEQhwHgNOCmpvazGSmsQDyfkyLOkcV/reOA6cAiSDC9TKqQ3Rl4iOjCaiNwYSVfukIirMYhDPD9TfctiDjXfgp9ZB/IOgcT/uymK4zTTt4Xcr0POCDCeOeg9mwAjjNM+8MB18ZFmLMVmuc5n2SEVSN+H9YTUQ8tu95TrWXsxGZ10o/xzQ2Gafch/BWTEFZ1/Nbg9/rrRP07K/VPRGB5wupBoscAbgTOruRLN4f0uxA4vKltSf/soXZkXZC9OXoJldcRZYd9YcT5cxH7t5uzOjRPFKE4Abi8DWs4HJjWhnFHnZYFVqqQ3R6x04kTsPy5Sr50u6xDdTAzCbjG59KvY8y3LfF6yPUasExlIMO0P0j0HePJhmnHtZm0g0yH5pkcsf+5hmlPSHgNhyQ8XtfQksBKFbJjEaExx8S4/aJKvnSbQr+v428k/02MObclfhByfRm5tOqJ3ikx5t8R+KRPe6dOETfNY5j2jrRHFfU7HAo60AnCAD4vua5kY2wiamyuCnHWkTitGt1vAD4d477vVvKl74R1qg5mDsVftdiIyHelCSKX/g7Fsom/ivIWwlirysmSa+8iAs+D7ruzqe12hLFaFke6F/I8aCuAFyXXV7GlIVpFWL0GLFXoB+L99zTipDAJLjJM+2bXsUacKruOtdow7YSm2YInEaeVKgwT/gXYEWILrFQhexYi00JUHmRzSE0Y1+DvNrCif/bQOzHm3rbIpY+nWJ6JOMqfiHjj3Ucu/SPVIQzTPhyRijqIfwKuDbj214Zpb+861nC9wXWsFYi8Z7I5P4cwGgdxq+tY18jGiIgLpF3HejvBMaNwAOL0VH46nRw/cB3rvA7NlSixBFaqkD0EEcQclT8Ap1TypVCnuepg5jDEiYsf2lNblVz6ceDxFkaQ7a6WIr55gwTWjsBf0f1pf54dRWFV52I6J7Ce6NA8iRNZYKUK2R2An7HZw1mV9Wuf3e/71eV7zjfMo2YAuyO27s8CvwDudB2rUU++QjKWkrG4pxBOrbMQLhPTEC4YExD2iHGI570aoc79L3ArufRTHViZTGDd5zrW64ZpP0mwf9tJdL/AqnZonuWIv6uf7fhjhmkf4jrW7zqwjkhe9t1EnB3WjcTIsz783JQ31i3f85tNze9D2DNOB/5gmPYFrmMtrA5mpiEcyYLobYFVLG+HOGbPIgTUXkT7AjgGuJhi+VXgJHLpR33mmAf8Df4qNcDL5NIp2SSGac9Crg7e6/17H8EC6wTDtPtdx+qUUOhm/oiwfQVpDhchogg0AUQ6JUwVssciQgQiseHNnWtrl07ZO6TbgcD9nv3iSwR/0AB6M3awWJ5AsfwQ4hv9XxGnaFOJvlutsxewmGL5YJ9rZyD+vn0BP1MUxpedDg6z+aT2AUk/g2Cv922REV7pDZyp4Ei6TaO8w/KKRPxz5Bk2juHdof37xqjlUxgDFB+v7LtmZuolWb+3ZBe7mF+h7i2uyljgX4A/b2pv6QTY85aWqYOLGnZNSxCG66Aj/VPonH0mDgOGaU9V7LsBeCVq8HIDCxH1Mf2iDAYQByRfjzm2KntEeL3vuI71ZjsXE4UoO6xLEbugSAw/P5naapkH/wjGXL/wgzvVatKl9WpdwSPaNG47HAVnATKVcVOcnmd7fEjS9wQvlq9bmQW8oPhTAZ6J+Xr6vWDn70v6nN+BZ3UT6q/3DcO0v9Lm9SijJLBShew+wGVRB68ND7BhWVTHX/jt6wZLVuwr66LqP9JttCvsJ8gPqhVkuyvYbL+qc5+kr0G8gPhuJU10j3bYnC3hVoRK7cdkwp99p4nis9dWVHdY1xHjQ7G2PIWN78Vzpl+0TCqwkgzq3BpoPYlZAwrq4DLXsZ5vapPZsQgZrxeJ/cxdx1oJ/IekyyVxx24To14OsE6oNEkVsgcAn406cG24393wx91jLQrg+ZU7xr63x9mAcPVYiLB5qTjIJiqwCFcHR+ymXMd6Cbl/3EldrhZ2GlnA/0zvhFbThMr253JiqDLDy/d5YWMt/udo5fCIrBmNbK1v/PeAXcmlp5NLH08ufRwwCREK0knCdkNB6p9sl7UrW5da2BKuYz1BUy6tJho90XvWbypppAIrVcjuTby0HC+89+LElhzgJu0gdduJYz/oBd4hl169RUsuvRa1XVYiKKiDw8B/Blxrtms1EyfutFtZn8AYsuy2pxmmXVdRVkv6dYLRnn8TYbrpF/FJEKZAYWOtbx1wZox7AThoT2mkhIoP0dZEJ4tshKmDfcCjAQG5YTvfOYZpn9eCS0C7eBORjVaF9cAS17FeTmDeEmDjn4G1H5HFoR2Rz08CUr+hBt4GQhMVdIpAgeXVEoyThG09wilyAuJhx9ILj5smfZ5SD21NS4SpgwOI6IQ4TER46ctcIEaDp13HmtPpSV3H2mCY9s3APwR0Oc8w7W+0Yer5rmPdmsA4QSedbUOmEn6ceDuZuyr50uveKZI0OV8Q5tQ/cche0i+wXsim2DXbaFUU1MEk2NpOC1ulgH9eLRBhUcfSQZNARDoebiUTWGfEHPOnDb9fRnjmyy2YOH4DVx3/X2HdZkZdlEcSdgdQS9LWi7FzYepgEnzaK6ygATwv8p9IupzDtmF0l8miYWknr1RXUICmjLU0nBS5jvV/iJ2aktDas38Dt52ymKm7hUYCTK4OZuJUXlH5w6ukq5Uln6szovxTD9CJ3c9EYHYH5uklZMb3uXSv36FUizBMe7cIY8liKDd9boOk2tHEe0gLK/nSmsYGL13GYYhvkUDj8anpV3ng8/dz+BRVWyBBVVlkqHjIH5rQ3C8o9OkaOqQO1tlW1UJfe673GVkUcM8AomxZNxKWhCBKVSZZ300ncEFG97iu+Pf4NXo7rbMM074aUbcug5CoK4Hf33vGI9Nnpl6KqoLOQe4t7IdKDOJMiuXxIfnOT1AY5/eKa+oWwtTB1agby6cwsspRI3MN077YLyXwKNEpgSDLtf5t4KMdWkdSxUF8i+U28Ckg1L7jFTnxK8xbZ9NGI0hgHRM2SQAyRzg8Q3xzTixmXp65O8Zcn6wOZsb3zx6KUtRgBXBUSJ9+4FmK5RPIpbf03C6WD0TsFFVSgCyJsK5uIGzXU3IdS1YsYROGab8fkZEgiL0RamG3FBKZYZj2XIRrg7LtMeFS8XcDzyPPP5YUnzVM+zfAy6i7zFQbU117vBhyzyWGad/hOlZgrnyvmniY68Zr9V9GCCwvo6i8OrI/q4FnYtwHIA0cDMAAPgH8MsI9g4TkE/d4P/AMxfI6NtuiolReWUMu3TMB2orq4ALV8VzHWm6Y9hDy0lon0z0Cqw/hExUJw7Qfdx0rTnm7EbiOtdErST8vifFCmAVEdeyuGaZ9rutYxYa2sDEM4EnDtG9B7M6fR5x4TkD4nh2JOFQI80Z4sf6Lnw3rAwHtYTymkqs9gLAqxUFELe4ZVYUcD+zi/UQJB4oruEeLMHXwXUTxkCiECYA5nqDsBEFuA60y0zDtJEtq3UL3usP0IfLzN7KY8PJfA4gwoxLwP4i6Dk8idpRXES6snnYda5Nbh59gipz+uD5wnJuqg5kBotdyq3NcdTDjl23Tn1z6dUQ+o3ZzZQfmSJKw3dUDPupAGD8PuZ4i+WSGvriOtZb2OTkmJnRdx3IRTtet0q6Ee1toZF7WiSgaThzmNf7HT2BFTtLnEfdUrNWUsJdG7P+FFucLwyGX7jZP7kC8XU5YodQw4TMC17GeBsoh3Tp5Whhq/O0SvkU0vys/95lWqiRF5TLal5/OoUmA+wmsOP5NMHoC68zqYGaGcu9c+kHEiUw7eJhcWuUEsZs4HPm2fAMBp78KLAi53slc79/t4FyxcR3rRaIVLR3yGWMp8HBSa5LhOtZziBP7VQkP/VMg62Vo3YSfwNol5gTNCd06xVjkjncjyaUvAT5DcvaCYeBiculWj6WDPPHjlHdXvWdqyPWF3tY/DmGhWZMC2tcEtNd5JepCXMcqAVeTvNd483OW+Saprvty1Izii4HHAq6dQfI7Ld/Pi+tYDyMO6pIo57YUON11rFNdxxrxHvZza4jz4ViFeplvv3tb5djqYGaf/tlD6hH0ufQdwB0UyxaitNL+RMusuB6h8hTJpecp3nMPIjbMz+6xHvhqwH03Iqpg+4W01PA/bQu7p6623uvNuz9it2uw+YtsNTFSY9dxHet3hmlfjPgGro+5HiGQViLqW/pxN0I18jviXw7cFnM91xmm/WOEH10acfIblxqw2HWsZpXsOsRnqDlD7xoUMy945ek/gnj2cxCn1vVDn42IzcFdwNeadyANY7ximPZRCN+uoxEVllrJI/cuEs3E2xnONUz7QOA0hGvUkYRHjqxF7BKXIHbkvw56TQB9tdqW1/b94cmfQfgaqRoTXeCCSr4ki4eSUh3MfA+Rd0slLMaPx4AP9c8eai0NS7E8DfGg67UCxyFOCtchHmwFIZgXkkt3wniv0fQ0hmlPQhyw7IQ4MexDaCRrEHUaX1NxIK7LqRECS6PRaLqVeBUiNBqNZhTQAkuj0fQMWmBpNJqeQQssjUbTM2iBpdFoegYtsDQaTc+gBZZGo+kZ/h/Ok5+P592a0wAAAABJRU5ErkJggg==" alt="UniAteneu" />
+          <h1 id="pedagogic-title">Meu extractor · Humor / depressividade</h1>
+          <span class="sub">Extensão Mentes Artificiais · UniAteneu</span>
+        </div>
+        <div class="topbar-right topbar-right-pinned">
+          <span class="save-status" id="save-status">Rascunho não salvo</span>
+          <button type="button" class="save-btn" id="save-btn">Salvar</button>
+        </div>
       </div>
     </div>
 

@@ -188,9 +188,13 @@
   /* ---------- main / topbar ---------- */
   .main{ min-width:0; }
   .topbar{
+    display:flex; flex-direction:column;
+    background:var(--surface-raised);
+    border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5;
+  }
+  .topbar-row{
     display:flex; align-items:center; justify-content:space-between; gap:16px;
-    padding:16px 28px; background:var(--surface-raised);
-    border-bottom:1px solid var(--line); position:sticky; top:0; z-index:5; flex-wrap:wrap;
+    padding:16px 28px; flex-wrap:wrap;
   }
   .topbar-title{ display:flex; flex-direction:column; gap:2px; }
   .topbar-title h1{ font-family:"Source Serif 4", serif; font-weight:600; font-size:19px; margin:0; }
@@ -418,24 +422,21 @@
   .opinion-scope{ font-size:12.5px; color:rgba(243,245,241,0.6); font-style:normal; }
 
   /* ---------- síntese ayla / traits ---------- */
-  /* ---------- clinical section tabs ---------- */
+  /* ---------- clinical section tabs (parte do topbar, sem sticky/offset próprio) ---------- */
   .clinical-tabs{
-    display:flex; gap:2px; overflow-x:auto;
-    background:var(--surface-raised); border-bottom:1px solid var(--line);
-    box-shadow:0 2px 6px -3px rgba(28,35,32,0.12);
-    position:sticky; top:61px; z-index:4;
-    margin:0 -28px 20px; padding:0 28px;
+    display:flex; gap:4px; overflow-x:auto;
+    padding:0 28px 10px;
   }
-  @media (max-width: 700px){ .clinical-tabs{ margin:0 -20px 20px; padding:0 20px; top:98px; } }
   .clinical-tab{
-    appearance:none; border:none; background:transparent; cursor:pointer;
-    padding:13px 16px; font-size:13.5px; font-weight:600; color:var(--ink-faint);
-    border-bottom:3px solid transparent; white-space:nowrap;
+    appearance:none; border:none; cursor:pointer;
+    padding:8px 14px; font-size:13.5px; font-weight:600; color:var(--ink-faint);
+    border-radius:999px; white-space:nowrap; background:transparent;
   }
-  .clinical-tab .tab-count{ font-family:"IBM Plex Mono", monospace; font-size:11px; font-weight:600; color:var(--ink-faint); margin-left:5px; }
-  .clinical-tab:hover{ color:var(--ink); }
-  .clinical-tab.active{ color:var(--clinical); border-bottom-color:var(--clinical); }
-  .clinical-tab.active .tab-count{ color:var(--clinical); }
+  .clinical-tab:hover{ background:var(--surface); color:var(--ink); }
+  .clinical-tab .tab-count{ font-family:"IBM Plex Mono", monospace; font-size:11px; font-weight:600; color:inherit; margin-left:5px; opacity:.75; }
+  .clinical-tab.active{ background:var(--clinical); color:#F3F5F1; font-weight:700; }
+  .clinical-tab.active:hover{ background:var(--clinical); color:#F3F5F1; }
+  .clinical-tab.active .tab-count{ color:#F3F5F1; opacity:.85; }
   [data-tab-content]{ display:none; }
   [data-tab-content].active{ display:block; }
   .synthesis-panel{ border-color:var(--clinical); }
@@ -616,13 +617,22 @@
 
     <!-- ---- clinical topbar ---- -->
     <div class="topbar" data-topbar="clinical">
-      <div class="topbar-title">
-        <h1 id="clinical-title">Paciente 4, pronta para revisão</h1>
-        <span class="sub" id="clinical-sub">gravada em 30/08/2026, processada em 29 min</span>
+      <div class="topbar-row">
+        <div class="topbar-title">
+          <h1 id="clinical-title">Paciente 4, pronta para revisão</h1>
+          <span class="sub" id="clinical-sub">gravada em 30/08/2026, processada em 29 min</span>
+        </div>
+        <div class="topbar-right">
+          <span class="status-badge done" id="clinical-status"><span class="d"></span> análise concluída</span>
+        </div>
       </div>
-      <div class="topbar-right">
-        <span class="status-badge done" id="clinical-status"><span class="d"></span> análise concluída</span>
-      </div>
+      <nav class="clinical-tabs" role="tablist" aria-label="Seções da avaliação">
+        <button type="button" class="clinical-tab active" data-tab="resumo" role="tab" aria-selected="true">Resumo</button>
+        <button type="button" class="clinical-tab" data-tab="linguagem" role="tab" aria-selected="false">Linguagem <span class="tab-count">12</span></button>
+        <button type="button" class="clinical-tab" data-tab="voz-corpo" role="tab" aria-selected="false">Voz e corpo <span class="tab-count">3</span></button>
+        <button type="button" class="clinical-tab" data-tab="vinculo" role="tab" aria-selected="false">Vínculo <span class="tab-count">12</span></button>
+        <button type="button" class="clinical-tab" data-tab="notas" role="tab" aria-selected="false">Notas da Dra.</button>
+      </nav>
     </div>
 
     <!-- ---- pedagogic topbar ---- -->
@@ -641,14 +651,6 @@
 
       <!-- ============ CLINICAL WORKSPACE ============ -->
       <div data-panel="clinical">
-
-        <nav class="clinical-tabs" role="tablist" aria-label="Seções da avaliação">
-          <button type="button" class="clinical-tab active" data-tab="resumo" role="tab" aria-selected="true">Resumo</button>
-          <button type="button" class="clinical-tab" data-tab="linguagem" role="tab" aria-selected="false">Linguagem <span class="tab-count">12</span></button>
-          <button type="button" class="clinical-tab" data-tab="voz-corpo" role="tab" aria-selected="false">Voz e corpo <span class="tab-count">3</span></button>
-          <button type="button" class="clinical-tab" data-tab="vinculo" role="tab" aria-selected="false">Vínculo <span class="tab-count">12</span></button>
-          <button type="button" class="clinical-tab" data-tab="notas" role="tab" aria-selected="false">Notas da Dra.</button>
-        </nav>
 
         <div class="safety-gate cleared" id="safety-gate" role="status" aria-live="polite">
           <span class="safety-icon" aria-hidden="true">✓</span>

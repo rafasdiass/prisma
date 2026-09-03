@@ -563,18 +563,11 @@
   .progress-bar{ height:8px; border-radius:5px; background:var(--surface); border:1px solid var(--line); overflow:hidden; }
   .progress-bar-fill{ height:100%; background:var(--pedagogic); }
 
-  .rubric-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:12px; }
-  .rubric-item{ display:flex; flex-direction:column; gap:4px; padding:12px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px; }
-  .rubric-crit{ font-size:13px; font-weight:600; color:var(--pedagogic); }
-  .rubric-desc{ font-size:12.5px; color:var(--ink-soft); line-height:1.4; }
-
-  .submission-panel #submit-btn:disabled{ opacity:.45; cursor:not-allowed; }
-  .feedback-box{ background:var(--good-soft); border:1px solid var(--good); border-radius:9px; padding:16px 18px; display:flex; flex-direction:column; gap:10px; }
-  .feedback-head{ display:flex; align-items:center; gap:14px; }
-  .feedback-grade{ font-family:"IBM Plex Mono", monospace; font-size:24px; font-weight:700; color:var(--good); }
-  .feedback-head strong{ display:block; font-size:13.5px; color:var(--ink); }
-  .feedback-sub{ font-size:12px; color:var(--ink-faint); font-family:"IBM Plex Mono", monospace; }
-  .feedback-comment{ margin:0; font-size:13px; color:var(--ink-soft); line-height:1.55; }
+  .tool-grid{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px; }
+  .tool-btn{ appearance:none; border:1px solid var(--line-strong); background:var(--surface); color:var(--ink-soft); font-size:12.5px; font-weight:600; padding:7px 12px; border-radius:999px; cursor:pointer; }
+  .tool-btn:hover{ border-color:var(--pedagogic); color:var(--pedagogic); }
+  .tool-btn.active{ background:var(--pedagogic); border-color:var(--pedagogic); color:#fff; }
+  .tool-explainer{ font-size:12.5px; color:var(--ink-soft); line-height:1.5; margin:0 0 14px; padding:10px 12px; background:var(--pedagogic-soft); border-radius:8px; }
 
   .run-btn{
     appearance:none; border:none; border-radius:8px;
@@ -1216,7 +1209,7 @@
         <div class="progress-panel">
           <div class="progress-head">
             <span class="progress-label">Seu progresso na extensão</span>
-            <span class="progress-count" id="progress-count">2 de 7 domínios submetidos</span>
+            <span class="progress-count" id="progress-count">2 de 7 domínios explorados</span>
           </div>
           <div class="progress-bar"><div class="progress-bar-fill" id="progress-bar-fill" style="width:28.5%"></div></div>
         </div>
@@ -1234,51 +1227,22 @@
           </div>
 
           <div class="panel">
-            <div class="panel-head"><h2>Saída do seu extractor</h2><span class="panel-tag">heurística didática</span></div>
+            <div class="panel-head"><h2>Escolha um extractor</h2><span class="panel-tag">arsenal real, um de cada vez</span></div>
+            <div class="tool-grid" id="tool-grid" role="group" aria-label="Extratores disponíveis">
+              <button type="button" class="tool-btn active" data-tool="liwc">Estilo linguístico (LIWC)</button>
+              <button type="button" class="tool-btn" data-tool="catastro">Distorção cognitiva</button>
+              <button type="button" class="tool-btn" data-tool="minim">Minimização / invalidação</button>
+              <button type="button" class="tool-btn" data-tool="darvo">DARVO</button>
+              <button type="button" class="tool-btn" data-tool="gottman">4 Cavaleiros (Gottman)</button>
+              <button type="button" class="tool-btn" data-tool="time">Orientação temporal</button>
+            </div>
+            <p class="tool-explainer" id="tool-explainer">Mede valência (positivo/negativo) e densidade de autofoco no texto, o extractor mais básico do arsenal, base pra quase todos os outros.</p>
             <div id="student-output" class="out-metric"></div>
-            <p class="panel-caption">Heurística simplificada para aprendizado, cada linha simula um extractor real do arsenal da Ayla (estilo linguístico, LIWC, distorção cognitiva, minimização, atos de fala, orientação temporal). Aqui roda por contagem de léxico; em produção, o mesmo raciocínio roda sobre um modelo estatístico treinado.</p>
           </div>
 
-          <div class="panel full rubric-panel">
-            <div class="panel-head"><h2>Rubrica de avaliação</h2><span class="panel-tag">o que a professora vai olhar, antes de você submeter</span></div>
-            <div class="rubric-grid">
-              <div class="rubric-item"><span class="rubric-crit">Uso correto do protocolo</span><span class="rubric-desc">o texto reflete o domínio clínico escolhido, não um relato genérico</span></div>
-              <div class="rubric-item"><span class="rubric-crit">Distinção observação × inferência</span><span class="rubric-desc">separa o que o extractor mediu do que seria interpretação clínica</span></div>
-              <div class="rubric-item"><span class="rubric-crit">Qualidade da tradução domínio → sinal</span><span class="rubric-desc">o raciocínio de que marcador linguístico corresponde ao domínio faz sentido</span></div>
-              <div class="rubric-item"><span class="rubric-crit">Aderência ao escopo</span><span class="rubric-desc">nenhum dado real de paciente ou terceiro foi usado</span></div>
-            </div>
-          </div>
-
-          <div class="panel full submission-panel">
-            <div class="panel-head"><h2>Submissão</h2><span class="panel-tag" id="submission-tag">rascunho</span></div>
-            <div id="submission-idle">
-              <p class="panel-caption" style="margin-top:0">Depois de rodar sua análise, submeta para a professora avaliar segundo a rubrica acima.</p>
-              <button type="button" class="run-btn" id="submit-btn" disabled style="background:var(--clinical)">Submeter para avaliação</button>
-            </div>
-            <div id="submission-waiting" hidden>
-              <p class="panel-caption" style="margin-top:0"><strong>Enviado.</strong> Aguardando avaliação da professora.</p>
-            </div>
-            <div id="submission-feedback" hidden>
-              <div class="feedback-box">
-                <div class="feedback-head">
-                  <span class="feedback-grade" id="feedback-grade">8,5</span>
-                  <div>
-                    <strong>Avaliação da Dra. Ana Lívia</strong>
-                    <span class="feedback-sub">Humor / depressividade</span>
-                  </div>
-                </div>
-                <p class="feedback-comment">Boa tradução do domínio, o vocabulário de queda de energia está bem capturado. Reforce a distinção entre o que é observação linguística e o que seria hipótese clínica, isso ainda mistura um pouco no seu texto.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel full">
-            <div class="panel-head"><h2>Histórico de execuções</h2><span class="panel-tag">seus experimentos</span></div>
-            <div class="history-list">
-              <div class="history-row"><span class="t">ontem 14:20</span><span class="d">trecho sobre período de provas · valência −0,4 · não submetido</span></div>
-              <div class="history-row"><span class="t">ontem 11:05</span><span class="d">Ansiedade / medo · submetido · nota 9,0</span></div>
-              <div class="history-row"><span class="t">seg 19:40</span><span class="d">Ativação / mania · submetido · nota 8,0</span></div>
-            </div>
+          <div class="panel">
+            <div class="panel-head"><h2>Sobre esta heurística</h2><span class="panel-tag">didático</span></div>
+            <p class="panel-caption" style="margin-top:0">O que você está vendo é uma simulação por contagem de léxico, feita pra ensinar o raciocínio de cada extractor isoladamente. Em produção, o mesmo extractor roda sobre um modelo estatístico treinado, não sobre uma lista de palavras. Troque de ferramenta ao lado pra ver o que cada uma mede especificamente no mesmo texto.</p>
           </div>
 
         </div>
@@ -1497,15 +1461,20 @@
   }
   queueButtons.forEach(function(b){ b.addEventListener('click', function(){ selectSession(b.dataset.id); }); });
 
-  /* ---- student extractor heuristic (simula parte do arsenal real: LIWC-like, CBT distortion, minimização/invalidação, orientação temporal) ---- */
+  /* ---- student extractor heuristic — arsenal real, um extractor por vez ---- */
   var LEX = {
     pos: ['feliz','alegre','tranquilo','calmo','bem','grato','agradecido','confiante','animado','leve','gosto','gostei','tranquila'],
     neg: ['triste','ansioso','ansiosa','cansado','cansada','medo','raiva','irritado','desanimado','sozinho','sozinha','preocupado','mal','péssimo','exausto','exausta','sem vontade'],
-    negation: ['não','nunca','nada','jamais','ninguém','nem'],
-    hedge: ['talvez','acho','meio','tipo','sei lá','possivelmente','às vezes'],
     self: ['eu','me','mim','meu','minha','comigo','tô','to'],
     catastrophizing: ['sempre','nunca vou','tudo dá errado','pior','desastre','impossível','não aguento mais','vai dar tudo errado','arruinado','acabou'],
     minimization: ['não é nada','não foi nada','tudo bem','tanto faz','não importa','deixa pra lá','sem problema','normal isso'],
+    darvoDeny: ['não fiz nada','isso nunca aconteceu','não é verdade','eu não'],
+    darvoAttack: ['você que','a culpa é sua','você começou','você exagera','você inventa'],
+    darvoReverse: ['sou eu a vítima','eu que sofri','você me magoou primeiro','olha o que você fez comigo'],
+    gottmanCriticism: ['você sempre','você nunca','o problema é você','você é assim'],
+    gottmanContempt: ['ridículo','patético','que absurdo','não acredito que você'],
+    gottmanDefensive: ['não foi minha culpa','eu só','mas eu','você também'],
+    gottmanStonewall: ['prefiro não falar','deixa pra lá','não quero discutir','chega'],
     future: ['vou','vai','amanhã','depois','futuro','ainda vai','vai acontecer'],
     past: ['era','fui','tinha','antes','naquela época','antigamente','já foi']
   };
@@ -1519,71 +1488,105 @@
     });
     return found;
   }
-
+  function sumN(list){ return list.reduce(function(a,f){return a+f.n;},0); }
   function clamp(n,a,b){ return Math.max(a, Math.min(b, n)); }
+  function chips(list){
+    if (!list.length) return '<span class="chip">nenhum marcador encontrado</span>';
+    return list.map(function(f){ return '<span class="chip">"'+f.term+'" ×'+f.n+'</span>'; }).join('');
+  }
+  function row(name, val, chipsHtml){
+    return '' +
+      '<div class="out-row">' +
+        '<div class="out-row-head"><span class="out-name">'+name+'</span><span class="out-num">'+Math.round(val)+'/100</span></div>' +
+        '<div class="out-bar"><div class="out-bar-fill" style="width:'+val+'%"></div></div>' +
+        '<div class="out-chips">'+chipsHtml+'</div>' +
+      '</div>';
+  }
 
+  var TOOLS = {
+    liwc: {
+      label: 'Estilo linguístico (LIWC)',
+      explainer: 'Mede valência (positivo/negativo) e densidade de autofoco no texto, o extractor mais básico do arsenal, base pra quase todos os outros.',
+      run: function(lowered, wc){
+        var pos = countMatches(lowered, LEX.pos), neg = countMatches(lowered, LEX.neg), self = countMatches(lowered, LEX.self);
+        var valence = clamp(50 + ((sumN(pos)-sumN(neg))/wc)*400, 0, 100);
+        var selfDensity = clamp((sumN(self)/wc)*100*3, 0, 100);
+        return row('Valência estimada', valence, chips(pos.concat(neg))) + row('Densidade de autofoco', selfDensity, chips(self));
+      }
+    },
+    catastro: {
+      label: 'Distorção cognitiva',
+      explainer: 'Da Terapia Cognitivo-Comportamental: procura generalização absoluta e catastrofização, "sempre", "nunca vou", "tudo dá errado".',
+      run: function(lowered, wc){
+        var c = countMatches(lowered, LEX.catastrophizing);
+        var score = clamp((sumN(c)/wc)*100*10, 0, 100);
+        return row('Distorção catastrófica', score, chips(c));
+      }
+    },
+    minim: {
+      label: 'Minimização / invalidação',
+      explainer: 'Detecta quando a pessoa desqualifica o próprio incômodo logo depois de descrever algo que a afeta, "não é nada", "tudo bem", "tanto faz".',
+      run: function(lowered, wc){
+        var m = countMatches(lowered, LEX.minimization);
+        var score = clamp((sumN(m)/wc)*100*10, 0, 100);
+        return row('Minimização / invalidação', score, chips(m));
+      }
+    },
+    darvo: {
+      label: 'DARVO',
+      explainer: 'Deny-Attack-Reverse Victim-Offender: nega o fato, ataca quem trouxe o assunto, e inverte quem é a vítima. Padrão de manipulação em conflito.',
+      run: function(lowered, wc){
+        var deny = countMatches(lowered, LEX.darvoDeny), attack = countMatches(lowered, LEX.darvoAttack), reverse = countMatches(lowered, LEX.darvoReverse);
+        var denyS = clamp((sumN(deny)/wc)*100*12,0,100), attackS = clamp((sumN(attack)/wc)*100*12,0,100), reverseS = clamp((sumN(reverse)/wc)*100*12,0,100);
+        return row('Negação (Deny)', denyS, chips(deny)) + row('Ataque (Attack)', attackS, chips(attack)) + row('Inversão de vítima (Reverse)', reverseS, chips(reverse));
+      }
+    },
+    gottman: {
+      label: '4 Cavaleiros (Gottman)',
+      explainer: 'Modelo de terapia de casal para prever ruptura relacional: crítica, desprezo, defensividade e esquiva num relato de conflito.',
+      run: function(lowered, wc){
+        var crit = countMatches(lowered, LEX.gottmanCriticism), cont = countMatches(lowered, LEX.gottmanContempt), def = countMatches(lowered, LEX.gottmanDefensive), stone = countMatches(lowered, LEX.gottmanStonewall);
+        return row('Crítica', clamp((sumN(crit)/wc)*100*12,0,100), chips(crit)) +
+               row('Desprezo', clamp((sumN(cont)/wc)*100*12,0,100), chips(cont)) +
+               row('Defensividade', clamp((sumN(def)/wc)*100*12,0,100), chips(def)) +
+               row('Esquiva (stonewalling)', clamp((sumN(stone)/wc)*100*12,0,100), chips(stone));
+      }
+    },
+    time: {
+      label: 'Orientação temporal',
+      explainer: 'Mede se o relato pesa mais pro futuro ou pro passado, usado para cruzar com ansiedade (futuro) ou ruminação/depressão (passado).',
+      run: function(lowered, wc){
+        var future = countMatches(lowered, LEX.future), past = countMatches(lowered, LEX.past);
+        var score = clamp(50 + ((sumN(future)-sumN(past))/wc)*300, 0, 100);
+        return row('Orientação temporal (futuro vs. passado)', score, chips(future.concat(past)));
+      }
+    }
+  };
+
+  var activeTool = 'liwc';
   function render(text){
     var out = document.getElementById('student-output');
     text = (text || '').trim();
     if (!text){
-      out.innerHTML = '<div class="output-empty">Cole um trecho de texto e clique em "Rodar análise".</div>';
+      out.innerHTML = '<div class="output-empty">Escreva seu texto e clique em "Rodar análise".</div>';
       return;
     }
     var words = text.split(/\s+/).filter(Boolean);
     var wc = words.length || 1;
     var lowered = text.toLowerCase();
-
-    var pos = countMatches(lowered, LEX.pos);
-    var neg = countMatches(lowered, LEX.neg);
-    var negation = countMatches(lowered, LEX.negation);
-    var hedge = countMatches(lowered, LEX.hedge);
-    var self = countMatches(lowered, LEX.self);
-    var catastro = countMatches(lowered, LEX.catastrophizing);
-    var minim = countMatches(lowered, LEX.minimization);
-    var future = countMatches(lowered, LEX.future);
-    var past = countMatches(lowered, LEX.past);
-
-    var posN = pos.reduce(function(a,f){return a+f.n;},0);
-    var negN = neg.reduce(function(a,f){return a+f.n;},0);
-    var selfN = self.reduce(function(a,f){return a+f.n;},0);
-    var negationN = negation.reduce(function(a,f){return a+f.n;},0);
-    var hedgeN = hedge.reduce(function(a,f){return a+f.n;},0);
-    var catastroN = catastro.reduce(function(a,f){return a+f.n;},0);
-    var minimN = minim.reduce(function(a,f){return a+f.n;},0);
-    var futureN = future.reduce(function(a,f){return a+f.n;},0);
-    var pastN = past.reduce(function(a,f){return a+f.n;},0);
-
-    var valence = clamp(50 + ((posN - negN) / wc) * 400, 0, 100);
-    var selfDensity = clamp((selfN / wc) * 100 * 3, 0, 100);
-    var ruminationScore = clamp((negationN / wc) * 100 * 6, 0, 100);
-    var hedgeScore = clamp((hedgeN / wc) * 100 * 6, 0, 100);
-    var catastroScore = clamp((catastroN / wc) * 100 * 10, 0, 100);
-    var minimScore = clamp((minimN / wc) * 100 * 10, 0, 100);
-    var timeOrientation = clamp(50 + ((futureN - pastN) / wc) * 300, 0, 100);
-
-    function chips(list){
-      if (!list.length) return '<span class="chip">nenhum marcador encontrado</span>';
-      return list.map(function(f){ return '<span class="chip">"'+f.term+'" ×'+f.n+'</span>'; }).join('');
-    }
-
-    function row(name, val, chipsHtml, tag){
-      return '' +
-        '<div class="out-row">' +
-          '<div class="out-row-head"><span class="out-name">'+name+(tag ? ' <span class="extractor-tag-inline">'+tag+'</span>' : '')+'</span><span class="out-num">'+Math.round(val)+'/100</span></div>' +
-          '<div class="out-bar"><div class="out-bar-fill" style="width:'+val+'%"></div></div>' +
-          '<div class="out-chips">'+chipsHtml+'</div>' +
-        '</div>';
-    }
-
-    out.innerHTML =
-      row('Valência estimada', valence, chips(posN||negN ? pos.concat(neg) : []), 'estilo linguístico') +
-      row('Densidade de autofoco', selfDensity, chips(self), 'LIWC-like') +
-      row('Negação / ruminação', ruminationScore, chips(negation), 'padrão relacional') +
-      row('Distorção catastrófica', catastroScore, chips(catastro), 'distorção cognitiva') +
-      row('Minimização / invalidação', minimScore, chips(minim), 'minimização') +
-      row('Hedging / incerteza', hedgeScore, chips(hedge), 'atos de fala') +
-      row('Orientação temporal (futuro vs. passado)', timeOrientation, chips(future.concat(past)), 'temporal') ;
+    out.innerHTML = TOOLS[activeTool].run(lowered, wc);
   }
+
+  var toolExplainer = document.getElementById('tool-explainer');
+  document.querySelectorAll('.tool-btn').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.tool-btn').forEach(function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      activeTool = b.dataset.tool;
+      toolExplainer.textContent = TOOLS[activeTool].explainer;
+      render(input.value);
+    });
+  });
 
   var MIN_CHARS = 120;
   var input = document.getElementById('student-input');
@@ -1612,36 +1615,9 @@
   updateCount();
   render('');
 
-  var submitBtn = document.getElementById('submit-btn');
-  var submissionTag = document.getElementById('submission-tag');
-  var submissionIdle = document.getElementById('submission-idle');
-  var submissionWaiting = document.getElementById('submission-waiting');
-  var submissionFeedback = document.getElementById('submission-feedback');
-
   document.getElementById('run-analysis').addEventListener('click', function(){
     if (runBtn.disabled) return;
     render(input.value);
-    submitBtn.disabled = false;
-  });
-
-  input.addEventListener('input', function(){
-    submitBtn.disabled = true;
-    submissionTag.textContent = 'rascunho';
-    submissionIdle.hidden = false;
-    submissionWaiting.hidden = true;
-    submissionFeedback.hidden = true;
-  });
-
-  submitBtn.addEventListener('click', function(){
-    if (submitBtn.disabled) return;
-    submissionTag.textContent = 'aguardando avaliação';
-    submissionIdle.hidden = true;
-    submissionWaiting.hidden = false;
-    setTimeout(function(){
-      submissionTag.textContent = 'avaliado';
-      submissionWaiting.hidden = true;
-      submissionFeedback.hidden = false;
-    }, 1600);
   });
 
   /* ---- module switching (student sidebar) ---- */

@@ -607,6 +607,16 @@
   .history-row .d{ color:var(--ink-soft); flex:1; }
 
   footer.appfoot{ padding:16px 28px 40px; font-size:12.5px; color:var(--ink-faint); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+
+  .export-btn{ appearance:none; border:1px solid var(--pedagogic); background:transparent; color:var(--pedagogic); font-size:12px; font-weight:600; padding:6px 12px; border-radius:999px; cursor:pointer; white-space:nowrap; }
+  .export-btn:hover{ background:var(--pedagogic-soft); }
+
+  @media print{
+    .sidebar, .topbar, .clinical-tabs, .mode-switch, .run-btn, .tool-grid, .export-btn, footer.appfoot, .save-btn, .save-status{ display:none !important; }
+    body, .content{ background:#fff !important; color:#000 !important; }
+    .panel, .history-list, .history-row{ break-inside:avoid; border-color:#ccc !important; }
+    .out-name, .history-row .d, h2{ color:#000 !important; }
+  }
 </style>
 
 <div class="app">
@@ -1256,7 +1266,13 @@
           </div>
 
           <div class="panel full">
-            <div class="panel-head"><h2>Histórico de análises</h2><span class="panel-tag" id="history-count">nenhuma execução ainda</span></div>
+            <div class="panel-head">
+              <h2>Histórico de análises</h2>
+              <div style="display:flex; align-items:center; gap:10px;">
+                <span class="panel-tag" id="history-count">nenhuma execução ainda</span>
+                <button type="button" class="export-btn" id="export-report-btn">⬇ Gerar relatório de aprendizagem</button>
+              </div>
+            </div>
             <div class="history-list" id="history-list">
               <div class="output-empty">Suas execuções aparecem aqui conforme você roda os extratores, com domínio, ferramenta e o sinal mais forte encontrado.</div>
             </div>
@@ -1633,6 +1649,13 @@
   render('');
 
   var HISTORY = [];
+  try {
+    var savedHistory = localStorage.getItem('prisma-student-history');
+    if (savedHistory) HISTORY = JSON.parse(savedHistory);
+  } catch(e){}
+  function saveHistory(){
+    try { localStorage.setItem('prisma-student-history', JSON.stringify(HISTORY)); } catch(e){}
+  }
   var historyListEl = document.getElementById('history-list');
   var historyCountEl = document.getElementById('history-count');
 
@@ -1663,6 +1686,7 @@
       return '<div class="history-row"><span class="t">' + h.time + '</span><span class="d">' + h.domain + ' · ' + h.tool + (h.top ? ' · ' + h.top.name + ' ' + h.top.score + '/100' : '') + '</span></div>';
     }).join('');
   }
+  renderHistory();
 
   document.getElementById('run-analysis').addEventListener('click', function(){
     if (runBtn.disabled) return;
@@ -1675,8 +1699,20 @@
       tool: TOOLS[activeTool].label,
       top: top
     });
+    saveHistory();
     renderHistory();
   });
+
+  var exportBtn = document.getElementById('export-report-btn');
+  if (exportBtn){
+    exportBtn.addEventListener('click', function(){
+      if (!HISTORY.length){
+        alert('Rode pelo menos uma análise antes de gerar o relatório.');
+        return;
+      }
+      window.print();
+    });
+  }
 
   /* ---- module switching (student sidebar) ---- */
   var moduleButtons = document.querySelectorAll('.module-item');

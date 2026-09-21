@@ -657,6 +657,7 @@
         <button type="button" class="new-session-btn" id="new-session-btn" aria-haspopup="dialog">+ Nova sessão</button>
       </div>
       <div class="queue">
+        <button type="button" class="queue-item" data-id="Anônimo"><span class="qid">Anônimo</span><span class="qstatus wait">para revisão</span></button>
         <button type="button" class="queue-item active" data-id="Paciente 4"><span class="qid">Paciente 4</span><span class="qstatus wait">para revisão</span></button>
         <button type="button" class="queue-item" data-id="Paciente 3"><span class="qid">Paciente 3</span><span class="qstatus proc">processando</span></button>
         <button type="button" class="queue-item" data-id="Paciente 2"><span class="qid">Paciente 2</span><span class="qstatus done">revisada</span></button>
@@ -1419,6 +1420,16 @@
 
   /* ---- session queue switching ---- */
   var SESSIONS = {
+    'Anônimo': {
+      status:'ready', label:'pronta para revisão', sub:'gravada em 21/09/2026, processada com pipeline real (piloto)', gravacao:'21/09/2026 · 09:08', analise:'21/09/2026 · 09:08', dur:'05:12', maiorSinal:'Vínculo positivo (texto) · 100%', contradicoes:'10',
+      opinionTitle:'Anônimo — sessão-piloto com pipeline real de ponta a ponta',
+      opinionBody:[
+        'Essa sessão é diferente das outras nesta fila: não é um caso ilustrativo, é uma execução real do meu pipeline completo, dado anonimizado a pedido de quem pediu a análise. Rodei os quatro canais de verdade, transcrição e prosódia da fala, expressão facial e postura do vídeo, e o texto de uma conversa longa por escrito, cada um com o extractor real, nada simulado.',
+        'No texto, o padrão que mais se repete e com mais força é vínculo positivo, presente na conversa inteira com evidência forte. Ao lado dele aparecem sinais de triangulação relacional, distorção cognitiva e manipulação persuasiva, cada um com evidência real também, e dez pontos onde esses padrões se cruzam com o vínculo positivo no mesmo trecho, ou seja, o mesmo momento carrega leituras que não combinam entre si. Isso não é contradição no sentido de erro, é o retrato normal de uma relação com camadas.',
+        'No vídeo, a leitura de rosto pegou tensão de sobrancelha e pálpebra na quase totalidade das janelas, um padrão que por si só não tem lado, pode ser concentração, pode ser tensão, pode ser só o esforço de falar direto pra câmera por cinco minutos seguidos. A postura só deu pra ler direito o quanto o corpo se mexe, porque o enquadramento do vídeo corta o quadril, e eu não invento o que a câmera não me mostra.',
+        'Eu não fecho isso em diagnóstico, nem aqui nem em nenhuma sessão. Esse status fica em rascunho, pendente de revisão de quem pediu a análise, porque decidir o que esses sinais significam de verdade não é trabalho meu, é de quem tem a pessoa na frente.'
+      ]
+    },
     'Paciente 4': {
       status:'ready', label:'pronta para revisão', sub:'gravada em 30/08/2026, processada em 29 min', gravacao:'30/08/2026 · 14:12', analise:'30/08/2026 · 14:41', dur:'17:04', maiorSinal:'Humor depressivo · 71%', contradicoes:'3',
       opinionTitle:'Paciente 4 — sofrimento ativo com forte autocontenção',
